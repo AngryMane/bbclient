@@ -336,13 +336,36 @@ class BBClient:
         options: Mapping[str, Any],
         environment: Mapping[str, str],
         command_line: str,
-    ):
-        return self.__run_command(
+    ) -> None:
+        """update config
+
+        Args:
+            self (BBClient): none
+            options (Mapping[str, Any]): dict of prefile and postfile
+            environment (Mapping[str, str]): _description_
+            command_line (str): _description_
+
+        Note:
+            | options will set like {"prefile": ["FILE_NAME", "FILE_NAME"], "postfile": ["FILE_NAME", "FILE_NAME"]}
+            | They are prefiles and postfiles settings. See set_pre_post_conf_files command.
+            | if you change prefiles or postfiles, bitbake will reset their cache.
+
+            | environment is environment variables, like {"KEY": "VALUE", "KEY": "VALUE"}.
+            | if you add/change/delete any environemt variable, bitbake will reset their cache.
+
+            | command_line will set to BB_CMDLINE variable. BB_CMDLINE seems not to be used at all.
+        """
+        self.__run_command(
             self.__server_connection, "updateConfig", options, environment, command_line
         )
 
-    def parse_configuration(self: "BBClient"):
-        return self.__run_command(self.__server_connection, "parseConfiguration")
+    def parse_configuration(self: "BBClient") -> None:
+        """parse configuration
+
+        Note:
+            This command clears caches and re-builds them.
+        """
+        self.__run_command(self.__server_connection, "parseConfiguration")
 
     def get_layer_priorities(self: "BBClient"):
         # Note: this command deletes caches(bug?)
