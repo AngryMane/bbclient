@@ -80,7 +80,7 @@ class BBClient:
 
     # --- bitbake server sync functions  ---
     def state_shutdown(self: "BBClient"):
-        """Terminate backend process
+        """Terminate tasks
 
         Terminate tasks defined in recipes. If there are running tasks, wait for them to exit.
 
@@ -88,7 +88,7 @@ class BBClient:
         return self.__run_command(self.__server_connection, "stateShutdown")
 
     def state_force_shutdown(self: "BBClient"):
-        """Terminate backend process
+        """Terminate tasks
 
         Terminate tasks defined in recipes. If there are running tasks, terminate them.
 
@@ -104,7 +104,7 @@ class BBClient:
             flag_list(List[str]): Target flags. If flags are unnecessary, please set [].
 
         Returns:
-            Dict object like below.
+            Dict object like below.\
             {
                 "VARIABLE_A_NAME" : {
                     "v" : "VARIABLE_A_VALUE",
