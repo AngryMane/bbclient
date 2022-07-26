@@ -21,7 +21,10 @@ def main() -> None:
 
     ret = client.parse_configuration()
     ret = client.parse_files()
-    sleep(3)  # wainting for parse files
+
+    # wainting for parse files
+    # use sleep because there is no callback function of parse_files command
+    sleep(3)
 
     # ret = client.data_store_connector_cmd(ret["dsindex"], "getVar", "FILE")
     # print(f"data_store_connector_cmd: {ret}")
@@ -45,6 +48,8 @@ def main() -> None:
     # print(f"find_sigInfo: {ret}")
     ret = client.get_all_keys_with_flags([])
     print(f"get_all_keys_with_flags: {ret}")
+    ret = client.get_variable("BBLAYERS")
+    print(f"get_variable: {type(ret)}")
 
     client.stop_server()
 

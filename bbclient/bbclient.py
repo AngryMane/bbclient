@@ -13,7 +13,7 @@ class BBClient:
         """Initialize BBClient instance
 
         Args:
-            self (BBClient): -
+            self (BBClient): none
             project_abs_path (str): abslute path to bitbake project, basically poky dir.
             init_script_path (str): initialize bitbake proejct command running at project_abs_path. This is maybe ". oe-init-build-env".
         """
@@ -35,7 +35,7 @@ class BBClient:
         """Finalize BBClient instance
 
         Args:
-            self (BBClient): -
+            self (BBClient): none
         """
         self.stop_server()
 
@@ -43,9 +43,10 @@ class BBClient:
         """Start bitbake XML RPC server
 
         Args:
-            self (BBClient): -
+            self (BBClient): none
             server_adder (str): server address you want to use.
             server_port (int): server port you want to use.
+
         Note:
             At this point, BBClient doesn't support remote host(=you can only use localhost).
         """
@@ -70,7 +71,7 @@ class BBClient:
         """Stop bitbake XML RPC server
 
         Args:
-            self (BBClient): -
+            self (BBClient): none
         """
         if not self.__is_server_running:
             return
@@ -79,112 +80,202 @@ class BBClient:
         self.__is_server_running = False
 
     # --- bitbake server sync functions  ---
-    def state_shutdown(self: "BBClient"):
+    def state_shutdown(self: "BBClient") -> None:
         """Terminate tasks
-
-        Terminate tasks defined in recipes. If there are running tasks, wait for them to exit.
-
-        """
-        return self.__run_command(self.__server_connection, "stateShutdown")
-
-    def state_force_shutdown(self: "BBClient"):
-        """Terminate tasks
-
-        Terminate tasks defined in recipes. If there are running tasks, terminate them.
-
-        """
-        return self.__run_command(self.__server_connection, "stateForceShutdown")
-
-    def get_all_keys_with_flags(self: "BBClient", flag_list: List[str]):
-        """Get value, history and specified flags of all global variables.
-
-        Get value, history and flags of all global variables.
 
         Args:
+            self (BBClient): none
+
+        Note:
+            Terminate tasks defined in recipes. If there are running tasks, wait for them to exit.
+        """
+        self.__run_command(self.__server_connection, "stateShutdown")
+
+    def state_force_shutdown(self: "BBClient") -> None:
+        """Terminate tasks
+
+        Args:
+            self (BBClient): none
+
+        Note:
+            Terminate tasks defined in recipes. If there are running tasks, terminate them.
+        """
+        self.__run_command(self.__server_connection, "stateForceShutdown")
+
+    def get_all_keys_with_flags(self: "BBClient", flag_list: List[str]) -> Mapping:
+        """Get value, history and specified flags of all global variables.
+
+        Args:
+            self (BBClient): none
             flag_list(List[str]): Target flags. If flags are unnecessary, please set [].
 
         Returns:
-            Dict object like below.\
-            {
-                "VARIABLE_A_NAME" : {
-                    "v" : "VARIABLE_A_VALUE",
-                    "history" : [
-                                    {
-                                        'parsing': True,
-                                        'variable': 'VARIABLE_NAME',
-                                        'file': 'PATH/TO/FILE/xxx.inc',
-                                        'line': ${LINE_NUM},
-                                        'op': 'set',
-                                        'detail': 'SETTING VALUE AT THIS POINT'
-                                    },
-                                    {
-                                        'parsing': True,
-                                        'variable': 'VARIABLE_NAME',
-                                        'file': 'PATH/TO/FILE/xxx.inc',
-                                        'line': ${LINE_NUM},
-                                        'op': 'set',
-                                        'detail': 'SETTING VALUE AT THIS POINT'
-                                    },
-                                ]
-                    "FLAG_A_NAME": "FLAG_A_VALUE",
-                    "FLAG_B_NAME": "FLAG_B_VALUE"
-                },
-                "VARIABLE_B_NAME" : {
-                    "v" : "VARIABLE_B_VALUE",
-                    "history" : [ ... ],
-                    "FLAG_A_NAME": "FLAG_A_VALUE",
-                    "FLAG_B_NAME": "FLAG_B_VALUE"
-                },
-            }
+            | Dict object like below.
+            | {
+            |     "VARIABLE_A_NAME" : {
+            |         "v" : "VARIABLE_A_VALUE",
+            |         "history" : [
+            |                         {
+            |                             'parsing': True,
+            |                             'variable': 'VARIABLE_NAME',
+            |                             'file': 'PATH/TO/FILE/xxx.inc',
+            |                             'line': ${LINE_NUM},
+            |                             'op': 'set',
+            |                             'detail': 'SETTING VALUE AT THIS POINT'
+            |                         },
+            |                         {
+            |                             'parsing': True,
+            |                             'variable': 'VARIABLE_NAME',
+            |                             'file': 'PATH/TO/FILE/xxx.inc',
+            |                             'line': ${LINE_NUM},
+            |                             'op': 'set',
+            |                             'detail': 'SETTING VALUE AT THIS POINT'
+            |                         },
+            |                     ]
+            |         "FLAG_A_NAME": "FLAG_A_VALUE",
+            |         "FLAG_B_NAME": "FLAG_B_VALUE"
+            |     },
+            |     "VARIABLE_B_NAME" : {
+            |         "v" : "VARIABLE_B_VALUE",
+            |         "history" : [ ... ],
+            |         "FLAG_A_NAME": "FLAG_A_VALUE",
+            |         "FLAG_B_NAME": "FLAG_B_VALUE"
+            |     },
+            | }
 
         """
-        return self.__run_command(
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getAllKeysWithFlags", flag_list
         )
 
-    def get_variable(self: "BBClient", name: str, expand: bool = True):
-        """_summary_
+    def get_variable(self: "BBClient", name: str, expand: bool = True) -> str:
+        """get variable value
 
         Args:
-            self (BBClient): _description_
-            name (str): _description_
-            expand (bool, optional): _description_. Defaults to True.
+            self (BBClient): none
+            name (str): variable name
+            expand (bool, optional): Whether to expand references to other variables. Defaults to True.
 
         Returns:
-            _type_: _description_
+            str: variable value
         """
-        return self.__run_command(self.__server_connection, "getVariable", name, expand)
+        return self.__run_command(self.__server_connection, "getVariable", name, expand)  # type: ignore
 
-    def set_variable(self: "BBClient", name: str, value: str):
-        return self.__run_command(self.__server_connection, "setVariable", name, value)
+    def set_variable(self: "BBClient", name: str, value: str) -> None:
+        """set vaiable value
 
-    def get_set_variable(self: "BBClient", name: str, expand: bool = True):
-        return self.__run_command(
+        Args:
+            self (BBClient): none
+            name (str): variable name
+            value (str): variable value you want to set
+
+        """
+        self.__run_command(self.__server_connection, "setVariable", name, value)
+
+    def get_set_variable(self: "BBClient", name: str, expand: bool = True) -> str:
+        """get variable from cache and set it into cache
+
+        Args:
+            self (BBClient): none
+            name (str): variable name
+            expand (bool, optional): Whether to expand references to other variables. Defaults to True.
+
+        Returns:
+            str: variable value
+
+        Note:
+            This is maybe for expand variable value in cache.
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getSetVariable", name, expand
         )
 
-    def set_config(self: "BBClient", name: str, value: str):
-        return self.__run_command(self.__server_connection, "setConfig", name, value)
+    def set_config(self: "BBClient", name: str, value: str) -> None:
+        """set CookerConfigcation properties
 
-    def enable_data_tracking(self: "BBClient"):
-        return self.__run_command(self.__server_connection, "enableDataTracking")
+        Args:
+            self (BBClient): none
+            name (str): property name
+            value (str): property value
 
-    def disable_data_tracking(self: "BBClient"):
-        return self.__run_command(self.__server_connection, "disableDataTracking")
+        Note:
+            | If you want to know all CookerConfigcation properties, see poky/bitbake/lib/bb/cookerdata.py.
+            | But I don't know the detail and how to use it...
+        """
+        self.__run_command(self.__server_connection, "setConfig", name, value)
 
-    def set_pre_post_conf_files(self: "BBClient", pre_files: str, post_files: str):
-        return self.__run_command(
+    def enable_data_tracking(self: "BBClient") -> None:
+        """Enable data tracking
+
+        Args:
+            self (BBClient): none
+
+        Note:
+            | If enable, cooker cacheata(VariableHistory class) logs the history of changin value.
+            | You can see the log by dataStoreConnectorVarHistCmdEmit command.
+        """
+        self.__run_command(self.__server_connection, "enableDataTracking")
+
+    def disable_data_tracking(self: "BBClient") -> None:
+        """Disable data tracking
+
+        Args:
+            self (BBClient): none
+
+        Note:
+            Please see enable_data_tracking command
+        """
+        self.__run_command(self.__server_connection, "disableDataTracking")
+
+    def set_pre_post_conf_files(
+        self: "BBClient", pre_files: str, post_files: str
+    ) -> None:
+        """Set pre-load files and post-load files of bitbake.conf at parse_configuration_files command
+
+        Args:
+            self (BBClient): none
+            pre_files (str): files loaded before bitbake.conf
+            post_files (str): files loaded after bitbake.conf
+
+        Note:
+            When parse_configuration_files command, pre_files will load before bitbake.conf and post_files will load after bitbake.conf.
+        """
+        self.__run_command(
             self.__server_connection, "setPrePostConfFiles", pre_files, post_files
         )
 
-    def match_file(self: "BBClient", file_path_regex: str, mutli_conf_name: str):
-        # This command maybe has a bug. The second parameter and the first one mixed up in the command.
-        return self.__run_command(
+    def match_file(
+        self: "BBClient", file_path_regex: str, mutli_conf_name: str = ""
+    ) -> str:
+        """Search file by regex
+
+        Args:
+            self (BBClient): none
+            file_path_regex (str): search regex pattern
+            mutli_conf_name (str): target multi-config. Defaults to ''.
+
+        Returns:
+            str: matched file path
+
+        Note:
+            | This command can extract only one file. If you input the regex matching to many file, this command will fail.
+            | This command maybe has a bug. The second parameter and the first one mixed up in the command.
+        """
+
+        return self.__run_command(  # type: ignore
             self.__server_connection, "matchFile", file_path_regex, mutli_conf_name
         )
 
-    def get_uihandler_num(self: "BBClient"):
-        return self.__run_command(self.__server_connection, "getUIHandlerNum")
+    def get_uihandler_num(self: "BBClient") -> int:
+        """get ui handler num.
+
+        Args:
+            self (BBClient): none
+
+        Returns:
+            int: ui hanlder num
+        """
+        return self.__run_command(self.__server_connection, "getUIHandlerNum")  # type: ignore
 
     def set_event_mask(
         self: "BBClient",
@@ -192,10 +283,32 @@ class BBClient:
         log_level: int,
         debug_domains: Mapping[str, int],
         mask: List[str],
-    ):
+    ) -> bool:
+        """set log filter for specified ui handler
+
+        Args:
+            self (BBClient): none
+            handler_num (int): target ui handler
+            log_level (int): logging.DEBUG, logging.INFO, etc...
+            debug_domains (Mapping[str, int]): logger name.
+            mask (List[str]): target event name. If you don't want to filter by event name, put [ "*" ].
+
+        Returns:
+            bool: if handler_num is invalid, return False, otherwise True.
+
+        Note:
+            | debug_domains is a little bit complex.
+            | If you want to extract logging.getLogger("NAME"), put { "NAME": logging.INFO }.
+            | debug_domains value filters log level like log_level arg.
+            | log_level arg and debug_domains value are `or conditoin`.
+
+            | mask is also a little bit difficult.
+            | This args filters log by event class name like bb.event.BuildStarted, bb.command.CommandCompleted, etc..
+            | It is unclear what type of logs are available.
+        """
         # TODO: investigate how to use
         # log level : logging.DEBUG, logging.INFO, etc...
-        return self.__run_command(
+        return self.__run_command(  # type: ignore
             self.__server_connection,
             "setEventMask",
             handler_num,
@@ -204,9 +317,19 @@ class BBClient:
             mask,
         )
 
-    def set_features(self: "BBClient", features: List[int]):
-        # HOB_EXTRA_CACHES, BASEDATASTORE_TRACKING, SEND_SANITYEVENTS
-        return self.__run_command(self.__server_connection, "setFeatures", features)
+    def set_features(self: "BBClient", features: List[int]) -> None:
+        """Set feature(Enable feature)
+
+        Args:
+            self (BBClient): none
+            features (List[int]): list of 0, 1, 2. 1 means HOB_EXTRA_CACHES, 2 means BASEDATASTORE_TRACKING and 3 means SEND_SANITYEVENTS.
+
+        Note:
+            | if enable HOB_EXTRA_CACHES, recipecheces has extra-info like SUMMARY, LICENSE, DESCRIPTION, etc...
+            | if enable BASEDATASTORE_TRACKING, enable_data_tracking. See enable_data_tracking command.
+            | if enable SEND_SANITYEVENTS, this feature has not been implemented and is currently meaningless.
+        """
+        self.__run_command(self.__server_connection, "setFeatures", features)
 
     def update_config(
         self: "BBClient",
