@@ -149,7 +149,7 @@ class BBClient:
         )
 
     def get_variable(self: "BBClient", name: str, expand: bool = True) -> str:
-        """get variable value
+        """Get variable value
 
         Args:
             self (BBClient): none
@@ -162,7 +162,7 @@ class BBClient:
         return self.__run_command(self.__server_connection, "getVariable", name, expand)  # type: ignore
 
     def set_variable(self: "BBClient", name: str, value: str) -> None:
-        """set vaiable value
+        """Set vaiable value
 
         Args:
             self (BBClient): none
@@ -173,7 +173,7 @@ class BBClient:
         self.__run_command(self.__server_connection, "setVariable", name, value)
 
     def get_set_variable(self: "BBClient", name: str, expand: bool = True) -> str:
-        """get variable from cache and set it into cache
+        """Get variable from cache and set it into cache
 
         Args:
             self (BBClient): none
@@ -191,7 +191,7 @@ class BBClient:
         )
 
     def set_config(self: "BBClient", name: str, value: str) -> None:
-        """set CookerConfigcation properties
+        """Set CookerConfigcation properties
 
         Args:
             self (BBClient): none
@@ -267,7 +267,7 @@ class BBClient:
         )
 
     def get_uihandler_num(self: "BBClient") -> int:
-        """get ui handler num.
+        """Get ui handler num.
 
         Args:
             self (BBClient): none
@@ -284,7 +284,7 @@ class BBClient:
         debug_domains: Mapping[str, int],
         mask: List[str],
     ) -> bool:
-        """set log filter for specified ui handler
+        """Set log filter for specified ui handler
 
         Args:
             self (BBClient): none
@@ -337,7 +337,7 @@ class BBClient:
         environment: Mapping[str, str],
         command_line: str,
     ) -> None:
-        """update config
+        """Update config
 
         Args:
             self (BBClient): none
@@ -360,37 +360,142 @@ class BBClient:
         )
 
     def parse_configuration(self: "BBClient") -> None:
-        """parse configuration
+        """Parse configuration
 
         Note:
             This command clears caches and re-builds them.
         """
         self.__run_command(self.__server_connection, "parseConfiguration")
 
-    def get_layer_priorities(self: "BBClient"):
+    def get_layer_priorities(self: "BBClient") -> List[List[str]]:
+        """Get name, path, priority of all layers
+
+        Args:
+            self (BBClient): none
+
+        Returns:
+            List[List[str]]: name, path, priority of all layers
+
+        Note:
+            | Return value is like follows.
+            | [
+            |   ['core', '^/PATH/TO/POKY/poky/meta/', '^/PATH/TO/POKY/poky/meta/', 5],
+            |   ['yocto', '^/PATH/TO/POKY/poky/meta-poky/', '^/PATH/TO/POKY/poky/meta-poky/', 5],
+            |   ['yoctobsp', '^/PATH/TO/POKY/poky/meta-yocto-bsp/', '^/PATH/TO/POKY/poky/meta-yocto-bsp/', 5],
+            |   ['raspberrypi', '^/PATH/TO/POKY/poky/meta-raspberrypi/', '^/PATH/TO/POKY/poky/meta-raspberrypi/', 9]
+            | ]
+            | The first element is layer name. the second is layer path, the third seems same as the second, but detail is not clear.
+            | The fourth element is layer priority.
+        """
         # Note: this command deletes caches(bug?)
-        return self.__run_command(self.__server_connection, "getLayerPriorities")
+        return self.__run_command(self.__server_connection, "getLayerPriorities")  # type: ignore
 
-    def get_recipes(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(self.__server_connection, "getRecipes", multi_config)
+    def get_recipes(self: "BBClient", multi_config: str = "") -> List[str]:
+        """Get all package name from cache
 
-    def get_recipe_depends(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            List[str]: package names
+        """
+        return self.__run_command(self.__server_connection, "getRecipes", multi_config)  # type: ignore
+
+    def get_recipe_depends(self: "BBClient", multi_config: str = "") -> List[List[Any]]:
+        """Get recipe depends
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            List[List[Any]]: See Note section.
+
+        Note:
+            | Return value is like below.
+            | [
+            |     ['RECIPE_NAME:RECIPE_FILE_PATH',
+            |         [
+            |             'depends-package-name-a',
+            |             'depends-package-name-b',
+            |             'depends-package-name-c',
+            |         ]
+            |     ],
+            | ]
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getRecipeDepends", multi_config
         )
 
-    def get_recipe_versions(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def get_recipe_versions(
+        self: "BBClient", multi_config: str = ""
+    ) -> Mapping[str, List[str]]:
+        """Get all recipe versions
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            Mapping[str, List[str]]: Recipes file and its version info
+
+        Note:
+            | Return value is like below.
+            | {
+                |   '/PATH/TO/POKY/poky/meta/recipes-graphics/cantarell-fonts/cantarell-fonts_0.303.1.bb': ['', '0.303.1', 'r0'],
+            | }
+            | ['', '0.303.1', 'r0'] is [PE, PV, PR]. If you want to know PE/PV/PR, see https://docs.yoctoproject.org/ref-manual/variables.html?highlight=bblayers# .
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getRecipeVersions", multi_config
         )
 
-    def get_recipe_provides(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def get_recipe_provides(
+        self: "BBClient", multi_config: str = ""
+    ) -> Mapping[str, List[str]]:
+        """Get all recipe files and its packages
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            Mapping[str, List[str]]: All recipe files and its packages
+
+        Note:
+            | Return value is like below.
+            | {
+            |   '/PATH/TO/RECIPE/inetutils_2.2.bb': ['inetutils'],
+            | }
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getRecipeProvides", multi_config
         )
 
-    def get_recipe_packages(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def get_recipe_packages(
+        self: "BBClient", multi_config: str = ""
+    ) -> Mapping[str, List[str]]:
+        """Get all recipe files and its recipe files
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            Mapping[str, List[str]]: All recipe files and its recipe files.
+
+        WARNING:
+            | This command doesn't work beacuase of bitbake bug.
+            | bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
+
+        Note:
+            | I fixed the bug locally, then this commands returns like below.
+            | {
+            |   'PACKAGE_NAME': ['/PATH/TO/RECIPE/cryptodev-linux_1.12.bb']
+            | }
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getRecipePackages", multi_config
         )
 
@@ -693,5 +798,9 @@ class BBClient:
         try:
             result = server_connection.connection.runCommand(commandline)
         except:
+            print("----------------------")
+            print(command)
+            print(result)
+            print("----------------------")
             return None
         return result[0]

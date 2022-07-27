@@ -46,10 +46,13 @@ def main() -> None:
     # print(f"get_r_providers: {ret}")
     # ret = client.find_sigInfo("", "bulid", [])
     # print(f"find_sigInfo: {ret}")
-    ret = client.get_all_keys_with_flags([])
-    print(f"get_all_keys_with_flags: {ret}")
-    ret = client.get_variable("BBLAYERS")
-    print(f"get_variable: {type(ret)}")
+    # ret = client.get_all_keys_with_flags([])
+    # print(f"get_all_keys_with_flags: {ret}")
+    # ret = client.get_variable("BBLAYERS")
+    # print(f"get_variable: {type(ret)}")
+    ret = client.get_recipe_packages()
+    print(f"get_recipe_packages: {type(ret)}")
+    print(f"get_recipe_packages: {ret}")
 
     client.stop_server()
 
