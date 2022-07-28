@@ -499,57 +499,256 @@ class BBClient:
             self.__server_connection, "getRecipePackages", multi_config
         )
 
-    def get_recipe_packages_dynamic(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def get_recipe_packages_dynamic(
+        self: "BBClient", multi_config: str = ""
+    ) -> Mapping[str, List[str]]:
+        """Get all recipe files that provides PACKAGE_DYNAMIC and its PACKAGE_DYNAMIC
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            Mapping[str, List[str]]: all recipe files that provides PACKAGE_DYNAMIC and its PACKAGE_DYNAMIC
+
+        WARNING:
+            | This command doesn't work beacuase of bitbake bug.
+            | bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
+
+        Note:
+            | I fixed the bug locally, then this commands returns like below.
+            | {
+            |   '^nativesdk-packagegroup-sdk-host-locale-.*': ['/PATH/TO/RECIPE/nativesdk-packagegroup-sdk-host.bb'],
+            | }
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getRecipePackagesDynamic", multi_config
         )
 
-    def get_r_providers(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def get_r_providers(
+        self: "BBClient", multi_config: str = ""
+    ) -> Mapping[str, List[str]]:
+        """Get alias of PN and its recipe files
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            Mapping[str, List[str]]: alias of PN and its recipe files
+
+        WARNING:
+            | This command doesn't work beacuase of bitbake bug.
+            | bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
+
+        Note:
+            | If you want to know the detail of alias of PN, See https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES
+            | I fixed the bug locally, then this commands returns like below.
+            | {
+            |   'opkg-config-base': ['/PATH/TO/RECIPE/opkg-arch-config_1.0.bb']
+            | }
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getRProviders", multi_config
         )
 
-    def get_runtime_depends(self: "BBClient", multi_config: str = ""):
-        # TODO:
-        return self.__run_command(
+    def get_runtime_depends(
+        self: "BBClient", multi_config: str = ""
+    ) -> List[List[Any]]:
+        """Get all runtime dependency by all recipe files
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            List[List[Any]]: all runtime dependency by all recipe files
+
+        Note:
+            | Return value is like below.
+            | [
+            |   [
+            |       'virtual:nativesdk:/PATH/TO/RECIPE/coreutils_9.0.bb',
+            |       {
+            |           'nativesdk-coreutils-src': [],
+            |           'nativesdk-coreutils-dbg': [],
+            |           'nativesdk-coreutils-staticdev': ['nativesdk-coreutils-dev'],
+            |           'nativesdk-coreutils-dev': ['nativesdk-coreutils'],
+            |           'nativesdk-coreutils-doc': [],
+            |           'nativesdk-coreutils-locale': [],
+            |           'nativesdk-coreutils': []
+            |       }
+            |   ],
+            |]
+
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getRuntimeDepends", multi_config
         )
 
-    def get_runtime_recommends(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def get_runtime_recommends(
+        self: "BBClient", multi_config: str = ""
+    ) -> List[List[Any]]:
+        """Get all runtime recoomends(=weak depends) by all recipe files
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            List[List[Any]]: all runtime recoomends(=weak depends) by all recipe files
+
+        Note:
+            Return value is same format as get_runtime_depends command.
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getRuntimeRecommends", multi_config
         )
 
-    def get_recipe_inherits(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def get_recipe_inherits(
+        self: "BBClient", multi_config: str = ""
+    ) -> Mapping[str, List]:
+        """Get recipes and its inherit recipes
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            Mapping[str, List]: recipes and its inherit recipes
+
+        Note:
+            | Return value is like below.
+            | {
+            |   '/PATH/TO/RECIPE/build-appliance-image_15.0.0.bb': [
+            |       '/PATH/TO/RECIPE/base.bbclass',
+            |       '/PATH/TO/RECIPE/patch.bbclass',                                                                                                           5         '/home/yosuke/work/git/yocto-learning/poky/meta/classes/terminal.bbclass',
+            |       '/PATH/TO/RECIPE/staging.bbclass',
+            |       '/PATH/TO/RECIPE/mirrors.bbclass',
+            |       '/PATH/TO/RECIPE/utils.bbclass',
+            |       '/PATH/TO/RECIPE/utility-tasks.bbclass',
+            |       '/PATH/TO/RECIPE/metadata_scm.bbclass',
+            |       '/PATH/TO/RECIPE/logging.bbclass',
+            |   ],
+            | }
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getRecipeInherits", multi_config
         )
 
-    def get_bb_file_priority(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def get_bb_file_priority(
+        self: "BBClient", multi_config: str = ""
+    ) -> Mapping[str, int]:
+        """Get recipe files and its priority.
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            Mapping[str, int]: recipe files and its priority
+
+        Note:
+            | Return value is like below.
+            | {
+            |   '/PATH/TO/RECIPE/l3afpad_git.bb': 5,
+            |   '/PATH/TO/RECIPE/cups_2.4.2.bb': 5,
+            | }
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getBbFilePriority", multi_config
         )
 
-    def get_default_preference(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def get_default_preference(
+        self: "BBClient", multi_config: str = ""
+    ) -> Mapping[str, int]:
+        """Get recipes and default preference.
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            Mapping[str, int]: recipes and default preference
+
+        Notes:
+            | Return value is like below.
+            | {
+            |   '/PATH/TO/RECIPE/gcr_3.40.0.bb': 0,
+            |   '/PATH/TO/RECIPE/python3-smmap_5.0.0.bb': 0,
+            | }
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getDefaultPreference", multi_config
         )
 
-    def get_skipped_recipes(self: "BBClient"):
-        return self.__run_command(self.__server_connection, "getSkippedRecipes")
+    def get_skipped_recipes(self: "BBClient") -> List[List[Any]]:
+        """Get skipped recipes and its reasons, provides, alias
+
+        Args:
+            self (BBClient): none
+
+        Returns:
+            List[List[Any]]: skipped recipes and its reasons, provides, alias
+
+        Note:
+            | Return value is like below.
+            | [
+            |   [
+            |       '/PATH/TO/RECIPE/raspidmx_git.bb',
+            |       {
+            |           'pn': 'raspidmx',
+            |           'skipreason': 'incompatible with host aarch64-poky-linux (not in COMPATIBLE_HOST)',
+            |           'provides': ['raspidmx'],
+            |           'rprovides': ['raspidmx-src', 'raspidmx-dbg', 'raspidmx-staticdev', 'raspidmx-dev', 'raspidmx-doc', 'raspidmx-locale', 'raspidmx']
+            |       }
+            |   ],
+            | ]
+        """
+        return self.__run_command(self.__server_connection, "getSkippedRecipes")  # type: ignore
 
     def get_overlayed_recipes(self: "BBClient", multi_config: str = ""):
         return self.__run_command(
             self.__server_connection, "getOverlayedRecipes", multi_config
         )
 
-    def get_file_appends(self: "BBClient", file_name: str, multi_config: str = ""):
-        return self.__run_command(
-            self.__server_connection, "getFileAppends", file_name, multi_config
+    def get_file_appends(
+        self: "BBClient", file_path: str, multi_config: str = ""
+    ) -> List[str]:
+        """Get append files
+
+        Args:
+            self (BBClient): none
+            file_path (str): recipe file path
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            List[str]: append files
+        """
+        return self.__run_command(  # type: ignore
+            self.__server_connection, "getFileAppends", file_path, multi_config
         )
 
-    def get_all_appends(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def get_all_appends(self: "BBClient", multi_config: str = "") -> List[List[str]]:
+        """Get all append recipes
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            List[List[str]]: all append recipes
+
+        Note:
+            | Return value is like below.
+            | [
+            |   [
+            |       'busybox_%.bb',
+            |       '/PATH/TO/RECIPE/busybox_%.bbappend'
+            |   ],
+            | ]
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "getAllAppends", multi_config
         )
 

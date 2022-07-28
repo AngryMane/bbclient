@@ -50,9 +50,13 @@ def main() -> None:
     # print(f"get_all_keys_with_flags: {ret}")
     # ret = client.get_variable("BBLAYERS")
     # print(f"get_variable: {type(ret)}")
-    ret = client.get_recipe_packages()
-    print(f"get_recipe_packages: {type(ret)}")
-    print(f"get_recipe_packages: {ret}")
+    # ret = client.get_recipe_packages()
+    # print(f"get_recipe_packages: {type(ret)}")
+    # print(f"get_recipe_packages: {ret}")
+    ret = client.get_file_appends(
+        "/home/yosuke/work/git/yocto-learning/poky/meta/recipes-core/busybox/busybox_1.35.0.bb"
+    )
+    print(f"get_file_appends: {ret}")
 
     client.stop_server()
 
