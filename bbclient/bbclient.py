@@ -752,38 +752,146 @@ class BBClient:
             self.__server_connection, "getAllAppends", multi_config
         )
 
-    def find_providers(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def find_providers(
+        self: "BBClient", multi_config: str = ""
+    ) -> List[Mapping[str, Any]]:
+        """Get latest packages versions, prefered package versions, and whether there is an REQUIRED_VERSION
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            List[Mapping[str, Any]]: latest packages versions, prefered package versions, and whether there is an REQUIRED_VERSION
+
+        Note:
+            | Return value is like below.
+            | [
+            |   {
+            |       find_providers: {'nativesdk-python3-pysocks': [['', '2.8.3', 'r0'], '/PATH/TO/RECIPE/python3-pysocks_2.8.3.bb']    # latest version info
+            |   },
+            |   {
+            |       find_providers: {'nativesdk-python3-pysocks': [['', '1.7.1', 'r0'], '/PATH/TO/RECIPE/python3-pysocks_1.7.1.bb']    # prefered version info
+            |   },
+            |   {
+            |       find_providers: False  # whether there is an REQUIRED_VERSION
+            |   },
+            | ]
+
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "findProviders", multi_config
         )
 
     def find_best_provider(
-        self: "BBClient", package_name_with_multi_config: str
+        self: "BBClient", package_name: str, multi_config: str = ""
     ) -> List[str]:
-        # TODO: package_name_with_multi_config. See split_mc function.
+        """Get best provider infos
+
+        Args:
+            self (BBClient): none
+            package_name (str): _description_
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            List[str]: Now under investigation.
+
+        Note:
+            | Return value is like below. Now under investigation.
+            | [None, None, None, '/PATH/TO/RECIPE/gcc_11.3.bb']
+        """
+        # if you want to know the detail of this line, see bb.runqueue.split_mc.
+        package_name = (
+            "mc:" + multi_config + ":" + package_name if multi_config else package_name
+        )
         return self.__run_command(  # type: ignore
-            self.__server_connection, "findBestProvider", package_name_with_multi_config
+            self.__server_connection, "findBestProvider", package_name
         )
 
-    def all_providers(self: "BBClient", multi_config: str = ""):
-        return self.__run_command(
+    def all_providers(self: "BBClient", multi_config: str = "") -> List[List[Any]]:
+        """Get all providers versions and recipe file path
+
+        Args:
+            self (BBClient): none
+            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+
+        Returns:
+            List[List[Any]]: all providers versions and recipe file path
+
+        Note:
+            | Return value is like below.
+            | [
+            |   ['nativesdk-go', [[['', '1.17.10', 'r0'], '/PATH/TO/RECIPE/go_1.17.10.bb']]],  # PN, [PE, PV, PR], recipe file path
+            |   ['go', [[['', '1.17.10', 'r0'], '/PATH/TO/RECIPE/go_1.17.10.bb']]],
+            | ]
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection, "allProviders", multi_config
         )
 
     def get_runtime_providers(
-        self: "BBClient", runtime_provider: str, multi_config: str = ""
+        self: "BBClient", runtime_providers: List[str], multi_config: str = ""
     ):
         # TODO: What is runtime_provider
         return self.__run_command(
             self.__server_connection,
             "getRuntimeProviders",
-            runtime_provider,
+            runtime_providers,
             multi_config,
         )
 
     def data_store_connector_cmd(
         self: "BBClient", datastore_index: int, command: str, *args, **kwargs
-    ):
+    ) -> Any:
+        """DataStore management function
+
+        Args:
+            self (BBClient): none
+            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.
+            command (str): the method name of bb.data_smart.DataSmart
+            args (Any): depends on command
+            kwargs (Any): depends on command
+
+        Returns:
+            Any: command return
+
+        Note:
+            | User can input following commands. If you want to know detail of these, please see bb.data_smart.DataSmart.
+            * createCopy
+            * createCopy
+            * delVar
+            * delVarFlag
+            * delVarFlags
+            * disableTracking
+            * enableTracking
+            * expand
+            * expandVarref
+            * expandWithRefs
+            * finalize
+            * get
+            * getVar
+            * getVarFlag
+            * getVarFlags
+            * get_hash
+            * hasOverrides
+            * initVar
+            * internal_finalize
+            * items
+            * keys
+            * localkeys
+            * need_overrides
+            * pop
+            * popitem
+            * prependVar
+            * prependVarFlag
+            * renameVar
+            * setVar
+            * setVarFlag
+            * setVarFlags
+            * setdefault
+            * update
+            * values
+        """
         return self.__run_command(
             self.__server_connection,
             "dataStoreConnectorCmd",
@@ -836,8 +944,8 @@ class BBClient:
             kwargs,
         )
 
-    def data_store_connector_release(self: "BBClient", datastore_index: int):
-        return self.__run_command(
+    def data_store_connector_release(self: "BBClient", datastore_index: int) -> None:
+        self.__run_command(
             self.__server_connection, "dataStoreConnectorRelease", datastore_index
         )
 
@@ -870,8 +978,8 @@ class BBClient:
     # --- bitbake server async functions  ---
     def build_file(
         self: "BBClient", file_name: str, task_name: str, internal: bool = False
-    ):
-        return self.__run_command(
+    ) -> None:
+        self.__run_command(
             self.__server_connection, "buildFile", file_name, task_name, internal
         )
 
@@ -879,15 +987,15 @@ class BBClient:
         self: "BBClient",
         package_names_with_task: List[str],
         task_name: str,
-    ):
-        return self.__run_command(
+    ) -> None:
+        self.__run_command(
             self.__server_connection, "buildTargets", package_names_with_task, task_name
         )
 
     def generate_dep_tree_event(
         self: "BBClient", package_names_with_multiconfig: List[str], task_name: str
-    ):
-        return self.__run_command(
+    ) -> None:
+        self.__run_command(
             self.__server_connection,
             "generateDepTreeEvent",
             package_names_with_multiconfig,
@@ -896,72 +1004,72 @@ class BBClient:
 
     def generate_dot_graph(
         self: "BBClient", package_names_with_multiconfig: List[str], task_name: str
-    ):
-        return self.__run_command(
+    ) -> None:
+        self.__run_command(
             self.__server_connection,
             "generateDotGraph",
             package_names_with_multiconfig,
             task_name,
         )
 
-    def generate_targets_tree(self: "BBClient", klass: str, package_names: List[str]):
-        return self.__run_command(
+    def generate_targets_tree(
+        self: "BBClient", klass: str, package_names: List[str]
+    ) -> None:
+        self.__run_command(
             self.__server_connection, "generateTargetsTree", klass, package_names
         )
 
-    def find_config_files(self: "BBClient", name: str):
-        return self.__run_command(self.__server_connection, "findConfigFiles", name)
+    def find_config_files(self: "BBClient", name: str) -> None:
+        self.__run_command(self.__server_connection, "findConfigFiles", name)
 
-    def find_files_matchingin_dir(self: "BBClient", regex_pattern: str, directory: str):
-        return self.__run_command(
+    def find_files_matchingin_dir(
+        self: "BBClient", regex_pattern: str, directory: str
+    ) -> None:
+        self.__run_command(
             self.__server_connection, "findConfigFiles", regex_pattern, directory
         )
 
-    def test_cooker_command_event(self: "BBClient", pattern: str):
-        return self.__run_command(
-            self.__server_connection, "testCookerCommandEvent", pattern
-        )
+    def test_cooker_command_event(self: "BBClient", pattern: str) -> None:
+        self.__run_command(self.__server_connection, "testCookerCommandEvent", pattern)
 
-    def find_config_file_path(self: "BBClient", config_file_name: str):
-        return self.__run_command(
+    def find_config_file_path(self: "BBClient", config_file_name: str) -> None:
+        self.__run_command(
             self.__server_connection, "findConfigFilePath", config_file_name
         )
 
-    def show_versions(self: "BBClient"):
-        return self.__run_command(self.__server_connection, "showVersions")
+    def show_versions(self: "BBClient") -> None:
+        self.__run_command(self.__server_connection, "showVersions")
 
-    def show_environment_target(self: "BBClient", package_name: str = ""):
-        return self.__run_command(
+    def show_environment_target(self: "BBClient", package_name: str = "") -> None:
+        self.__run_command(
             self.__server_connection, "showEnvironmentTarget", package_name
         )
 
-    def show_environment(self: "BBClient", bb_file_name: str):
-        return self.__run_command(
-            self.__server_connection, "showEnvironment", bb_file_name
-        )
+    def show_environment(self: "BBClient", bb_file_name: str) -> None:
+        self.__run_command(self.__server_connection, "showEnvironment", bb_file_name)
 
-    def parse_files(self: "BBClient"):
-        return self.__run_command(self.__server_connection, "parseFiles")
+    def parse_files(self: "BBClient") -> None:
+        self.__run_command(self.__server_connection, "parseFiles")
 
-    def compare_revisions(self: "BBClient"):
-        return self.__run_command(self.__server_connection, "compareRevisions")
+    def compare_revisions(self: "BBClient") -> None:
+        self.__run_command(self.__server_connection, "compareRevisions")
 
-    def trigger_event(self: "BBClient", evene_name: str):
-        return self.__run_command(self.__server_connection, "triggerEvent", evene_name)
+    def trigger_event(self: "BBClient", evene_name: str) -> None:
+        self.__run_command(self.__server_connection, "triggerEvent", evene_name)
 
-    def reset_cooker(self: "BBClient"):
-        return self.__run_command(self.__server_connection, "resetCooker")
+    def reset_cooker(self: "BBClient") -> None:
+        self.__run_command(self.__server_connection, "resetCooker")
 
-    def client_complete(self: "BBClient"):
-        return self.__run_command(self.__server_connection, "clientComplete")
+    def client_complete(self: "BBClient") -> None:
+        self.__run_command(self.__server_connection, "clientComplete")
 
     def find_sigInfo(
         self: "BBClient",
         package_name_with_multi_config: str,
         task_name: str,
         sigs: List[str],
-    ):
-        return self.__run_command(
+    ) -> None:
+        self.__run_command(
             self.__server_connection,
             "findSigInfo",
             package_name_with_multi_config,
@@ -998,6 +1106,7 @@ class BBClient:
             result = server_connection.connection.runCommand(commandline)
         except:
             print("----------------------")
+            print("[ERROR]")
             print(command)
             print(result)
             print("----------------------")

@@ -26,8 +26,11 @@ def main() -> None:
     # use sleep because there is no callback function of parse_files command
     sleep(3)
 
-    # ret = client.data_store_connector_cmd(ret["dsindex"], "getVar", "FILE")
-    # print(f"data_store_connector_cmd: {ret}")
+    ret = client.parse_recipe_file(
+        "/home/yosuke/work/git/yocto-learning/poky/meta/recipes-devtools/gcc/gcc_11.3.bb"
+    )
+    ret = client.data_store_connector_cmd(ret["dsindex"], "getVar", "FILE")
+    print(f"data_store_connector_cmd: {ret}")
     # ret = client.find_best_provider("gcc")
     # print(f"find_best_provider: {ret}")
     # ret = client.get_overlayed_recipes()
@@ -53,10 +56,8 @@ def main() -> None:
     # ret = client.get_recipe_packages()
     # print(f"get_recipe_packages: {type(ret)}")
     # print(f"get_recipe_packages: {ret}")
-    ret = client.get_file_appends(
-        "/home/yosuke/work/git/yocto-learning/poky/meta/recipes-core/busybox/busybox_1.35.0.bb"
-    )
-    print(f"get_file_appends: {ret}")
+    # ret = client.get_runtime_providers(["gcc", "go"])
+    # print(f"get_runtime_providers: {ret}")
 
     client.stop_server()
 
