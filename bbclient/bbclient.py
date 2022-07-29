@@ -843,7 +843,7 @@ class BBClient:
     def data_store_connector_cmd(
         self: "BBClient", datastore_index: int, command: str, *args, **kwargs
     ) -> Any:
-        """DataStore management function
+        """Data store management function
 
         Args:
             self (BBClient): none
@@ -903,7 +903,32 @@ class BBClient:
 
     def data_store_connector_varhist_cmd(
         self: "BBClient", datastore_index: int, command: str, *args, **kwargs
-    ):
+    ) -> Any:
+        """Data store variable history function
+
+        Args:
+            self (BBClient): none
+            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.
+            command (str): the method name of bb.data_smart.VariableHistory
+            args (Any): depends on command
+            kwargs (Any): depends on command
+
+        Returns:
+            Any: command return
+
+        Note:
+            | User can input following commands. If you want to know detail of these, please see bb.data_smart.VariableHistory.
+            * copy
+            * del_var_history
+            * emit
+            * get_variable_files
+            * get_variable_items_files
+            * get_variable_lines
+            * get_variable_refs
+            * record
+            * rename_variable_hist
+            * variable
+        """
         return self.__run_command(
             self.__server_connection,
             "dataStoreConnectorVarHistCmd",
@@ -917,24 +942,56 @@ class BBClient:
         self: "BBClient",
         datastore_index: int,
         variable: str,
-        oval: str,
+        comment: str,
         val: str,
-        datastore_index_: int,
-    ):
-        # TODO: overview of this command
-        return self.__run_command(
+        override_datastore_index: int,
+    ) -> str:
+        """Update variable in datastore by variable inoverride datastore
+
+        Args:
+            self (BBClient): none
+            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.
+            variable (str): varibale name
+            comment (str): comment for update log()
+            override_datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.
+
+        Returns:
+            str: update log
+
+        Note:
+            To be investigate.
+        """
+        return self.__run_command(  # type: ignore
             self.__server_connection,
             "dataStoreConnectorVarHistCmdEmit",
             datastore_index,
             variable,
-            oval,
-            val,
-            datastore_index_,
+            comment,
+            "",  # this parameter is not used at all, but accessed, so we have to set a value. If not so, then exception will occur.
+            override_datastore_index,
         )
 
     def data_store_connector_inc_hist_cmd(
         self: "BBClient", datastore_index: int, command: str, *args, **kwargs
-    ):
+    ) -> Any:
+        """Data store include history function
+
+        Args:
+            self (BBClient): none
+            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.
+            command (str): the method name of bb.data_smart.IncludeHistory
+            args (Any): depends on command
+            kwargs (Any): depends on command
+
+        Returns:
+            Any: command return
+
+        Note:
+            | User can input following commands. If you want to know detail of these, please see bb.data_smart.IncludeHistory.
+            * copy
+            * include
+            * emit
+        """
         return self.__run_command(
             self.__server_connection,
             "dataStoreConnectorIncHistCmd",
@@ -945,22 +1002,45 @@ class BBClient:
         )
 
     def data_store_connector_release(self: "BBClient", datastore_index: int) -> None:
+        """Discard data store
+
+        Args:
+            self (BBClient): none
+            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.
+        """
         self.__run_command(
             self.__server_connection, "dataStoreConnectorRelease", datastore_index
         )
 
     def parse_recipe_file(
         self: "BBClient",
-        file_name: str,
+        file_path: str,
         append: bool = True,
         append_list: Optional[str] = None,
         datastore_index: Optional[int] = None,
-    ):
-        return (
-            self.__run_command(
+    ) -> int:
+        """Parse recipe file
+
+        Args:
+            self (BBClient): none
+            file_path (str): recipe file path
+            append (bool, optional): whether to append. Defaults to True.
+            append_list (Optional[str], optional): Append file list. Defaults to None. If None, bitbake loads append files automatically.
+            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.
+
+        Returns:
+            int: data store index
+
+        Note:
+            | This commands parses recipe file and store result into datastore.
+            | User can access the result by data store index.
+            | It's not clear how the fifth parameter(datastore_index) works.
+        """
+        ret: Mapping[str, int] = (
+            self.__run_command(  # type: ignore
                 self.__server_connection,
                 "parseRecipeFile",
-                file_name,
+                file_path,
                 append,
                 append_list,
                 datastore_index,
@@ -969,11 +1049,12 @@ class BBClient:
             else self.__run_command(
                 self.__server_connection,
                 "parseRecipeFile",
-                file_name,
+                file_path,
                 append,
                 append_list,
             )
         )
+        return ret["dsindex"]
 
     # --- bitbake server async functions  ---
     def build_file(

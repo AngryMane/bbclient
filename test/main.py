@@ -29,8 +29,13 @@ def main() -> None:
     ret = client.parse_recipe_file(
         "/home/yosuke/work/git/yocto-learning/poky/meta/recipes-devtools/gcc/gcc_11.3.bb"
     )
-    ret = client.data_store_connector_cmd(ret["dsindex"], "getVar", "FILE")
-    print(f"data_store_connector_cmd: {ret}")
+    print(type(ret))
+    print(ret)
+    # ret = client.data_store_connector_cmd(ret, "getVar", "FILE")
+    # print(f"data_store_connector_cmd: {ret}")
+    # ret = client.data_store_connector_varhist_cmd(ret, "variable", "FILE")
+    # print(f"data_store_connector_varhist_cmd: {ret}")
+
     # ret = client.find_best_provider("gcc")
     # print(f"find_best_provider: {ret}")
     # ret = client.get_overlayed_recipes()
