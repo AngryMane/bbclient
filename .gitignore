@@ -131,3 +131,7 @@ dmypy.json
 
 # Privte info
 test.yml
+
+# auto generated-documents
+bbclient_doc
+html
