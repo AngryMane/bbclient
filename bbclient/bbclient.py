@@ -1,3 +1,21 @@
+#!/usr/bin/env python3
+""" 
+This file provides client class for bitbake server.
+"""
+
+__author__ = "AngryMane"
+__authors__ = ["AngryMane"]
+__contact__ = "regulationdango@gmail.com"
+__copyright__ = "Copyright 2022"
+__credits__ = ["AngryMane"]
+__date__ = "2022/07/31"
+__deprecated__ = False
+__email__ = "regulationdango@gmail.com"
+__license__ = "GPLv3"
+__maintainer__ = "AngryMane"
+__status__ = "in progress"
+__version__ = "0.0.1"
+
 import os
 import sys
 import subprocess
@@ -5,6 +23,13 @@ from typing import Any, List, Optional, Tuple, Mapping
 
 
 class BBClient:
+    """Client for bitbake RPC Server
+
+    Attributes:
+        __project_path (str): poky directory path
+        __is_server_running (bool): server is running or not
+        __server_connection (bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection): touch point to server
+    """
 
     # --- setup functions ---
     def __init__(
@@ -78,6 +103,18 @@ class BBClient:
         self.__server_connection.connection.terminateServer()
         self.__server_connection.terminate()
         self.__is_server_running = False
+
+    def get_event(self: "BBClient", timeout: float) -> Optional[Any]:
+        """Get latest event
+
+        Args:
+            self (BBClient): none
+            timeout (float): timeout. if timeout, return None
+
+        Returns:
+            Optional[Any]: event notification objects. See bb.event.py
+        """
+        return self.__server_connection.events.waitEvent(timeout)
 
     # --- bitbake server sync functions  ---
     def state_shutdown(self: "BBClient") -> None:
@@ -622,7 +659,7 @@ class BBClient:
             | {
             |   '/PATH/TO/RECIPE/build-appliance-image_15.0.0.bb': [
             |       '/PATH/TO/RECIPE/base.bbclass',
-            |       '/PATH/TO/RECIPE/patch.bbclass',                                                                                                           5         '/home/yosuke/work/git/yocto-learning/poky/meta/classes/terminal.bbclass',
+            |       '/PATH/TO/RECIPE/patch.bbclass',
             |       '/PATH/TO/RECIPE/staging.bbclass',
             |       '/PATH/TO/RECIPE/mirrors.bbclass',
             |       '/PATH/TO/RECIPE/utils.bbclass',
@@ -1018,7 +1055,7 @@ class BBClient:
         append: bool = True,
         append_list: Optional[str] = None,
         datastore_index: Optional[int] = None,
-    ) -> int:
+    ) -> Optional[int]:
         """Parse recipe file
 
         Args:
@@ -1029,7 +1066,7 @@ class BBClient:
             datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.
 
         Returns:
-            int: data store index
+            Optional[int]: data store index
 
         Note:
             | This commands parses recipe file and store result into datastore.
@@ -1054,94 +1091,277 @@ class BBClient:
                 append_list,
             )
         )
-        return ret["dsindex"]
+        return ret["dsindex"] if ret else None
 
     # --- bitbake server async functions  ---
     def build_file(
-        self: "BBClient", file_name: str, task_name: str, internal: bool = False
+        self: "BBClient", file_path: str, task_name: str, internal: bool = False
     ) -> None:
+        """Build recipe file
+
+        Args:
+            self (BBClient): none
+            file_path (str): target recipe file path
+            task_name (str): task name which will run
+            internal (bool, optional): If True, bitbake will fire events that notify BuildStarted and BuildCompleted. Defaults to False.
+
+        Note:
+            | If you want to monitor BuildStarted and BuildCompleted event, use get_event.
+        """
         self.__run_command(
-            self.__server_connection, "buildFile", file_name, task_name, internal
+            self.__server_connection, "buildFile", file_path, task_name, internal
         )
 
     def build_targets(
         self: "BBClient",
-        package_names_with_task: List[str],
+        targets: List[str],
         task_name: str,
     ) -> None:
-        self.__run_command(
-            self.__server_connection, "buildTargets", package_names_with_task, task_name
-        )
+        """Build package
+
+        Args:
+            self (BBClient): none
+            targets (List[str]): see Note section
+            task_name (str): task name which will run
+
+        Note:
+            | User can input targets as follows.
+            | [
+            |   "gcc",                              # only package name
+            |   "mc:xxx_config:alsa",               # multiconfig and package name
+            |   "multiconfig:yyy_config:vim",       # multiconfig and package name
+            |   "mc:*:clang"                        # all multiconfig and package name
+            |   "mc:yyy_config:python:do_patch",    # multiconfig, package name and task name
+            | ]
+        """
+
+        self.__run_command(self.__server_connection, "buildTargets", targets, task_name)
 
     def generate_dep_tree_event(
-        self: "BBClient", package_names_with_multiconfig: List[str], task_name: str
+        self: "BBClient", targets: List[str], task_name: str
     ) -> None:
+        """Request dependency tree information
+
+        Args:
+            self (BBClient): none
+            targets(List[str]): targets info. see Note section.
+            task_name (str): task name. e.g.) do_build, do_fetch, etc...
+
+        Note:
+            | User can input targets as follows.
+            | [
+            |   "gcc",                              # only package name
+            |   "mc:xxx_config:alsa",               # multiconfig and package name
+            |   "multiconfig:yyy_config:vim",       # multiconfig and package name
+            |   "mc:*:clang"                        # all multiconfig and package name
+            |   "mc:yyy_config:python:do_patch",    # multiconfig, package name and task name
+            | ]
+        """
         self.__run_command(
             self.__server_connection,
             "generateDepTreeEvent",
-            package_names_with_multiconfig,
+            targets,
             task_name,
         )
 
     def generate_dot_graph(
-        self: "BBClient", package_names_with_multiconfig: List[str], task_name: str
+        self: "BBClient", targets: List[str], task_name: str
     ) -> None:
+        """Generate task dependency graph(task-depends.dot)
+
+        Args:
+            self (BBClient): none
+            targets (List[str]): targets info. see Note section.
+            task_name (str): task name. e.g.) do_build, do_fetch, etc...
+
+        Note:
+            | User can input targets as follows.
+            | [
+            |   "gcc",                              # only package name
+            |   "mc:xxx_config:alsa",               # multiconfig and package name
+            |   "multiconfig:yyy_config:vim",       # multiconfig and package name
+            |   "mc:*:clang"                        # all multiconfig and package name
+            |   "mc:yyy_config:python:do_patch",    # multiconfig, package name and task name
+            | ]
+        """
         self.__run_command(
             self.__server_connection,
             "generateDotGraph",
-            package_names_with_multiconfig,
+            targets,
             task_name,
         )
 
     def generate_targets_tree(
-        self: "BBClient", klass: str, package_names: List[str]
+        self: "BBClient", bb_klass_file_path: str, package_names: List[str]
     ) -> None:
+        """Generate target tree
+
+        Args:
+            self (BBClient): none
+            bb_klass_file_path (str): bbclass file path
+            package_names (List[str]): target package names
+
+        Note:
+            | Use can receive result by bb.event.TargetsTreeGenerated event.
+            |
+            | If you specify bb_klass_file_path, bitbake will add the packages that inherits bb_klass_file_path to package_names.
+            | If you don't want to do it, please input None to bb_klass_file_path.
+        """
         self.__run_command(
-            self.__server_connection, "generateTargetsTree", klass, package_names
+            self.__server_connection,
+            "generateTargetsTree",
+            bb_klass_file_path,
+            package_names,
         )
 
-    def find_config_files(self: "BBClient", name: str) -> None:
-        self.__run_command(self.__server_connection, "findConfigFiles", name)
+    def find_config_files(self: "BBClient", variable_name: str) -> None:
+        """Find Config files that define specified variable.
 
-    def find_files_matchingin_dir(
-        self: "BBClient", regex_pattern: str, directory: str
+        Args:
+            self (BBClient): none
+            variable_name (str): _description_
+
+        Note:
+            | Use can receive result by bb.event.ConfigFilesFound event.
+        """
+        self.__run_command(self.__server_connection, "findConfigFiles", variable_name)
+
+    def find_files_matching_in_dir(
+        self: "BBClient", target_file_name_substring: str, directory: str
     ) -> None:
+        """Find files that matches the regex_pattern from the directory.
+
+        Args:
+            self (BBClient): none
+            target_file_name_substring (str): Substrings of target file name. e.g.) ".conf", "xxx.bbappe", etc...
+            directory (str): Target directory. Base directory is ${BBPATH}.
+
+        Note:
+            | Use can receive result by bb.event.FilesMatchingFound event.
+        """
         self.__run_command(
-            self.__server_connection, "findConfigFiles", regex_pattern, directory
+            self.__server_connection,
+            "findFilesMatchingInDir",
+            target_file_name_substring,
+            directory,
         )
 
     def test_cooker_command_event(self: "BBClient", pattern: str) -> None:
+        """Dummy command
+
+        Args:
+            self (BBClient): none
+            pattern (str): dummy param
+        """
         self.__run_command(self.__server_connection, "testCookerCommandEvent", pattern)
 
     def find_config_file_path(self: "BBClient", config_file_name: str) -> None:
+        """Find config file path
+
+        Args:
+            self (BBClient): none
+            config_file_name (str): target config file name
+
+        Note:
+            | Use can receive result by bb.event.ConfigFilePathFound event.
+        """
         self.__run_command(
             self.__server_connection, "findConfigFilePath", config_file_name
         )
 
     def show_versions(self: "BBClient") -> None:
+        """Show all packages versions
+
+        Args:
+            self (BBClient): none
+
+        Note:
+            | bbclient doesn't display any information.
+            | if you want to use this feature, please use bitbake-layers.
+        """
         self.__run_command(self.__server_connection, "showVersions")
 
     def show_environment_target(self: "BBClient", package_name: str = "") -> None:
+        """Show variables for specified package
+
+        Args:
+            self (BBClient): none
+            package_name (str): target package name
+
+        Note:
+            | bbclient doesn't display any information.
+            | if you want to use this feature, please use bitbake-gervar or bitbake -e.
+        """
         self.__run_command(
             self.__server_connection, "showEnvironmentTarget", package_name
         )
 
-    def show_environment(self: "BBClient", bb_file_name: str) -> None:
-        self.__run_command(self.__server_connection, "showEnvironment", bb_file_name)
+    def show_environment(self: "BBClient", bb_file_path: str) -> None:
+        """Show variables for specified recipe
+
+        Args:
+            self (BBClient): none
+            bb_file_path (str): target recipe path
+
+        Note:
+            | bbclient doesn't display any information.
+            | if you want to use this feature, please use bitbake-gervar or bitbake -e.
+        """
+        self.__run_command(self.__server_connection, "showEnvironment", bb_file_path)
 
     def parse_files(self: "BBClient") -> None:
+        """Parse all bb files.
+
+        Args:
+            self (BBClient): none
+
+        Note:
+            | TODO: investigate what event will user receive.
+        """
         self.__run_command(self.__server_connection, "parseFiles")
 
     def compare_revisions(self: "BBClient") -> None:
+        """Exit async command
+
+        Args:
+            self (BBClient): none
+
+        Note:
+            | TODO: investigate the detail.
+            | This determines if the cache is out of date, and if so, this terminates asynchronous processing.
+        """
         self.__run_command(self.__server_connection, "compareRevisions")
 
     def trigger_event(self: "BBClient", evene_name: str) -> None:
+        """Send event
+
+        Args:
+            self (BBClient): none
+            evene_name (str): event class name.
+
+        Note:
+            | Send evene_name event.
+            | User can receive this event by get_event.
+        """
         self.__run_command(self.__server_connection, "triggerEvent", evene_name)
 
     def reset_cooker(self: "BBClient") -> None:
+        """Reset cooker state and caches.
+
+        Args:
+            self (BBClient): none
+
+        Note:
+            | TODO: investigate the detail.
+        """
         self.__run_command(self.__server_connection, "resetCooker")
 
     def client_complete(self: "BBClient") -> None:
+        """Notify client will be close
+
+        Args:
+            self (BBClient): none
+        """
         self.__run_command(self.__server_connection, "clientComplete")
 
     def find_sigInfo(
@@ -1150,6 +1370,17 @@ class BBClient:
         task_name: str,
         sigs: List[str],
     ) -> None:
+        """Find signature info files via the signature generator(?)
+
+        Args:
+            self (BBClient): none
+            package_name_with_multi_config (str): TODO
+            task_name (str): TODO
+            sigs (List[str]): TODO
+
+        Note:
+            | Use can receive result by bb.event.FindSigInfoResult event.
+        """
         self.__run_command(
             self.__server_connection,
             "findSigInfo",
@@ -1164,6 +1395,11 @@ class BBClient:
     def __connect_server(
         server_adder: str, project_path: str
     ) -> Tuple["bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection", "module"]:  # type: ignore
+        """Connect to server
+
+        Returns:
+            _type_: ("bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection", "module")
+        """
         # TODO: use shell not to be depends on bb modules
         sys.path.append(f"{project_path}/bitbake/lib")
         from bb.main import setup_bitbake, BitBakeConfigParameters  # type: ignore
@@ -1181,6 +1417,15 @@ class BBClient:
 
     @staticmethod
     def __run_command(server_connection, command: str, *params: Any) -> Optional[Any]:
+        """Run command
+
+        Args:
+            server_connection (_type_): use return value of __connect_server()
+            command (str): commands bitbake defined
+
+        Returns:
+            Optional[Any]: command return
+        """
         commandline: List[str] = [command]
         commandline.extend(params if params else [])
         try:

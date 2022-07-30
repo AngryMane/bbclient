@@ -3,6 +3,8 @@
 from bbclient.bbclient import BBClient
 
 import yaml
+import logging
+from typing import Optional, Any
 from time import sleep
 from typing import Tuple
 
@@ -19,52 +21,45 @@ def main() -> None:
     client: BBClient = BBClient(project_path, init_command)
     client.start_server(server_adder, server_port)
 
-    ret = client.parse_configuration()
-    ret = client.parse_files()
+    typical_setup(client, logging.DEBUG)
 
-    # wainting for parse files
-    # use sleep because there is no callback function of parse_files command
-    sleep(3)
+    # do test
+    client.show_versions()
 
-    ret = client.parse_recipe_file(
-        "/home/yosuke/work/git/yocto-learning/poky/meta/recipes-devtools/gcc/gcc_11.3.bb"
-    )
-    print(type(ret))
-    print(ret)
-    # ret = client.data_store_connector_cmd(ret, "getVar", "FILE")
-    # print(f"data_store_connector_cmd: {ret}")
-    # ret = client.data_store_connector_varhist_cmd(ret, "variable", "FILE")
-    # print(f"data_store_connector_varhist_cmd: {ret}")
-
-    # ret = client.find_best_provider("gcc")
-    # print(f"find_best_provider: {ret}")
-    # ret = client.get_overlayed_recipes()
-    # print(f"get_overlayed_recipes: {ret}")
-    # ret = client.get_variable("FILE")
-    # print(f"get_variable: {ret}")
-    # ret = client.get_skipped_recipes()
-    # print(f"get_skipped_recipes: {ret}")
-    # ret = client.show_environment_target()
-    # print(f"show_environment_target: {ret}")
-    # ret = client.get_layer_priorities()
-    # print(f"get_layer_priorities: {ret}")
-    # ret = client.get_recipes()
-    # print(f"get_recipes: {len(ret)}")
-    # ret = client.get_r_providers()
-    # print(f"get_r_providers: {ret}")
-    # ret = client.find_sigInfo("", "bulid", [])
-    # print(f"find_sigInfo: {ret}")
-    # ret = client.get_all_keys_with_flags([])
-    # print(f"get_all_keys_with_flags: {ret}")
-    # ret = client.get_variable("BBLAYERS")
-    # print(f"get_variable: {type(ret)}")
-    # ret = client.get_recipe_packages()
-    # print(f"get_recipe_packages: {type(ret)}")
-    # print(f"get_recipe_packages: {ret}")
-    # ret = client.get_runtime_providers(["gcc", "go"])
-    # print(f"get_runtime_providers: {ret}")
+    sleep(5)
 
     client.stop_server()
+
+
+def typical_setup(client: BBClient, log_level: int) -> None:
+    ret = client.get_uihandler_num()
+    client.set_event_mask(
+        ret, log_level, {"": 0}, ["*"]
+    )  # mask unnecessary logging info
+    ret = client.parse_configuration()
+    ret = client.parse_files()
+    # wainting for parse files
+    # TODO: use client.get_event
+    sleep(3)
+
+
+def wait_event(client: BBClient, class_name: str) -> Optional[Any]:
+    count: int = 0
+    while count < 3000:
+        ret: Optional[Any] = client.get_event(0.03)
+        # if type(ret) == f"<class '{class_name}'>":
+        if not ret:
+            count = count + 1
+        elif get_class_name(ret) == class_name:
+            return ret
+        else:
+            count = 0
+        sleep(0.01)
+    return None
+
+
+def get_class_name(obj: Any) -> str:
+    return str(type(obj))[8:-2]
 
 
 def load_test_settings(yml_file_path: str) -> Tuple[str, str, int]:
