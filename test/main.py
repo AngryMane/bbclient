@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 
 from bbclient.bbclient import BBClient
+from bbclient.bbcommon import *
 
 import yaml
 import logging
-from typing import Optional, Any
+from typing import Optional, Any, List
 from time import sleep
 from typing import Tuple
 
@@ -24,7 +25,15 @@ def main() -> None:
     typical_setup(client, logging.DEBUG)
 
     # do test
-    client.show_versions()
+    ret: List[AllProvidersResult] = client.all_providers()
+    for package in ret:
+        print(package.package_name)
+        for recipe in package.recipes:
+            print(recipe.recipe_file_path)
+            print(recipe.pe)
+            print(recipe.pv)
+            print(recipe.pr)
+        print("-------------------------------------")
 
     sleep(5)
 
