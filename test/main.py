@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 
-from bbclient.bbclient import BBClient
+from bbclient import *
 
 import yaml
 import logging
-from typing import Optional, Any
+from typing import Optional, Any, List
 from time import sleep
 from typing import Tuple
 
@@ -24,7 +24,11 @@ def main() -> None:
     typical_setup(client, logging.DEBUG)
 
     # do test
-    client.show_versions()
+    ret: List[GetAllAppendsResult] = client.get_all_appends()
+    for recipe in ret:
+        print(recipe.target_recipe_name)
+        print(recipe.append_file_path)
+        print("-------------------")
 
     sleep(5)
 

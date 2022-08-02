@@ -19,7 +19,10 @@ __version__ = "0.0.1"
 import os
 import sys
 import subprocess
+from tkinter import W
 from typing import Any, List, Optional, Tuple, Mapping
+
+from .bbcommon import *
 
 
 class BBClient:
@@ -139,7 +142,9 @@ class BBClient:
         """
         self.__run_command(self.__server_connection, "stateForceShutdown")
 
-    def get_all_keys_with_flags(self: "BBClient", flag_list: List[str]) -> Mapping:
+    def get_all_keys_with_flags(
+        self: "BBClient", flag_list: List[str]
+    ) -> List[getAllKeysWithFlagsResult]:
         """Get value, history and specified flags of all global variables.
 
         Args:
@@ -147,43 +152,12 @@ class BBClient:
             flag_list(List[str]): Target flags. If flags are unnecessary, please set [].
 
         Returns:
-            | Dict object like below.
-            | {
-            |     "VARIABLE_A_NAME" : {
-            |         "v" : "VARIABLE_A_VALUE",
-            |         "history" : [
-            |                         {
-            |                             'parsing': True,
-            |                             'variable': 'VARIABLE_NAME',
-            |                             'file': 'PATH/TO/FILE/xxx.inc',
-            |                             'line': ${LINE_NUM},
-            |                             'op': 'set',
-            |                             'detail': 'SETTING VALUE AT THIS POINT'
-            |                         },
-            |                         {
-            |                             'parsing': True,
-            |                             'variable': 'VARIABLE_NAME',
-            |                             'file': 'PATH/TO/FILE/xxx.inc',
-            |                             'line': ${LINE_NUM},
-            |                             'op': 'set',
-            |                             'detail': 'SETTING VALUE AT THIS POINT'
-            |                         },
-            |                     ]
-            |         "FLAG_A_NAME": "FLAG_A_VALUE",
-            |         "FLAG_B_NAME": "FLAG_B_VALUE"
-            |     },
-            |     "VARIABLE_B_NAME" : {
-            |         "v" : "VARIABLE_B_VALUE",
-            |         "history" : [ ... ],
-            |         "FLAG_A_NAME": "FLAG_A_VALUE",
-            |         "FLAG_B_NAME": "FLAG_B_VALUE"
-            |     },
-            | }
-
+            List[getAllKeysWithFlagsResult]: See getAllKeysWithFlagsResult.
         """
-        return self.__run_command(  # type: ignore
+        ret: Mapping = self.__run_command(  # type: ignore
             self.__server_connection, "getAllKeysWithFlags", flag_list
         )
+        return [getAllKeysWithFlagsResult(key, value) for key, value in ret.items()]
 
     def get_variable(self: "BBClient", name: str, expand: bool = True) -> str:
         """Get variable value
@@ -354,19 +328,23 @@ class BBClient:
             mask,
         )
 
-    def set_features(self: "BBClient", features: List[int]) -> None:
+    def set_features(self: "BBClient", features: List[BBFeature]) -> None:
         """Set feature(Enable feature)
 
         Args:
             self (BBClient): none
-            features (List[int]): list of 0, 1, 2. 1 means HOB_EXTRA_CACHES, 2 means BASEDATASTORE_TRACKING and 3 means SEND_SANITYEVENTS.
+            features (List[BBFeature]): list of HOB_EXTRA_CACHES, BASEDATASTORE_TRACKING and SEND_SANITYEVENTS.
 
         Note:
             | if enable HOB_EXTRA_CACHES, recipecheces has extra-info like SUMMARY, LICENSE, DESCRIPTION, etc...
             | if enable BASEDATASTORE_TRACKING, enable_data_tracking. See enable_data_tracking command.
             | if enable SEND_SANITYEVENTS, this feature has not been implemented and is currently meaningless.
         """
-        self.__run_command(self.__server_connection, "setFeatures", features)
+        self.__run_command(
+            self.__server_connection,
+            "setFeatures",
+            [feature.value for feature in features],
+        )
 
     def update_config(
         self: "BBClient",
@@ -379,8 +357,8 @@ class BBClient:
         Args:
             self (BBClient): none
             options (Mapping[str, Any]): dict of prefile and postfile
-            environment (Mapping[str, str]): _description_
-            command_line (str): _description_
+            environment (Mapping[str, str]): environment variables
+            command_line (str): will set to BB_CMDLINE
 
         Note:
             | options will set like {"prefile": ["FILE_NAME", "FILE_NAME"], "postfile": ["FILE_NAME", "FILE_NAME"]}
@@ -404,30 +382,22 @@ class BBClient:
         """
         self.__run_command(self.__server_connection, "parseConfiguration")
 
-    def get_layer_priorities(self: "BBClient") -> List[List[str]]:
+    def get_layer_priorities(self: "BBClient") -> List[GetLayerPrioritiesResult]:
         """Get name, path, priority of all layers
 
         Args:
             self (BBClient): none
 
         Returns:
-            List[List[str]]: name, path, priority of all layers
+            List[GetLayerPrioritiesResult]: See GetLayerPrioritiesResult.
 
-        Note:
-            | Return value is like follows.
-            | [
-            |   ['core', '^/PATH/TO/POKY/poky/meta/', '^/PATH/TO/POKY/poky/meta/', 5],
-            |   ['yocto', '^/PATH/TO/POKY/poky/meta-poky/', '^/PATH/TO/POKY/poky/meta-poky/', 5],
-            |   ['yoctobsp', '^/PATH/TO/POKY/poky/meta-yocto-bsp/', '^/PATH/TO/POKY/poky/meta-yocto-bsp/', 5],
-            |   ['raspberrypi', '^/PATH/TO/POKY/poky/meta-raspberrypi/', '^/PATH/TO/POKY/poky/meta-raspberrypi/', 9]
-            | ]
-            | The first element is layer name. the second is layer path, the third seems same as the second, but detail is not clear.
-            | The fourth element is layer priority.
+        WARNING:
+            This command deletes caches(bug?).
         """
-        # Note: this command deletes caches(bug?)
-        return self.__run_command(self.__server_connection, "getLayerPriorities")  # type: ignore
+        ret: List[List[Any]] = self.__run_command(self.__server_connection, "getLayerPriorities")  # type: ignore
+        return [GetLayerPrioritiesResult(layer) for layer in ret]
 
-    def get_recipes(self: "BBClient", multi_config: str = "") -> List[str]:
+    def get_recipes(self: "BBClient", multi_config: str = "") -> List[GetRecipesResult]:
         """Get all package name from cache
 
         Args:
@@ -435,11 +405,14 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            List[str]: package names
+            List[GetRecipesResult]: See GetRecipesResult.
         """
-        return self.__run_command(self.__server_connection, "getRecipes", multi_config)  # type: ignore
+        ret: List[List[Any]] = self.__run_command(self.__server_connection, "getRecipes", multi_config)  # type: ignore
+        return [GetRecipesResult(recipe) for recipe in ret]
 
-    def get_recipe_depends(self: "BBClient", multi_config: str = "") -> List[List[Any]]:
+    def get_recipe_depends(
+        self: "BBClient", multi_config: str = ""
+    ) -> List[GetRecipeDependsResult]:
         """Get recipe depends
 
         Args:
@@ -447,27 +420,16 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            List[List[Any]]: See Note section.
-
-        Note:
-            | Return value is like below.
-            | [
-            |     ['RECIPE_NAME:RECIPE_FILE_PATH',
-            |         [
-            |             'depends-package-name-a',
-            |             'depends-package-name-b',
-            |             'depends-package-name-c',
-            |         ]
-            |     ],
-            | ]
+            List[GetRecipeDependsResult]: See GetRecipeDependsResult.
         """
-        return self.__run_command(  # type: ignore
+        ret: List[List[Any]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRecipeDepends", multi_config
         )
+        return [GetRecipeDependsResult(recipe_file) for recipe_file in ret]
 
     def get_recipe_versions(
         self: "BBClient", multi_config: str = ""
-    ) -> Mapping[str, List[str]]:
+    ) -> List[GetRecipeVersionsResult]:
         """Get all recipe versions
 
         Args:
@@ -475,22 +437,16 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            Mapping[str, List[str]]: Recipes file and its version info
-
-        Note:
-            | Return value is like below.
-            | {
-                |   '/PATH/TO/POKY/poky/meta/recipes-graphics/cantarell-fonts/cantarell-fonts_0.303.1.bb': ['', '0.303.1', 'r0'],
-            | }
-            | ['', '0.303.1', 'r0'] is [PE, PV, PR]. If you want to know PE/PV/PR, see https://docs.yoctoproject.org/ref-manual/variables.html?highlight=bblayers# .
+            List[GetRecipeVersions]: See GetRecipeVersions.
         """
-        return self.__run_command(  # type: ignore
+        ret: Mapping[str, List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRecipeVersions", multi_config
         )
+        return [GetRecipeVersionsResult(value, key) for key, value in ret.items()]
 
     def get_recipe_provides(
         self: "BBClient", multi_config: str = ""
-    ) -> Mapping[str, List[str]]:
+    ) -> List[GetRecipeProvidesResult]:
         """Get all recipe files and its packages
 
         Args:
@@ -498,21 +454,16 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            Mapping[str, List[str]]: All recipe files and its packages
-
-        Note:
-            | Return value is like below.
-            | {
-            |   '/PATH/TO/RECIPE/inetutils_2.2.bb': ['inetutils'],
-            | }
+            List[GetRecipeProvidesResult]: See GetRecipeProvidesResult
         """
-        return self.__run_command(  # type: ignore
+        ret: Mapping[str, List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRecipeProvides", multi_config
         )
+        return [GetRecipeProvidesResult(key, value) for key, value in ret.items()]
 
     def get_recipe_packages(
         self: "BBClient", multi_config: str = ""
-    ) -> Mapping[str, List[str]]:
+    ) -> List[GetRecipePackagesResult]:
         """Get all recipe files and its recipe files
 
         Args:
@@ -520,25 +471,20 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            Mapping[str, List[str]]: All recipe files and its recipe files.
+            List[GetRecipePackagesResult]: See GetRecipePackagesResult.
 
         WARNING:
             | This command doesn't work beacuase of bitbake bug.
             | bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
-
-        Note:
-            | I fixed the bug locally, then this commands returns like below.
-            | {
-            |   'PACKAGE_NAME': ['/PATH/TO/RECIPE/cryptodev-linux_1.12.bb']
-            | }
         """
-        return self.__run_command(  # type: ignore
+        ret: Mapping[str, List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRecipePackages", multi_config
         )
+        return [GetRecipePackagesResult(key, value) for key, value in ret.items()]
 
     def get_recipe_packages_dynamic(
         self: "BBClient", multi_config: str = ""
-    ) -> Mapping[str, List[str]]:
+    ) -> List[GetRecipePackagesDynamicResult]:
         """Get all recipe files that provides PACKAGE_DYNAMIC and its PACKAGE_DYNAMIC
 
         Args:
@@ -546,25 +492,22 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            Mapping[str, List[str]]: all recipe files that provides PACKAGE_DYNAMIC and its PACKAGE_DYNAMIC
+            List[GetRecipePackagesDynamicResult]: See GetRecipePackagesDynamicResult
 
         WARNING:
             | This command doesn't work beacuase of bitbake bug.
             | bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
-
-        Note:
-            | I fixed the bug locally, then this commands returns like below.
-            | {
-            |   '^nativesdk-packagegroup-sdk-host-locale-.*': ['/PATH/TO/RECIPE/nativesdk-packagegroup-sdk-host.bb'],
-            | }
         """
-        return self.__run_command(  # type: ignore
+        ret: Mapping[str, List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRecipePackagesDynamic", multi_config
         )
+        return [
+            GetRecipePackagesDynamicResult(key, value) for key, value in ret.items()
+        ]
 
     def get_r_providers(
         self: "BBClient", multi_config: str = ""
-    ) -> Mapping[str, List[str]]:
+    ) -> List[GetRProvidersResult]:
         """Get alias of PN and its recipe files
 
         Args:
@@ -572,7 +515,7 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            Mapping[str, List[str]]: alias of PN and its recipe files
+            List[GetRProvidersResult]: See GetRProvidersResult
 
         WARNING:
             | This command doesn't work beacuase of bitbake bug.
@@ -580,18 +523,15 @@ class BBClient:
 
         Note:
             | If you want to know the detail of alias of PN, See https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES
-            | I fixed the bug locally, then this commands returns like below.
-            | {
-            |   'opkg-config-base': ['/PATH/TO/RECIPE/opkg-arch-config_1.0.bb']
-            | }
         """
-        return self.__run_command(  # type: ignore
+        ret: Mapping[str, List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRProviders", multi_config
         )
+        return [GetRProvidersResult(key, value) for key, value in ret.items()]
 
     def get_runtime_depends(
         self: "BBClient", multi_config: str = ""
-    ) -> List[List[Any]]:
+    ) -> List[GetRuntimeDependsResult]:
         """Get all runtime dependency by all recipe files
 
         Args:
@@ -599,33 +539,16 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            List[List[Any]]: all runtime dependency by all recipe files
-
-        Note:
-            | Return value is like below.
-            | [
-            |   [
-            |       'virtual:nativesdk:/PATH/TO/RECIPE/coreutils_9.0.bb',
-            |       {
-            |           'nativesdk-coreutils-src': [],
-            |           'nativesdk-coreutils-dbg': [],
-            |           'nativesdk-coreutils-staticdev': ['nativesdk-coreutils-dev'],
-            |           'nativesdk-coreutils-dev': ['nativesdk-coreutils'],
-            |           'nativesdk-coreutils-doc': [],
-            |           'nativesdk-coreutils-locale': [],
-            |           'nativesdk-coreutils': []
-            |       }
-            |   ],
-            |]
-
+            List[GetRuntimeDependsResult]: See GetRuntimeDependsResult
         """
-        return self.__run_command(  # type: ignore
+        ret: List[str, Mapping[str, List[str]]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRuntimeDepends", multi_config
         )
+        return [GetRuntimeDependsResult(*data) for data in ret]
 
     def get_runtime_recommends(
         self: "BBClient", multi_config: str = ""
-    ) -> List[List[Any]]:
+    ) -> List[GetRuntimeRecommendsResult]:
         """Get all runtime recoomends(=weak depends) by all recipe files
 
         Args:
@@ -633,18 +556,16 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            List[List[Any]]: all runtime recoomends(=weak depends) by all recipe files
-
-        Note:
-            Return value is same format as get_runtime_depends command.
+            List[GetRuntimeRecommendsResult]: See GetRuntimeRecommendsResult
         """
-        return self.__run_command(  # type: ignore
+        ret: List[str, Mapping[str, List[str]]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRuntimeRecommends", multi_config
         )
+        return [GetRuntimeRecommendsResult(*data) for data in ret]
 
     def get_recipe_inherits(
         self: "BBClient", multi_config: str = ""
-    ) -> Mapping[str, List]:
+    ) -> List[GetRecipeInheritsResult]:
         """Get recipes and its inherit recipes
 
         Args:
@@ -652,30 +573,16 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            Mapping[str, List]: recipes and its inherit recipes
-
-        Note:
-            | Return value is like below.
-            | {
-            |   '/PATH/TO/RECIPE/build-appliance-image_15.0.0.bb': [
-            |       '/PATH/TO/RECIPE/base.bbclass',
-            |       '/PATH/TO/RECIPE/patch.bbclass',
-            |       '/PATH/TO/RECIPE/staging.bbclass',
-            |       '/PATH/TO/RECIPE/mirrors.bbclass',
-            |       '/PATH/TO/RECIPE/utils.bbclass',
-            |       '/PATH/TO/RECIPE/utility-tasks.bbclass',
-            |       '/PATH/TO/RECIPE/metadata_scm.bbclass',
-            |       '/PATH/TO/RECIPE/logging.bbclass',
-            |   ],
-            | }
+            List[GetRecipeInheritsResult]: See GetRecipeInheritsResult
         """
-        return self.__run_command(  # type: ignore
+        ret: Mapping[str, List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRecipeInherits", multi_config
         )
+        return [GetRecipeInheritsResult(key, value) for key, value in ret.items()]
 
     def get_bb_file_priority(
         self: "BBClient", multi_config: str = ""
-    ) -> Mapping[str, int]:
+    ) -> List[GetBbFilePriorityResult]:
         """Get recipe files and its priority.
 
         Args:
@@ -683,22 +590,16 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            Mapping[str, int]: recipe files and its priority
-
-        Note:
-            | Return value is like below.
-            | {
-            |   '/PATH/TO/RECIPE/l3afpad_git.bb': 5,
-            |   '/PATH/TO/RECIPE/cups_2.4.2.bb': 5,
-            | }
+            List[GetBbFilePriorityResult]: See GetBbFilePriorityResult
         """
-        return self.__run_command(  # type: ignore
+        ret: Mapping[str, int] = self.__run_command(  # type: ignore
             self.__server_connection, "getBbFilePriority", multi_config
         )
+        return [GetBbFilePriorityResult(key, value) for key, value in ret.items()]
 
     def get_default_preference(
         self: "BBClient", multi_config: str = ""
-    ) -> Mapping[str, int]:
+    ) -> List[GetDefaultPreferenceResult]:
         """Get recipes and default preference.
 
         Args:
@@ -706,43 +607,24 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            Mapping[str, int]: recipes and default preference
-
-        Notes:
-            | Return value is like below.
-            | {
-            |   '/PATH/TO/RECIPE/gcr_3.40.0.bb': 0,
-            |   '/PATH/TO/RECIPE/python3-smmap_5.0.0.bb': 0,
-            | }
+            List[GetDefaultPreference]: See GetDefaultPreference
         """
-        return self.__run_command(  # type: ignore
+        ret: Mapping[str, int] = self.__run_command(  # type: ignore
             self.__server_connection, "getDefaultPreference", multi_config
         )
+        return [GetDefaultPreferenceResult(key, value) for key, value in ret.items()]
 
-    def get_skipped_recipes(self: "BBClient") -> List[List[Any]]:
+    def get_skipped_recipes(self: "BBClient") -> List[GetSkippedRecipesResult]:
         """Get skipped recipes and its reasons, provides, alias
 
         Args:
             self (BBClient): none
 
         Returns:
-            List[List[Any]]: skipped recipes and its reasons, provides, alias
-
-        Note:
-            | Return value is like below.
-            | [
-            |   [
-            |       '/PATH/TO/RECIPE/raspidmx_git.bb',
-            |       {
-            |           'pn': 'raspidmx',
-            |           'skipreason': 'incompatible with host aarch64-poky-linux (not in COMPATIBLE_HOST)',
-            |           'provides': ['raspidmx'],
-            |           'rprovides': ['raspidmx-src', 'raspidmx-dbg', 'raspidmx-staticdev', 'raspidmx-dev', 'raspidmx-doc', 'raspidmx-locale', 'raspidmx']
-            |       }
-            |   ],
-            | ]
+            List[GetSkippedRecipesResult]: See GetSkippedRecipesResult
         """
-        return self.__run_command(self.__server_connection, "getSkippedRecipes")  # type: ignore
+        ret: List[List[Any]] = self.__run_command(self.__server_connection, "getSkippedRecipes")  # type: ignore
+        return [GetSkippedRecipesResult(*i) for i in ret]
 
     def get_overlayed_recipes(self: "BBClient", multi_config: str = ""):
         return self.__run_command(
@@ -766,7 +648,9 @@ class BBClient:
             self.__server_connection, "getFileAppends", file_path, multi_config
         )
 
-    def get_all_appends(self: "BBClient", multi_config: str = "") -> List[List[str]]:
+    def get_all_appends(
+        self: "BBClient", multi_config: str = ""
+    ) -> List[GetAllAppendsResult]:
         """Get all append recipes
 
         Args:
@@ -774,24 +658,16 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            List[List[str]]: all append recipes
-
-        Note:
-            | Return value is like below.
-            | [
-            |   [
-            |       'busybox_%.bb',
-            |       '/PATH/TO/RECIPE/busybox_%.bbappend'
-            |   ],
-            | ]
+            List[GetAllAppendsResult]: See GetAllAppendsResult
         """
-        return self.__run_command(  # type: ignore
+        ret: List[List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getAllAppends", multi_config
         )
+        return [GetAllAppendsResult(*i) for i in ret]
 
     def find_providers(
         self: "BBClient", multi_config: str = ""
-    ) -> List[Mapping[str, Any]]:
+    ) -> List[FindProvidersResult]:
         """Get latest packages versions, prefered package versions, and whether there is an REQUIRED_VERSION
 
         Args:
@@ -799,26 +675,19 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            List[Mapping[str, Any]]: latest packages versions, prefered package versions, and whether there is an REQUIRED_VERSION
-
-        Note:
-            | Return value is like below.
-            | [
-            |   {
-            |       find_providers: {'nativesdk-python3-pysocks': [['', '2.8.3', 'r0'], '/PATH/TO/RECIPE/python3-pysocks_2.8.3.bb']    # latest version info
-            |   },
-            |   {
-            |       find_providers: {'nativesdk-python3-pysocks': [['', '1.7.1', 'r0'], '/PATH/TO/RECIPE/python3-pysocks_1.7.1.bb']    # prefered version info
-            |   },
-            |   {
-            |       find_providers: False  # whether there is an REQUIRED_VERSION
-            |   },
-            | ]
-
+            List[FindProvidersResult]: See FindProvidersResult
         """
-        return self.__run_command(  # type: ignore
+        result: Any = self.__run_command(  # type: ignore
             self.__server_connection, "findProviders", multi_config
         )
+        ret: List[FindProvidersResult] = []
+        for package in result[0].keys():
+            ret.append(
+                FindProvidersResult(
+                    package, result[0][package], result[1][package], result[2][package]
+                )
+            )
+        return ret
 
     def find_best_provider(
         self: "BBClient", package_name: str, multi_config: str = ""
@@ -845,7 +714,9 @@ class BBClient:
             self.__server_connection, "findBestProvider", package_name
         )
 
-    def all_providers(self: "BBClient", multi_config: str = "") -> List[List[Any]]:
+    def all_providers(
+        self: "BBClient", multi_config: str = ""
+    ) -> List[AllProvidersResult]:
         """Get all providers versions and recipe file path
 
         Args:
@@ -853,7 +724,7 @@ class BBClient:
             multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
 
         Returns:
-            List[List[Any]]: all providers versions and recipe file path
+            List[AllProvidersResult]: See AllProvidersResult
 
         Note:
             | Return value is like below.
@@ -862,9 +733,10 @@ class BBClient:
             |   ['go', [[['', '1.17.10', 'r0'], '/PATH/TO/RECIPE/go_1.17.10.bb']]],
             | ]
         """
-        return self.__run_command(  # type: ignore
+        ret: List[List[Any]] = self.__run_command(  # type: ignore
             self.__server_connection, "allProviders", multi_config
         )
+        return [AllProvidersResult(*i) for i in ret]
 
     def get_runtime_providers(
         self: "BBClient", runtime_providers: List[str], multi_config: str = ""
