@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
-from bbclient.bbclient import BBClient
-from bbclient.bbcommon import *
+from bbclient import *
 
 import yaml
 import logging
@@ -25,15 +24,11 @@ def main() -> None:
     typical_setup(client, logging.DEBUG)
 
     # do test
-    ret: List[AllProvidersResult] = client.all_providers()
-    for package in ret:
-        print(package.package_name)
-        for recipe in package.recipes:
-            print(recipe.recipe_file_path)
-            print(recipe.pe)
-            print(recipe.pv)
-            print(recipe.pr)
-        print("-------------------------------------")
+    ret: List[GetAllAppendsResult] = client.get_all_appends()
+    for recipe in ret:
+        print(recipe.target_recipe_name)
+        print(recipe.append_file_path)
+        print("-------------------")
 
     sleep(5)
 

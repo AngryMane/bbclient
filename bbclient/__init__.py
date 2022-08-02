@@ -1,2 +1,2 @@
-from .bbclient import BBClient
+from .bbclient import *
 from .bbcommon import *

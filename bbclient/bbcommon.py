@@ -87,18 +87,38 @@ class GetLayerPrioritiesResult:
 
 
 class GetRecipesResult:
+    """getRecipes result
+
+    Attributes:
+        package_name (str): package name
+        recipe_files (List[str]): recipe file paths
+    """
     def __init__(self: "GetRecipesResult", data: List[Any]) -> None:
         self.package_name: str = data[0]
         self.recipe_files: List[str] = data[1]
 
 
 class GetRecipeDependsResult:
+    """getRecipeDepends result
+
+    Attributes:
+        recipe_file_path (str): recipe file path
+        depend_package_names (List[str]): package names that the recipe file depends on
+    """
     def __init__(self: "GetRecipeDependsResult", data: List[Any]) -> None:
         self.recipe_file_path: str = data[0]
-        self.package_names: List[str] = data[1]
+        self.depend_package_names: List[str] = data[1]
 
 
 class GetRecipeVersionsResult:
+    """getRecipeVersions result
+
+    Attributes:
+        recipe_file_path (str): recipe file path
+        pe (str): package epoch
+        pv (str): package version
+        pr (str): package revision
+    """
     def __init__(
         self: "GetRecipeVersionsResult", version: List[str], recipe_file_path: str
     ):
@@ -109,6 +129,12 @@ class GetRecipeVersionsResult:
 
 
 class GetRecipeProvidesResult:
+    """getRecipeProvides result
+
+    Attributes:
+        recipe_file_path (str): recipe file path
+        packages (List[str]): package names that the recipe file provides
+    """
     def __init__(
         self: "GetRecipeProvidesResult", recipe_file_path: str, packages: List[str]
     ):
@@ -117,6 +143,12 @@ class GetRecipeProvidesResult:
 
 
 class GetRecipePackagesResult:
+    """getRecipePackages result
+
+    Attributes:
+        package_name (str): package name 
+        recipe_file_paths (List[str]): recipe file paths that provides the package
+    """
     def __init__(
         self: "GetRecipePackagesResult", package_name: str, recipe_file_paths: List[str]
     ):
@@ -125,6 +157,12 @@ class GetRecipePackagesResult:
 
 
 class GetRecipePackagesDynamicResult:
+    """getRecipePackagesDynamic result
+
+    Attributes:
+        dynamic_package_name (str): dynamic package name 
+        recipe_file_paths (List[str]): recipe file paths that provides the dynamic package
+    """
     def __init__(
         self: "GetRecipePackagesDynamicResult",
         dynamic_package_name: str,
@@ -135,6 +173,12 @@ class GetRecipePackagesDynamicResult:
 
 
 class GetRProvidersResult:
+    """getRProviders result
+
+    Attributes:
+        package_alias_name (str): package alias name 
+        recipe_file_paths (List[str]): recipe file paths that provides the alias package 
+    """
     def __init__(
         self: "GetRProvidersResult",
         package_alias_name: str,
@@ -145,6 +189,12 @@ class GetRProvidersResult:
 
 
 class GetRuntimeDependsResult:
+    """getRProviders result
+
+    Attributes:
+        recipe_file_path (str): recipe file path 
+        package_depenedncy (Mapping[str, List[str]]): package names that the recipe file depends on
+    """
     def __init__(
         self: "GetRuntimeDependsResult",
         recipe_file_path: str,
@@ -155,6 +205,12 @@ class GetRuntimeDependsResult:
 
 
 class GetRecipeInheritsResult:
+    """getRecipeInherits result
+
+    Attributes:
+        recipe_file_path (str): recipe file path 
+        inherit_file_paths (List[str]): inherit recipe file paths that the recipe file inherits
+    """
     def __init__(
         self: "GetRecipeInheritsResult",
         recipe_file_path: str,
@@ -165,6 +221,12 @@ class GetRecipeInheritsResult:
 
 
 class GetBbFilePriorityResult:
+    """getBbFilePriority result
+
+    Attributes:
+        recipe_file_path (str): recipe file path 
+        priority (int): priority of the recipe file
+    """
     def __init__(
         self: "GetBbFilePriorityResult", recipe_file_path: str, priority: int
     ) -> None:
@@ -173,16 +235,31 @@ class GetBbFilePriorityResult:
 
 
 class GetDefaultPreferenceResult:
+    """getDefaultPreference result
+
+    Attributes:
+        recipe_file_path (str): recipe file path 
+        default_preference_version (int): DEFAULT_PRERENCE for the recipe file.
+    """
     def __init__(
         self: "GetDefaultPreferenceResult",
         recipe_file_path: str,
-        default_preference: int,
+        default_preference_version: int,
     ) -> None:
         self.recipe_file_path: str = recipe_file_path
-        self.default_preference: int = default_preference
+        self.default_preference_version: int = default_preference_version
 
 
 class GetSkippedRecipesResult:
+    """getSkippedRecipes result
+
+    Attributes:
+        recipe_file_path (str): recipe file path 
+        pn (str): packages name 
+        skipreason (str): skipreason for the recipe file.
+        provides (List[str]): package names provided by the recipe file 
+        rprovides (List[str]): package alias names provided by the recipe file
+    """
     def __init__(
         self: "GetSkippedRecipesResult", recipe_file_path: str, data: Mapping[str, Any]
     ) -> None:
@@ -194,14 +271,34 @@ class GetSkippedRecipesResult:
 
 
 class GetAllAppendsResult:
+    """getAllAppends result
+
+    Attributes:
+        target_recipe_name (str): recipe file name 
+        append_file_path (str): append recipe file path for the recipe file name
+    """
     def __init__(
         self: "GetAllAppendsResult", target_recipe_name: str, append_file_path: str
     ) -> None:
-        self.append_file_path = append_file_path
         self.target_recipe_name = target_recipe_name
+        self.append_file_path = append_file_path
 
 
 class FindProvidersResult:
+    """findProviders result
+
+    Attributes:
+        package_name (str): recipe file name 
+        latest_pe (List[Any]): latest package epoch
+        latest_pv (List[Any]): latest package version
+        latest_pr (List[Any]): latest package revision
+        latest_recipe_file_path (List[Any]): latest package recipe file path
+        preffered_pe (List[Any]): preffered package epoch
+        preffered_pv (List[Any]): preffered package version
+        preffered_pr (List[Any]): preffered package revision
+        preffered_recipe_file_path (List[Any]): preffered package recipe file path
+        required_version (bool): whether required version exists or not
+    """
     def __init__(
         self: "FindProvidersResult",
         package_name: str,
@@ -222,6 +319,12 @@ class FindProvidersResult:
 
 
 class AllProvidersResult:
+    """allProviders result
+
+    Attributes:
+        package_name (str): package name
+        recipes (List[GetRecipeVersionsResult]): recipe file path and its pe, pv, pr
+    """
     def __init__(
         self: "AllProvidersResult", package_name: str, recipe_file: List[Any]
     ) -> None:
