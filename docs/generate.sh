@@ -3,15 +3,11 @@ PROJECT_NAME=bbclient_doc
 PROJECT_DIR=$(pwd)/${PROJECT_NAME}
 TARGET_MODULE=$(pwd)/bbclient
 VERSION=v0.0.1
-OUTPUT_DIR=$(pwd)/html
+OUTPUT_DIR=$(pwd)
 MY_THEME_FILE=$(pwd)/my_theme.css
 
 if [ -d ${PROJECT_DIR} ];then
   rm -rf ${PROJECT_DIR}
-fi
-
-if [ -d ${OUTPUT_DIR} ]; then
-  rm -rf ${OUTPUT_DIR}
 fi
 
 sphinx-apidoc -F -H ${PROJECT_NAME} -V ${VERSION} -o ${PROJECT_DIR} ${TARGET_MODULE}
@@ -30,5 +26,5 @@ sed -i "40ihtml_style = 'css/my_theme.css'" ${PROJECT_DIR}/conf.py
 sphinx-build ${PROJECT_DIR} ${OUTPUT_DIR}
 
 if [ -d ${PROJECT_DIR} ];then
-  rm -rf ${PROJECT_DIR}
+  #rm -rf ${PROJECT_DIR}
 fi

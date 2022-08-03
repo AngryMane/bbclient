@@ -24,11 +24,10 @@ def main() -> None:
     typical_setup(client, logging.DEBUG)
 
     # do test
-    ret: List[GetAllAppendsResult] = client.get_all_appends()
-    for recipe in ret:
-        print(recipe.target_recipe_name)
-        print(recipe.append_file_path)
-        print("-------------------")
+    ret: List[GetRecipeInheritsResult] = client.get_recipe_inherits()
+    for i in ret:
+        print(f"target recipe file path: {i.recipe_file_path}") 
+        print(f"inherit recipe file paths: {i.inherit_file_paths}") 
 
     sleep(5)
 

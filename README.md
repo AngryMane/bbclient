@@ -19,7 +19,11 @@ The typical use case is as follows. You can do it via python easily.
 
 ## Installation
 At this point, please git clone and import this in your python code.  
-TODO: Enable to install by pip  
+
+```
+# TODO: Enable to install by pypi  
+pip3 install -e .
+```
 
 <!--
 Linux:
@@ -69,25 +73,12 @@ print(src_uri)
 
 #### get all inherit files of all recipes
 ```python
-ret: Mapping[str, List] = client.get_recipe_inherits()
-print(ret) 
-# {
-#   '/PATH/TO/RECIPE/build-appliance-image_15.0.0.bb': [
-#       '/PATH/TO/RECIPE/base.bbclass',
-#       '/PATH/TO/RECIPE/patch.bbclass',
-#       '/PATH/TO/RECIPE/staging.bbclass',
-#       '/PATH/TO/RECIPE/mirrors.bbclass',
-#       '/PATH/TO/RECIPE/utils.bbclass',
-#       '/PATH/TO/RECIPE/utility-tasks.bbclass',
-#       '/PATH/TO/RECIPE/metadata_scm.bbclass',
-#       '/PATH/TO/RECIPE/logging.bbclass',
-#   ],
-#   '/PATH/TO/RECIPE/xxx.bb': [
-#       '/PATH/TO/RECIPE/yyy.bbclass',
-#       '/PATH/TO/RECIPE/zzz.bbclass',
-#   ],
-#   ...
-# }
+ret: List[GetRecipeInheritsResult] = client.get_recipe_inherits()
+for i in ret:
+    print(f"target recipe file path: {i.recipe_file_path}") 
+    print(f"inherit recipe file paths: {i.inherit_file_paths}") 
+# target recipe file path: /PATH/TO/RECIPE/libcap_2.63.bb
+# inherit recipe file paths: ['/PATH/TO/RECIPE/base.bbclass', ...]
 ```
 
 #### get append files
