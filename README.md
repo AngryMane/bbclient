@@ -18,7 +18,7 @@ The typical use case is as follows. You can do it via python easily.
 ![](header.png)
 
 ## Installation
-At this point, please git clone and import this in your python code.  
+At this point, please git clone and install.
 
 ```
 # TODO: Enable to install by pypi  
@@ -40,7 +40,6 @@ If you want to know all supported features, see bbclient.py at this point. (I'll
 
 #### start server
 ```python
-server_port = 8080
 client: BBClient = BBClient("/PATH/TO/poky", ". oe-init-build-env")
 # address and port. Please note that BBClient supports only localhost at this point.
 client.start_server("localhost", 8080) 
@@ -91,6 +90,9 @@ print(ret)
 #   ...
 # ]
 ```
+
+## Document
+See [document](https://angrymane.github.io/bbclient/) for more detail.  
 
 ## Development setup
 

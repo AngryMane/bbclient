@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Use case &mdash; bbclient_doc v0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="bbclient package" href="bbclient.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> bbclient_doc
+          </a>
+              <div class="version">
+                v0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="bbclient.html">bbclient package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Use case</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#use-cases-for-whole-project">Use cases for whole project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#build-package">Build package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-all-recipes-in-layers">Get all recipes in layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-all-recipes-that-inherits-specific-recipe">Get all recipes that inherits specific recipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-all-recipes-that-provides-specific-package">Get all recipes that provides specific package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-global-variable">Get global variable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-all-layers">Get all layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-dependency-dot-file">Generate dependency dot file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#use-cases-for-one-specific-recipe">Use cases for one specific recipe</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get-one-specific-variable-in-one-specific-recipe">Get one specific variable in one specific recipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-all-variables-in-one-specific-recipe">Get all variables in one specific recipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-all-appends-files-for-one-specific-recipe">Get all appends files for one specific recipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-all-inherit-files-for-one-specific-recipe">Get all inherit files for one specific recipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Get all inherit files for one specific recipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-a-task">Run a task</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#others">Others</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#set-event-mask">Set event mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-event">Get event</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">bbclient_doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Use case</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usecase.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="use-case">
+<h1>Use case<a class="headerlink" href="#use-case" title="Permalink to this heading"></a></h1>
+<p>This page introduce typical use cases for bbclient. Please do setup like below before each use cases.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">bbclient</span>
+<span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span> <span class="o">=</span> <span class="n">BBClient</span><span class="p">(</span><span class="n">project_path</span><span class="p">,</span> <span class="n">init_command</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">start_server</span><span class="p">(</span><span class="n">server_adder</span><span class="p">,</span> <span class="n">server_port</span><span class="p">)</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_configuration</span><span class="p">()</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_files</span><span class="p">()</span>
+<span class="c1"># wainting for parse files</span>
+<span class="c1"># TODO: use client.get_event</span>
+<span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="use-cases-for-whole-project">
+<h2>Use cases for whole project<a class="headerlink" href="#use-cases-for-whole-project" title="Permalink to this heading"></a></h2>
+<section id="build-package">
+<h3>Build package<a class="headerlink" href="#build-package" title="Permalink to this heading"></a></h3>
+<p>You can build a package like below.
+Please note that this command will kick all the tasks target depends, so it maybe taks so much time.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">build_targets</span><span class="p">([</span><span class="s2">&quot;busybox&quot;</span><span class="p">],</span> <span class="s2">&quot;compile&quot;</span><span class="p">)</span>
+<span class="c1"># TODO: use client.get_event</span>
+<span class="n">sleep</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There are no means to notify complete task because bb.command.CommandCompleted event will occurs many times, and we can’t distinguish which event notifys complete.</p>
+</section>
+<section id="get-all-recipes-in-layers">
+<h3>Get all recipes in layers<a class="headerlink" href="#get-all-recipes-in-layers" title="Permalink to this heading"></a></h3>
+<p>You can get all recipe files for every package like below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipesResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipes</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">package_name</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">recipe_files</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also get all recipe files with version info like below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeVersionsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_versions</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">recipe_file_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">pe</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">pv</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">pr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There are many other commands to get all recipes in layers.</p>
+</section>
+<section id="get-all-recipes-that-inherits-specific-recipe">
+<h3>Get all recipes that inherits specific recipe<a class="headerlink" href="#get-all-recipes-that-inherits-specific-recipe" title="Permalink to this heading"></a></h3>
+<p>If you want to get all recipes that inherits specific core-image.bbclass, you can do it like below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeInheritsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_inherits</span><span class="p">()</span>
+<span class="n">imatges</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span> <span class="k">if</span> <span class="s2">&quot;/PATH/TO/poky/meta/classes/core-image.bbclass&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">inherit_file_paths</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">imatges</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">recipe_file_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="get-all-recipes-that-provides-specific-package">
+<h3>Get all recipes that provides specific package<a class="headerlink" href="#get-all-recipes-that-provides-specific-package" title="Permalink to this heading"></a></h3>
+<p>If you want to get all recipes that provides gcc, you can do it like below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FindProvidersResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">find_providers</span><span class="p">()</span>
+<span class="n">imatges</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span> <span class="k">if</span> <span class="s2">&quot;gcc&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">package_name</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">imatges</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">latest_recipe_file_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">latest_pe</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">latest_pv</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">latest_pr</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">latest_recipe_file_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">preffered_pe</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">preffered_pv</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">preffered_pr</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">preffered_recipe_file_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">required_version</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="get-global-variable">
+<h3>Get global variable<a class="headerlink" href="#get-global-variable" title="Permalink to this heading"></a></h3>
+<p>If you want to get MACHINE variable value, you can do it like below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;MACHINE&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="get-all-layers">
+<h3>Get all layers<a class="headerlink" href="#get-all-layers" title="Permalink to this heading"></a></h3>
+<p>If you want to get all layers, you can do it like below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetLayerPrioritiesResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_layer_priorities</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you need only layer paths, following means is also fine.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;BBLAYERS&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-dependency-dot-file">
+<h3>Generate dependency dot file<a class="headerlink" href="#generate-dependency-dot-file" title="Permalink to this heading"></a></h3>
+<div class="line-block">
+<div class="line">You can get task-depends.dot and pn-depends file like below.</div>
+<div class="line">These files will be writtene at the root of the yocto porject.</div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">generate_dot_graph</span><span class="p">([</span><span class="s2">&quot;gcc&quot;</span><span class="p">],</span> <span class="s2">&quot;build&quot;</span><span class="p">)</span>
+<span class="c1"># TODO: use client.get_event</span>
+<span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>task-depends provides dependency info between recipes. See <a class="reference external" href="https://docs.yoctoproject.org/current/dev-manual/common-tasks.html?highlight=task+depends+dot#viewing-task-variable-dependencies">here</a></p>
+</section>
+</section>
+<section id="use-cases-for-one-specific-recipe">
+<h2>Use cases for one specific recipe<a class="headerlink" href="#use-cases-for-one-specific-recipe" title="Permalink to this heading"></a></h2>
+<section id="get-one-specific-variable-in-one-specific-recipe">
+<h3>Get one specific variable in one specific recipe<a class="headerlink" href="#get-one-specific-variable-in-one-specific-recipe" title="Permalink to this heading"></a></h3>
+<p>You can get one specific variable in one specific recipe like below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_store_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_recipe_file</span><span class="p">(</span><span class="s2">&quot;/PATH/TO/RECIPE/gcc_11.3.bb&quot;</span><span class="p">)</span>
+<span class="n">ret</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="n">data_store_index</span><span class="p">,</span> <span class="s2">&quot;getVar&quot;</span><span class="p">,</span> <span class="s2">&quot;FILE&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="get-all-variables-in-one-specific-recipe">
+<h3>Get all variables in one specific recipe<a class="headerlink" href="#get-all-variables-in-one-specific-recipe" title="Permalink to this heading"></a></h3>
+<div class="line-block">
+<div class="line">bitbake IPC Interface does not provide any means to get all the variables in one specific recipe.</div>
+<div class="line">Use can only get this info by bitbak -e command because this command outputs this info to stdo on the server process.</div>
+</div>
+</section>
+<section id="get-all-appends-files-for-one-specific-recipe">
+<h3>Get all appends files for one specific recipe<a class="headerlink" href="#get-all-appends-files-for-one-specific-recipe" title="Permalink to this heading"></a></h3>
+</section>
+<section id="get-all-inherit-files-for-one-specific-recipe">
+<h3>Get all inherit files for one specific recipe<a class="headerlink" href="#get-all-inherit-files-for-one-specific-recipe" title="Permalink to this heading"></a></h3>
+</section>
+<section id="id1">
+<h3>Get all inherit files for one specific recipe<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+</section>
+<section id="run-a-task">
+<h3>Run a task<a class="headerlink" href="#run-a-task" title="Permalink to this heading"></a></h3>
+</section>
+</section>
+<section id="others">
+<h2>Others<a class="headerlink" href="#others" title="Permalink to this heading"></a></h2>
+<section id="set-event-mask">
+<h3>Set event mask<a class="headerlink" href="#set-event-mask" title="Permalink to this heading"></a></h3>
+</section>
+<section id="get-event">
+<h3>Get event<a class="headerlink" href="#get-event" title="Permalink to this heading"></a></h3>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bbclient.html" class="btn btn-neutral float-left" title="bbclient package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -24,12 +24,6 @@ def main() -> None:
     typical_setup(client, logging.DEBUG)
 
     # do test
-    ret: List[GetRecipeInheritsResult] = client.get_recipe_inherits()
-    for i in ret:
-        print(f"target recipe file path: {i.recipe_file_path}") 
-        print(f"inherit recipe file paths: {i.inherit_file_paths}") 
-
-    sleep(5)
 
     client.stop_server()
 
@@ -56,6 +50,7 @@ def wait_event(client: BBClient, class_name: str) -> Optional[Any]:
         elif get_class_name(ret) == class_name:
             return ret
         else:
+            print(ret)
             count = 0
         sleep(0.01)
     return None

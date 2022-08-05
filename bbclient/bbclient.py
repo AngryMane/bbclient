@@ -153,6 +153,9 @@ class BBClient:
 
         Returns:
             List[getAllKeysWithFlagsResult]: See getAllKeysWithFlagsResult.
+
+        Note:
+            If you want to get variables defined at any recipes, please use `parse_recipe_file` and `data_store_connector_cmd`.
         """
         ret: Mapping = self.__run_command(  # type: ignore
             self.__server_connection, "getAllKeysWithFlags", flag_list
