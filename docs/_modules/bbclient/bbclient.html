@@ -41,6 +41,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../bbclient.html">bbclient package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usecase.html">Use case</a></li>
 </ul>
 
         </div>
@@ -223,6 +224,9 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[getAllKeysWithFlagsResult]: See getAllKeysWithFlagsResult.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            If you want to get variables defined at any recipes, please use `parse_recipe_file` and `data_store_connector_cmd`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getAllKeysWithFlags&quot;</span><span class="p">,</span> <span class="n">flag_list</span>
