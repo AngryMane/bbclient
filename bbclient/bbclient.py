@@ -18,9 +18,9 @@ __version__ = "0.0.1"
 
 import os
 import sys
+import time
 import subprocess
-from tkinter import W
-from typing import Any, List, Optional, Tuple, Mapping
+from typing import Any, List, Optional, Tuple, Mapping, Callable
 
 from .bbcommon import *
 
@@ -107,12 +107,45 @@ class BBClient:
         self.__server_connection.terminate()
         self.__is_server_running = False
 
-    def get_event(self: "BBClient", timeout: float) -> Optional[Any]:
-        """Get latest event
+    # --- utility functions ---
+    def wait_event(self: "BBClient", event_names: List[str], timeout: Optional[float] = None) -> Optional[Any]:
+        """Wait specific event
 
         Args:
             self (BBClient): none
-            timeout (float): timeout. if timeout, return None
+            event_names (List[str]): event names you wait for
+            timeout (float): timeout. (milliseconds)
+
+        Returns:
+            Optional[Any]: The event you wait for or None
+        
+        Note:
+            This functions will return one event whenever finding a event in event_names. Please note that the other events will be discarded.
+        """
+        # f"<class '{event_name}'>" -> event_name
+        class_name_extractor: Callable = lambda x: str(type(x))[8:-2] 
+        start_time: float = time.perf_counter()
+        ret: Any = None
+        while True:
+            cur_event: Optional[Any] = self.get_event(0.01)
+            cur_event_name: str = class_name_extractor(cur_event) if cur_event else ""
+            #for debug 
+            #if cur_event_name and not cur_event_name == "bb.event.HeartbeatEvent" and not cur_event_name == "logging.LogRecord":
+            #    print(cur_event_name)
+            if cur_event_name in event_names:
+                ret = cur_event
+                break
+            execution_time: float = time.perf_counter() - start_time
+            if ret or timeout and timeout < execution_time:
+                break
+        return ret
+
+    def get_event(self: "BBClient", timeout: Optional[float] = None) -> Optional[Any]:
+        """Get oldest event
+
+        Args:
+            self (BBClient): none
+            timeout (Optional[float]): timeout. if timeout, return None
 
         Returns:
             Optional[Any]: event notification objects. See bb.event.py
