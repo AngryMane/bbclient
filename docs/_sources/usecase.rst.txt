@@ -20,21 +20,17 @@ Use cases for whole project
 Build package
 --------------
 
-You can build a package like below.
-Please note that this command will kick all the tasks target depends, so it maybe taks so much time.
-
 .. code-block:: python
 
     client.build_targets(["busybox"], "compile")
     # TODO: use client.get_event
     sleep(3600)
 
-There are no means to notify complete task because bb.command.CommandCompleted event will occurs many times, and we can't distinguish which event notifys complete.
+| Please note that this command will kick all the tasks target depends, so it maybe taks so much time.
+| There are no means to notify complete task because bb.command.CommandCompleted event will occurs many times, and we can't distinguish which event notifys complete.
 
 Get all recipes in layers
 --------------------------
-
-You can get all recipe files for every package like below.
 
 .. code-block:: python
 
@@ -43,7 +39,7 @@ You can get all recipe files for every package like below.
         print(i.package_name)
         print(i.recipe_files)
 
-You can also get all recipe files with version info like below.
+or
 
 .. code-block:: python
 
@@ -59,8 +55,6 @@ There are many other commands to get all recipes in layers.
 Get all recipes that inherits specific recipe
 ------------------------------------------------
 
-If you want to get all recipes that inherits specific core-image.bbclass, you can do it like below.
-
 .. code-block:: python
 
     ret: List[GetRecipeInheritsResult] = client.get_recipe_inherits()
@@ -70,8 +64,6 @@ If you want to get all recipes that inherits specific core-image.bbclass, you ca
 
 Get all recipes that provides specific package
 ------------------------------------------------
-
-If you want to get all recipes that provides gcc, you can do it like below.
 
 .. code-block:: python
 
@@ -92,8 +84,6 @@ If you want to get all recipes that provides gcc, you can do it like below.
 Get global variable
 --------------------
 
-If you want to get MACHINE variable value, you can do it like below.
-
 .. code-block:: python
     
     ret: str = client.get_variable("MACHINE")
@@ -101,8 +91,6 @@ If you want to get MACHINE variable value, you can do it like below.
 
 Get all layers
 ---------------
-
-If you want to get all layers, you can do it like below.
 
 .. code-block:: python
 
@@ -112,7 +100,7 @@ If you want to get all layers, you can do it like below.
         print(i.path)
         print(i.priority)
 
-If you need only layer paths, following means is also fine.
+or
 
 .. code-block:: python
 
@@ -141,8 +129,6 @@ Use cases for one specific recipe
 Get one specific variable in one specific recipe
 -------------------------------------------------
 
-You can get one specific variable in one specific recipe like below.
-
 .. code-block:: python
 
     data_store_index: int = client.parse_recipe_file("/PATH/TO/RECIPE/gcc_11.3.bb")
@@ -159,26 +145,40 @@ Get all variables in one specific recipe
 Get all appends files for one specific recipe
 ----------------------------------------------
 
-Get all inherit files for one specific recipe
-----------------------------------------------
+.. code-block:: python
+
+    ret: List[str] = client.get_file_appends("/PATH/TO/RECIPE/psplash_git.bb")
+    print(ret)
 
 Get all inherit files for one specific recipe
 ----------------------------------------------
+
+.. code-block:: python
+
+    ret: List[GetRecipeInheritsResult] = client.get_recipe_inherits()
+    imatges = [i for i in ret if "/PATH/TO/poky/meta/classes/core-image.bbclass" in i.inherit_file_paths]
+    for i in imatges:
+        print(i.recipe_file_path)
+
+Get all inherit files for one specific recipe
+----------------------------------------------
+
+.. code-block:: python
+
+    ret: List[GetRecipeInheritsResult] = client.get_recipe_inherits()
+    itr = filter(lambda x: x.recipe_file_path == "/PATH/TO/RECIPE/psplash_git.bb", ret)
+    result = next(itr, None)
+    print(result.inherit_file_paths)
 
 
 Run a task
 ------------
 
+.. code-block:: python
 
-Others
-^^^^^^^
-
-Set event mask
----------------
-
-Get event
-----------
-
-
-
-
+    client.build_targets(["busybox"], "fetch")
+    # TODO: use client.get_event
+    sleep(3600)
+    client.build_targets(["busybox"], "patch")
+    # TODO: use client.get_event
+    sleep(3600)

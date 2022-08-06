@@ -213,8 +213,7 @@ class BBClient:
             value (str): property value
 
         Note:
-            | If you want to know all CookerConfigcation properties, see poky/bitbake/lib/bb/cookerdata.py.
-            | But I don't know the detail and how to use it...
+            | If you want to know all CookerConfigcation properties, see poky/bitbake/lib/bb/cookerdata.py. But I don't know the detail and how to use it...
         """
         self.__run_command(self.__server_connection, "setConfig", name, value)
 
@@ -225,8 +224,7 @@ class BBClient:
             self (BBClient): none
 
         Note:
-            | If enable, cooker cacheata(VariableHistory class) logs the history of changin value.
-            | You can see the log by dataStoreConnectorVarHistCmdEmit command.
+            | If enable, cooker cacheata(VariableHistory class) logs the history of changin value. You can see the log by dataStoreConnectorVarHistCmdEmit command.
         """
         self.__run_command(self.__server_connection, "enableDataTracking")
 
@@ -272,8 +270,7 @@ class BBClient:
             str: matched file path
 
         Note:
-            | This command can extract only one file. If you input the regex matching to many file, this command will fail.
-            | This command maybe has a bug. The second parameter and the first one mixed up in the command.
+            | This command can extract only one file. If you input the regex matching to many file, this command will fail. This command maybe has a bug. The second parameter and the first one mixed up in the command.
         """
 
         return self.__run_command(  # type: ignore
@@ -311,13 +308,10 @@ class BBClient:
             bool: if handler_num is invalid, return False, otherwise True.
 
         Note:
-            | debug_domains is a little bit complex.
-            | If you want to extract logging.getLogger("NAME"), put { "NAME": logging.INFO }.
-            | debug_domains value filters log level like log_level arg.
-            | log_level arg and debug_domains value are `or conditoin`.
-
-            | mask is also a little bit difficult.
-            | This args filters log by event class name like bb.event.BuildStarted, bb.command.CommandCompleted, etc..
+            | debug_domains is a little bit complex. If you want to extract logging.getLogger("NAME"), put { "NAME": logging.INFO }. 
+            | debug_domains value filters log level like log_level arg. log_level arg and debug_domains value are `or conditoin`.
+            |
+            | mask is also a little bit difficult. This args filters log by event class name like bb.event.BuildStarted, bb.command.CommandCompleted, etc..
             | It is unclear what type of logs are available.
         """
         # TODO: investigate how to use
@@ -365,12 +359,8 @@ class BBClient:
 
         Note:
             | options will set like {"prefile": ["FILE_NAME", "FILE_NAME"], "postfile": ["FILE_NAME", "FILE_NAME"]}
-            | They are prefiles and postfiles settings. See set_pre_post_conf_files command.
-            | if you change prefiles or postfiles, bitbake will reset their cache.
-
-            | environment is environment variables, like {"KEY": "VALUE", "KEY": "VALUE"}.
-            | if you add/change/delete any environemt variable, bitbake will reset their cache.
-
+            | They are prefiles and postfiles settings. See set_pre_post_conf_files command. if you change prefiles or postfiles, bitbake will reset their cache.
+            | environment is environment variables, like {"KEY": "VALUE", "KEY": "VALUE"}. if you add/change/delete any environemt variable, bitbake will reset their cache.
             | command_line will set to BB_CMDLINE variable. BB_CMDLINE seems not to be used at all.
         """
         self.__run_command(
@@ -405,7 +395,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetRecipesResult]: See GetRecipesResult.
@@ -420,7 +410,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetRecipeDependsResult]: See GetRecipeDependsResult.
@@ -437,7 +427,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetRecipeVersions]: See GetRecipeVersions.
@@ -454,7 +444,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetRecipeProvidesResult]: See GetRecipeProvidesResult
@@ -471,14 +461,13 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetRecipePackagesResult]: See GetRecipePackagesResult.
 
         WARNING:
-            | This command doesn't work beacuase of bitbake bug.
-            | bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
+            | This command doesn't work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
         """
         ret: Mapping[str, List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRecipePackages", multi_config
@@ -492,14 +481,13 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetRecipePackagesDynamicResult]: See GetRecipePackagesDynamicResult
 
         WARNING:
-            | This command doesn't work beacuase of bitbake bug.
-            | bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
+            | This command doesn't work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
         """
         ret: Mapping[str, List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRecipePackagesDynamic", multi_config
@@ -515,17 +503,16 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetRProvidersResult]: See GetRProvidersResult
 
         WARNING:
-            | This command doesn't work beacuase of bitbake bug.
-            | bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
+            | This command doesn't work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
 
         Note:
-            | If you want to know the detail of alias of PN, See https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES
+            | If you want to know the detail of alias of PN, See `here <https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES>`_
         """
         ret: Mapping[str, List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRProviders", multi_config
@@ -539,7 +526,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetRuntimeDependsResult]: See GetRuntimeDependsResult
@@ -556,7 +543,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetRuntimeRecommendsResult]: See GetRuntimeRecommendsResult
@@ -573,7 +560,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetRecipeInheritsResult]: See GetRecipeInheritsResult
@@ -590,7 +577,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetBbFilePriorityResult]: See GetBbFilePriorityResult
@@ -607,7 +594,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetDefaultPreference]: See GetDefaultPreference
@@ -642,7 +629,7 @@ class BBClient:
         Args:
             self (BBClient): none
             file_path (str): recipe file path
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[str]: append files
@@ -658,7 +645,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[GetAllAppendsResult]: See GetAllAppendsResult
@@ -675,7 +662,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[FindProvidersResult]: See FindProvidersResult
@@ -700,14 +687,13 @@ class BBClient:
         Args:
             self (BBClient): none
             package_name (str): _description_
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[str]: Now under investigation.
 
         Note:
-            | Return value is like below. Now under investigation.
-            | [None, None, None, '/PATH/TO/RECIPE/gcc_11.3.bb']
+            | Return value is like [None, None, None, '/PATH/TO/RECIPE/gcc_11.3.bb']. Now under investigation.
         """
         # if you want to know the detail of this line, see bb.runqueue.split_mc.
         package_name = (
@@ -724,7 +710,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            multi_config (str, optional): Defaults to "". See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations
+            multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
             List[AllProvidersResult]: See AllProvidersResult
@@ -769,6 +755,7 @@ class BBClient:
 
         Note:
             | User can input following commands. If you want to know detail of these, please see bb.data_smart.DataSmart.
+
             * createCopy
             * createCopy
             * delVar
@@ -830,6 +817,7 @@ class BBClient:
 
         Note:
             | User can input following commands. If you want to know detail of these, please see bb.data_smart.VariableHistory.
+
             * copy
             * del_var_history
             * emit
@@ -900,6 +888,7 @@ class BBClient:
 
         Note:
             | User can input following commands. If you want to know detail of these, please see bb.data_smart.IncludeHistory.
+
             * copy
             * include
             * emit
@@ -944,9 +933,7 @@ class BBClient:
             Optional[int]: data store index
 
         Note:
-            | This commands parses recipe file and store result into datastore.
-            | User can access the result by data store index.
-            | It's not clear how the fifth parameter(datastore_index) works.
+            | This commands parses recipe file and store result into datastore. User can access the result by data store index. It's not clear how the fifth parameter(datastore_index) works.
         """
         ret: Mapping[str, int] = (
             self.__run_command(  # type: ignore
@@ -1005,7 +992,7 @@ class BBClient:
             |   "gcc",                              # only package name
             |   "mc:xxx_config:alsa",               # multiconfig and package name
             |   "multiconfig:yyy_config:vim",       # multiconfig and package name
-            |   "mc:*:clang"                        # all multiconfig and package name
+            |   "mc:\*:clang"                       # all multiconfig and package name
             |   "mc:yyy_config:python:do_patch",    # multiconfig, package name and task name
             | ]
         """
@@ -1028,7 +1015,7 @@ class BBClient:
             |   "gcc",                              # only package name
             |   "mc:xxx_config:alsa",               # multiconfig and package name
             |   "multiconfig:yyy_config:vim",       # multiconfig and package name
-            |   "mc:*:clang"                        # all multiconfig and package name
+            |   "mc:\*:clang"                        # all multiconfig and package name
             |   "mc:yyy_config:python:do_patch",    # multiconfig, package name and task name
             | ]
         """
@@ -1055,7 +1042,7 @@ class BBClient:
             |   "gcc",                              # only package name
             |   "mc:xxx_config:alsa",               # multiconfig and package name
             |   "multiconfig:yyy_config:vim",       # multiconfig and package name
-            |   "mc:*:clang"                        # all multiconfig and package name
+            |   "mc:\*:clang"                        # all multiconfig and package name
             |   "mc:yyy_config:python:do_patch",    # multiconfig, package name and task name
             | ]
         """
@@ -1078,9 +1065,7 @@ class BBClient:
 
         Note:
             | Use can receive result by bb.event.TargetsTreeGenerated event.
-            |
-            | If you specify bb_klass_file_path, bitbake will add the packages that inherits bb_klass_file_path to package_names.
-            | If you don't want to do it, please input None to bb_klass_file_path.
+            | If you specify bb_klass_file_path, bitbake will add the packages that inherits bb_klass_file_path to package_names. If you don't want to do it, please input None to bb_klass_file_path.
         """
         self.__run_command(
             self.__server_connection,
@@ -1151,8 +1136,7 @@ class BBClient:
             self (BBClient): none
 
         Note:
-            | bbclient doesn't display any information.
-            | if you want to use this feature, please use bitbake-layers.
+            | bbclient doesn't display any information. If you want to use this feature, please use bitbake-layers.
         """
         self.__run_command(self.__server_connection, "showVersions")
 
@@ -1164,8 +1148,7 @@ class BBClient:
             package_name (str): target package name
 
         Note:
-            | bbclient doesn't display any information.
-            | if you want to use this feature, please use bitbake-gervar or bitbake -e.
+            | bbclient doesn't display any information. If you want to use this feature, please use bitbake-gervar or bitbake -e.
         """
         self.__run_command(
             self.__server_connection, "showEnvironmentTarget", package_name
@@ -1179,8 +1162,7 @@ class BBClient:
             bb_file_path (str): target recipe path
 
         Note:
-            | bbclient doesn't display any information.
-            | if you want to use this feature, please use bitbake-gervar or bitbake -e.
+            | bbclient doesn't display any information. If you want to use this feature, please use bitbake-gervar or bitbake -e.
         """
         self.__run_command(self.__server_connection, "showEnvironment", bb_file_path)
 
@@ -1215,8 +1197,7 @@ class BBClient:
             evene_name (str): event class name.
 
         Note:
-            | Send evene_name event.
-            | User can receive this event by get_event.
+            | Send evene_name event. User can receive this event by get_event.
         """
         self.__run_command(self.__server_connection, "triggerEvent", evene_name)
 

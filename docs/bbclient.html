@@ -131,7 +131,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -199,7 +199,7 @@
 <div class="line">“gcc”,                              # only package name</div>
 <div class="line">“mc:xxx_config:alsa”,               # multiconfig and package name</div>
 <div class="line">“multiconfig:yyy_config:vim”,       # multiconfig and package name</div>
-<div class="line">“mc:<a href="#id1"><span class="problematic" id="id2">*</span></a>:clang”                        # all multiconfig and package name</div>
+<div class="line">“mc:*:clang”                       # all multiconfig and package name</div>
 <div class="line">“mc:yyy_config:python:do_patch”,    # multiconfig, package name and task name</div>
 </div>
 <div class="line">]</div>
@@ -444,8 +444,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">If enable, cooker cacheata(VariableHistory class) logs the history of changin value.</div>
-<div class="line">You can see the log by dataStoreConnectorVarHistCmdEmit command.</div>
+<div class="line">If enable, cooker cacheata(VariableHistory class) logs the history of changin value. You can see the log by dataStoreConnectorVarHistCmdEmit command.</div>
 </div>
 </div>
 </dd></dl>
@@ -459,7 +458,8 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
 <li><p><strong>package_name</strong> (<em>str</em>) – _description_</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -472,8 +472,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">Return value is like below. Now under investigation.</div>
-<div class="line">[None, None, None, ‘/PATH/TO/RECIPE/gcc_11.3.bb’]</div>
+<div class="line">Return value is like [None, None, None, ‘/PATH/TO/RECIPE/gcc_11.3.bb’]. Now under investigation.</div>
 </div>
 </div>
 </dd></dl>
@@ -547,7 +546,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -603,7 +603,7 @@
 <div class="line">“gcc”,                              # only package name</div>
 <div class="line">“mc:xxx_config:alsa”,               # multiconfig and package name</div>
 <div class="line">“multiconfig:yyy_config:vim”,       # multiconfig and package name</div>
-<div class="line">“mc:<a href="#id3"><span class="problematic" id="id4">*</span></a>:clang”                        # all multiconfig and package name</div>
+<div class="line">“mc:*:clang”                        # all multiconfig and package name</div>
 <div class="line">“mc:yyy_config:python:do_patch”,    # multiconfig, package name and task name</div>
 </div>
 <div class="line">]</div>
@@ -633,7 +633,7 @@
 <div class="line">“gcc”,                              # only package name</div>
 <div class="line">“mc:xxx_config:alsa”,               # multiconfig and package name</div>
 <div class="line">“multiconfig:yyy_config:vim”,       # multiconfig and package name</div>
-<div class="line">“mc:<a href="#id5"><span class="problematic" id="id6">*</span></a>:clang”                        # all multiconfig and package name</div>
+<div class="line">“mc:*:clang”                        # all multiconfig and package name</div>
 <div class="line">“mc:yyy_config:python:do_patch”,    # multiconfig, package name and task name</div>
 </div>
 <div class="line">]</div>
@@ -658,9 +658,7 @@
 <p class="admonition-title">Note</p>
 <div class="line-block">
 <div class="line">Use can receive result by bb.event.TargetsTreeGenerated event.</div>
-<div class="line"><br /></div>
-<div class="line">If you specify bb_klass_file_path, bitbake will add the packages that inherits bb_klass_file_path to package_names.</div>
-<div class="line">If you don’t want to do it, please input None to bb_klass_file_path.</div>
+<div class="line">If you specify bb_klass_file_path, bitbake will add the packages that inherits bb_klass_file_path to package_names. If you don’t want to do it, please input None to bb_klass_file_path.</div>
 </div>
 </div>
 </dd></dl>
@@ -673,7 +671,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -717,7 +716,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -737,7 +737,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -778,7 +779,8 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
 <li><p><strong>file_path</strong> (<em>str</em>) – recipe file path</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -824,7 +826,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -837,14 +840,13 @@
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <div class="line-block">
-<div class="line">This command doesn’t work beacuase of bitbake bug.</div>
-<div class="line">bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can’t support this type.</div>
+<div class="line">This command doesn’t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can’t support this type.</div>
 </div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">If you want to know the detail of alias of PN, See <a class="reference external" href="https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES">https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES</a></div>
+<div class="line">If you want to know the detail of alias of PN, See <a class="reference external" href="https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES">here</a></div>
 </div>
 </div>
 </dd></dl>
@@ -857,7 +859,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -877,7 +880,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -897,7 +901,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -910,8 +915,7 @@
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <div class="line-block">
-<div class="line">This command doesn’t work beacuase of bitbake bug.</div>
-<div class="line">bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can’t support this type.</div>
+<div class="line">This command doesn’t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can’t support this type.</div>
 </div>
 </div>
 </dd></dl>
@@ -924,7 +928,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -937,8 +942,7 @@
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <div class="line-block">
-<div class="line">This command doesn’t work beacuase of bitbake bug.</div>
-<div class="line">bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can’t support this type.</div>
+<div class="line">This command doesn’t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can’t support this type.</div>
 </div>
 </div>
 </dd></dl>
@@ -951,7 +955,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -971,7 +976,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -991,7 +997,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1011,7 +1018,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1036,7 +1044,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</a></p></li>
+<li><p><strong>multi_config</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Defaults to “”. See <a class="reference external" href="https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations">here</a></p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1150,8 +1159,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">This command can extract only one file. If you input the regex matching to many file, this command will fail.</div>
-<div class="line">This command maybe has a bug. The second parameter and the first one mixed up in the command.</div>
+<div class="line">This command can extract only one file. If you input the regex matching to many file, this command will fail. This command maybe has a bug. The second parameter and the first one mixed up in the command.</div>
 </div>
 </div>
 </dd></dl>
@@ -1207,9 +1215,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">This commands parses recipe file and store result into datastore.</div>
-<div class="line">User can access the result by data store index.</div>
-<div class="line">It’s not clear how the fifth parameter(datastore_index) works.</div>
+<div class="line">This commands parses recipe file and store result into datastore. User can access the result by data store index. It’s not clear how the fifth parameter(datastore_index) works.</div>
 </div>
 </div>
 </dd></dl>
@@ -1247,8 +1253,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">If you want to know all CookerConfigcation properties, see poky/bitbake/lib/bb/cookerdata.py.</div>
-<div class="line">But I don’t know the detail and how to use it…</div>
+<div class="line">If you want to know all CookerConfigcation properties, see poky/bitbake/lib/bb/cookerdata.py. But I don’t know the detail and how to use it…</div>
 </div>
 </div>
 </dd></dl>
@@ -1277,14 +1282,10 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">debug_domains is a little bit complex.</div>
-<div class="line">If you want to extract logging.getLogger(“NAME”), put { “NAME”: logging.INFO }.</div>
-<div class="line">debug_domains value filters log level like log_level arg.</div>
-<div class="line">log_level arg and debug_domains value are <cite>or conditoin</cite>.</div>
-</div>
-<div class="line-block">
-<div class="line">mask is also a little bit difficult.</div>
-<div class="line">This args filters log by event class name like bb.event.BuildStarted, bb.command.CommandCompleted, etc..</div>
+<div class="line">debug_domains is a little bit complex. If you want to extract logging.getLogger(“NAME”), put { “NAME”: logging.INFO }.</div>
+<div class="line">debug_domains value filters log level like log_level arg. log_level arg and debug_domains value are <cite>or conditoin</cite>.</div>
+<div class="line"><br /></div>
+<div class="line">mask is also a little bit difficult. This args filters log by event class name like bb.event.BuildStarted, bb.command.CommandCompleted, etc..</div>
 <div class="line">It is unclear what type of logs are available.</div>
 </div>
 </div>
@@ -1361,8 +1362,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">bbclient doesn’t display any information.</div>
-<div class="line">if you want to use this feature, please use bitbake-gervar or bitbake -e.</div>
+<div class="line">bbclient doesn’t display any information. If you want to use this feature, please use bitbake-gervar or bitbake -e.</div>
 </div>
 </div>
 </dd></dl>
@@ -1382,8 +1382,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">bbclient doesn’t display any information.</div>
-<div class="line">if you want to use this feature, please use bitbake-gervar or bitbake -e.</div>
+<div class="line">bbclient doesn’t display any information. If you want to use this feature, please use bitbake-gervar or bitbake -e.</div>
 </div>
 </div>
 </dd></dl>
@@ -1400,8 +1399,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">bbclient doesn’t display any information.</div>
-<div class="line">if you want to use this feature, please use bitbake-layers.</div>
+<div class="line">bbclient doesn’t display any information. If you want to use this feature, please use bitbake-layers.</div>
 </div>
 </div>
 </dd></dl>
@@ -1495,8 +1493,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">Send evene_name event.</div>
-<div class="line">User can receive this event by get_event.</div>
+<div class="line">Send evene_name event. User can receive this event by get_event.</div>
 </div>
 </div>
 </dd></dl>
@@ -1519,14 +1516,8 @@
 <p class="admonition-title">Note</p>
 <div class="line-block">
 <div class="line">options will set like {“prefile”: [“FILE_NAME”, “FILE_NAME”], “postfile”: [“FILE_NAME”, “FILE_NAME”]}</div>
-<div class="line">They are prefiles and postfiles settings. See set_pre_post_conf_files command.</div>
-<div class="line">if you change prefiles or postfiles, bitbake will reset their cache.</div>
-</div>
-<div class="line-block">
-<div class="line">environment is environment variables, like {“KEY”: “VALUE”, “KEY”: “VALUE”}.</div>
-<div class="line">if you add/change/delete any environemt variable, bitbake will reset their cache.</div>
-</div>
-<div class="line-block">
+<div class="line">They are prefiles and postfiles settings. See set_pre_post_conf_files command. if you change prefiles or postfiles, bitbake will reset their cache.</div>
+<div class="line">environment is environment variables, like {“KEY”: “VALUE”, “KEY”: “VALUE”}. if you add/change/delete any environemt variable, bitbake will reset their cache.</div>
 <div class="line">command_line will set to BB_CMDLINE variable. BB_CMDLINE seems not to be used at all.</div>
 </div>
 </div>

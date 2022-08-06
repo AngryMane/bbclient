@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from gettext import find
 from bbclient import *
 
 import yaml
@@ -12,10 +13,11 @@ YML_KEY_BB_PROJECT_ABS_PATH: str = "bb_project_abs_path"
 YML_KEY_SERVER_ADDER: str = "server_adder"
 YML_KEY_SERVER_PORT: str = "server_port"
 YML_KEY_INIT_COMMAND: str = "init_command"
+YML_KEY_PATH_TO_SAMPLE_RECIPE: str = "path_to_sample_recipe"
 
 
 def main() -> None:
-    project_path, server_adder, server_port, init_command = load_test_settings(
+    project_path, server_adder, server_port, init_command, path_to_sample_recipe = load_test_settings(
         "./test.yml"
     )
     client: BBClient = BBClient(project_path, init_command)
@@ -24,6 +26,10 @@ def main() -> None:
     typical_setup(client, logging.DEBUG)
 
     # do test
+    ret: List[GetRecipeInheritsResult] = client.get_recipe_inherits()
+    itr = filter(lambda x: x.recipe_file_path == path_to_sample_recipe, ret)
+    result = next(itr, None)
+    print(result.inherit_file_paths)
 
     client.stop_server()
 
@@ -68,6 +74,7 @@ def load_test_settings(yml_file_path: str) -> Tuple[str, str, int]:
             yml_content[YML_KEY_SERVER_ADDER],
             int(yml_content[YML_KEY_SERVER_PORT]),
             yml_content[YML_KEY_INIT_COMMAND],
+            yml_content[YML_KEY_PATH_TO_SAMPLE_RECIPE],
         )
 
 

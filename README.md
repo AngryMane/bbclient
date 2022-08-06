@@ -35,8 +35,10 @@ npm install my-crazy-module --save
 
 ## Usage example
 
-Typical use case is as follows.   
-If you want to know all supported features, see bbclient.py at this point. (I'll make some documents sooner or later)
+Typical use case is as follows. If you want to know more detail, see following links may help you.  
+
+* [specification](https://angrymane.github.io/bbclient/bbclient.html).  
+* [use case](https://angrymane.github.io/bbclient/usecase.html).  
 
 #### start server
 ```python

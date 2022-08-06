@@ -284,8 +284,7 @@
 <span class="sd">            value (str): property value</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | If you want to know all CookerConfigcation properties, see poky/bitbake/lib/bb/cookerdata.py.</span>
-<span class="sd">            | But I don&#39;t know the detail and how to use it...</span>
+<span class="sd">            | If you want to know all CookerConfigcation properties, see poky/bitbake/lib/bb/cookerdata.py. But I don&#39;t know the detail and how to use it...</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;setConfig&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
 
@@ -296,8 +295,7 @@
 <span class="sd">            self (BBClient): none</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | If enable, cooker cacheata(VariableHistory class) logs the history of changin value.</span>
-<span class="sd">            | You can see the log by dataStoreConnectorVarHistCmdEmit command.</span>
+<span class="sd">            | If enable, cooker cacheata(VariableHistory class) logs the history of changin value. You can see the log by dataStoreConnectorVarHistCmdEmit command.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;enableDataTracking&quot;</span><span class="p">)</span></div>
 
@@ -343,8 +341,7 @@
 <span class="sd">            str: matched file path</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | This command can extract only one file. If you input the regex matching to many file, this command will fail.</span>
-<span class="sd">            | This command maybe has a bug. The second parameter and the first one mixed up in the command.</span>
+<span class="sd">            | This command can extract only one file. If you input the regex matching to many file, this command will fail. This command maybe has a bug. The second parameter and the first one mixed up in the command.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
@@ -382,13 +379,10 @@
 <span class="sd">            bool: if handler_num is invalid, return False, otherwise True.</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | debug_domains is a little bit complex.</span>
-<span class="sd">            | If you want to extract logging.getLogger(&quot;NAME&quot;), put { &quot;NAME&quot;: logging.INFO }.</span>
-<span class="sd">            | debug_domains value filters log level like log_level arg.</span>
-<span class="sd">            | log_level arg and debug_domains value are `or conditoin`.</span>
-
-<span class="sd">            | mask is also a little bit difficult.</span>
-<span class="sd">            | This args filters log by event class name like bb.event.BuildStarted, bb.command.CommandCompleted, etc..</span>
+<span class="sd">            | debug_domains is a little bit complex. If you want to extract logging.getLogger(&quot;NAME&quot;), put { &quot;NAME&quot;: logging.INFO }. </span>
+<span class="sd">            | debug_domains value filters log level like log_level arg. log_level arg and debug_domains value are `or conditoin`.</span>
+<span class="sd">            |</span>
+<span class="sd">            | mask is also a little bit difficult. This args filters log by event class name like bb.event.BuildStarted, bb.command.CommandCompleted, etc..</span>
 <span class="sd">            | It is unclear what type of logs are available.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO: investigate how to use</span>
@@ -436,12 +430,8 @@
 
 <span class="sd">        Note:</span>
 <span class="sd">            | options will set like {&quot;prefile&quot;: [&quot;FILE_NAME&quot;, &quot;FILE_NAME&quot;], &quot;postfile&quot;: [&quot;FILE_NAME&quot;, &quot;FILE_NAME&quot;]}</span>
-<span class="sd">            | They are prefiles and postfiles settings. See set_pre_post_conf_files command.</span>
-<span class="sd">            | if you change prefiles or postfiles, bitbake will reset their cache.</span>
-
-<span class="sd">            | environment is environment variables, like {&quot;KEY&quot;: &quot;VALUE&quot;, &quot;KEY&quot;: &quot;VALUE&quot;}.</span>
-<span class="sd">            | if you add/change/delete any environemt variable, bitbake will reset their cache.</span>
-
+<span class="sd">            | They are prefiles and postfiles settings. See set_pre_post_conf_files command. if you change prefiles or postfiles, bitbake will reset their cache.</span>
+<span class="sd">            | environment is environment variables, like {&quot;KEY&quot;: &quot;VALUE&quot;, &quot;KEY&quot;: &quot;VALUE&quot;}. if you add/change/delete any environemt variable, bitbake will reset their cache.</span>
 <span class="sd">            | command_line will set to BB_CMDLINE variable. BB_CMDLINE seems not to be used at all.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
@@ -476,7 +466,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRecipesResult]: See GetRecipesResult.</span>
@@ -491,7 +481,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRecipeDependsResult]: See GetRecipeDependsResult.</span>
@@ -508,7 +498,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRecipeVersions]: See GetRecipeVersions.</span>
@@ -525,7 +515,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRecipeProvidesResult]: See GetRecipeProvidesResult</span>
@@ -542,14 +532,13 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRecipePackagesResult]: See GetRecipePackagesResult.</span>
 
 <span class="sd">        WARNING:</span>
-<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug.</span>
-<span class="sd">            | bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
+<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRecipePackages&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
@@ -563,14 +552,13 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRecipePackagesDynamicResult]: See GetRecipePackagesDynamicResult</span>
 
 <span class="sd">        WARNING:</span>
-<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug.</span>
-<span class="sd">            | bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
+<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRecipePackagesDynamic&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
@@ -586,17 +574,16 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRProvidersResult]: See GetRProvidersResult</span>
 
 <span class="sd">        WARNING:</span>
-<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug.</span>
-<span class="sd">            | bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
+<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | If you want to know the detail of alias of PN, See https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES</span>
+<span class="sd">            | If you want to know the detail of alias of PN, See `here &lt;https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES&gt;`_</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRProviders&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
@@ -610,7 +597,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRuntimeDependsResult]: See GetRuntimeDependsResult</span>
@@ -627,7 +614,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRuntimeRecommendsResult]: See GetRuntimeRecommendsResult</span>
@@ -644,7 +631,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRecipeInheritsResult]: See GetRecipeInheritsResult</span>
@@ -661,7 +648,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetBbFilePriorityResult]: See GetBbFilePriorityResult</span>
@@ -678,7 +665,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetDefaultPreference]: See GetDefaultPreference</span>
@@ -713,7 +700,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
 <span class="sd">            file_path (str): recipe file path</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[str]: append files</span>
@@ -729,7 +716,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetAllAppendsResult]: See GetAllAppendsResult</span>
@@ -746,7 +733,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[FindProvidersResult]: See FindProvidersResult</span>
@@ -771,14 +758,13 @@
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
 <span class="sd">            package_name (str): _description_</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[str]: Now under investigation.</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | Return value is like below. Now under investigation.</span>
-<span class="sd">            | [None, None, None, &#39;/PATH/TO/RECIPE/gcc_11.3.bb&#39;]</span>
+<span class="sd">            | Return value is like [None, None, None, &#39;/PATH/TO/RECIPE/gcc_11.3.bb&#39;]. Now under investigation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># if you want to know the detail of this line, see bb.runqueue.split_mc.</span>
         <span class="n">package_name</span> <span class="o">=</span> <span class="p">(</span>
@@ -795,7 +781,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[AllProvidersResult]: See AllProvidersResult</span>
@@ -840,6 +826,7 @@
 
 <span class="sd">        Note:</span>
 <span class="sd">            | User can input following commands. If you want to know detail of these, please see bb.data_smart.DataSmart.</span>
+
 <span class="sd">            * createCopy</span>
 <span class="sd">            * createCopy</span>
 <span class="sd">            * delVar</span>
@@ -901,6 +888,7 @@
 
 <span class="sd">        Note:</span>
 <span class="sd">            | User can input following commands. If you want to know detail of these, please see bb.data_smart.VariableHistory.</span>
+
 <span class="sd">            * copy</span>
 <span class="sd">            * del_var_history</span>
 <span class="sd">            * emit</span>
@@ -971,6 +959,7 @@
 
 <span class="sd">        Note:</span>
 <span class="sd">            | User can input following commands. If you want to know detail of these, please see bb.data_smart.IncludeHistory.</span>
+
 <span class="sd">            * copy</span>
 <span class="sd">            * include</span>
 <span class="sd">            * emit</span>
@@ -1015,9 +1004,7 @@
 <span class="sd">            Optional[int]: data store index</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | This commands parses recipe file and store result into datastore.</span>
-<span class="sd">            | User can access the result by data store index.</span>
-<span class="sd">            | It&#39;s not clear how the fifth parameter(datastore_index) works.</span>
+<span class="sd">            | This commands parses recipe file and store result into datastore. User can access the result by data store index. It&#39;s not clear how the fifth parameter(datastore_index) works.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
@@ -1076,7 +1063,7 @@
 <span class="sd">            |   &quot;gcc&quot;,                              # only package name</span>
 <span class="sd">            |   &quot;mc:xxx_config:alsa&quot;,               # multiconfig and package name</span>
 <span class="sd">            |   &quot;multiconfig:yyy_config:vim&quot;,       # multiconfig and package name</span>
-<span class="sd">            |   &quot;mc:*:clang&quot;                        # all multiconfig and package name</span>
+<span class="sd">            |   &quot;mc:\*:clang&quot;                       # all multiconfig and package name</span>
 <span class="sd">            |   &quot;mc:yyy_config:python:do_patch&quot;,    # multiconfig, package name and task name</span>
 <span class="sd">            | ]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1099,7 +1086,7 @@
 <span class="sd">            |   &quot;gcc&quot;,                              # only package name</span>
 <span class="sd">            |   &quot;mc:xxx_config:alsa&quot;,               # multiconfig and package name</span>
 <span class="sd">            |   &quot;multiconfig:yyy_config:vim&quot;,       # multiconfig and package name</span>
-<span class="sd">            |   &quot;mc:*:clang&quot;                        # all multiconfig and package name</span>
+<span class="sd">            |   &quot;mc:\*:clang&quot;                        # all multiconfig and package name</span>
 <span class="sd">            |   &quot;mc:yyy_config:python:do_patch&quot;,    # multiconfig, package name and task name</span>
 <span class="sd">            | ]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1126,7 +1113,7 @@
 <span class="sd">            |   &quot;gcc&quot;,                              # only package name</span>
 <span class="sd">            |   &quot;mc:xxx_config:alsa&quot;,               # multiconfig and package name</span>
 <span class="sd">            |   &quot;multiconfig:yyy_config:vim&quot;,       # multiconfig and package name</span>
-<span class="sd">            |   &quot;mc:*:clang&quot;                        # all multiconfig and package name</span>
+<span class="sd">            |   &quot;mc:\*:clang&quot;                        # all multiconfig and package name</span>
 <span class="sd">            |   &quot;mc:yyy_config:python:do_patch&quot;,    # multiconfig, package name and task name</span>
 <span class="sd">            | ]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1149,9 +1136,7 @@
 
 <span class="sd">        Note:</span>
 <span class="sd">            | Use can receive result by bb.event.TargetsTreeGenerated event.</span>
-<span class="sd">            |</span>
-<span class="sd">            | If you specify bb_klass_file_path, bitbake will add the packages that inherits bb_klass_file_path to package_names.</span>
-<span class="sd">            | If you don&#39;t want to do it, please input None to bb_klass_file_path.</span>
+<span class="sd">            | If you specify bb_klass_file_path, bitbake will add the packages that inherits bb_klass_file_path to package_names. If you don&#39;t want to do it, please input None to bb_klass_file_path.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
@@ -1222,8 +1207,7 @@
 <span class="sd">            self (BBClient): none</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | bbclient doesn&#39;t display any information.</span>
-<span class="sd">            | if you want to use this feature, please use bitbake-layers.</span>
+<span class="sd">            | bbclient doesn&#39;t display any information. If you want to use this feature, please use bitbake-layers.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;showVersions&quot;</span><span class="p">)</span></div>
 
@@ -1235,8 +1219,7 @@
 <span class="sd">            package_name (str): target package name</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | bbclient doesn&#39;t display any information.</span>
-<span class="sd">            | if you want to use this feature, please use bitbake-gervar or bitbake -e.</span>
+<span class="sd">            | bbclient doesn&#39;t display any information. If you want to use this feature, please use bitbake-gervar or bitbake -e.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;showEnvironmentTarget&quot;</span><span class="p">,</span> <span class="n">package_name</span>
@@ -1250,8 +1233,7 @@
 <span class="sd">            bb_file_path (str): target recipe path</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | bbclient doesn&#39;t display any information.</span>
-<span class="sd">            | if you want to use this feature, please use bitbake-gervar or bitbake -e.</span>
+<span class="sd">            | bbclient doesn&#39;t display any information. If you want to use this feature, please use bitbake-gervar or bitbake -e.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;showEnvironment&quot;</span><span class="p">,</span> <span class="n">bb_file_path</span><span class="p">)</span></div>
 
@@ -1286,8 +1268,7 @@
 <span class="sd">            evene_name (str): event class name.</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | Send evene_name event.</span>
-<span class="sd">            | User can receive this event by get_event.</span>
+<span class="sd">            | Send evene_name event. User can receive this event by get_event.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;triggerEvent&quot;</span><span class="p">,</span> <span class="n">evene_name</span><span class="p">)</span></div>
 
