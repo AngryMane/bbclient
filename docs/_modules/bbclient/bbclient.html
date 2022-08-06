@@ -89,9 +89,9 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">from</span> <span class="nn">tkinter</span> <span class="kn">import</span> <span class="n">W</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Mapping</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Callable</span>
 
 <span class="kn">from</span> <span class="nn">.bbcommon</span> <span class="kn">import</span> <span class="o">*</span>
 
@@ -178,12 +178,45 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="BBClient.get_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_event">[docs]</a>    <span class="k">def</span> <span class="nf">get_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Get latest event</span>
+    <span class="c1"># --- utility functions ---</span>
+<div class="viewcode-block" id="BBClient.wait_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.wait_event">[docs]</a>    <span class="k">def</span> <span class="nf">wait_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">event_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Wait specific event</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            timeout (float): timeout. if timeout, return None</span>
+<span class="sd">            event_names (List[str]): event names you wait for</span>
+<span class="sd">            timeout (float): timeout. (milliseconds)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[Any]: The event you wait for or None</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            This functions will return one event whenever finding a event in event_names. Please note that the other events will be discarded.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># f&quot;&lt;class &#39;{event_name}&#39;&gt;&quot; -&gt; event_name</span>
+        <span class="n">class_name_extractor</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">))[</span><span class="mi">8</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> 
+        <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">cur_event</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_event</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+            <span class="n">cur_event_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">class_name_extractor</span><span class="p">(</span><span class="n">cur_event</span><span class="p">)</span> <span class="k">if</span> <span class="n">cur_event</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="c1">#for debug </span>
+            <span class="c1">#if cur_event_name and not cur_event_name == &quot;bb.event.HeartbeatEvent&quot; and not cur_event_name == &quot;logging.LogRecord&quot;:</span>
+            <span class="c1">#    print(cur_event_name)</span>
+            <span class="k">if</span> <span class="n">cur_event_name</span> <span class="ow">in</span> <span class="n">event_names</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="n">cur_event</span>
+                <span class="k">break</span>
+            <span class="n">execution_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+            <span class="k">if</span> <span class="n">ret</span> <span class="ow">or</span> <span class="n">timeout</span> <span class="ow">and</span> <span class="n">timeout</span> <span class="o">&lt;</span> <span class="n">execution_time</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="BBClient.get_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_event">[docs]</a>    <span class="k">def</span> <span class="nf">get_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get oldest event</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            timeout (Optional[float]): timeout. if timeout, return None</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Optional[Any]: event notification objects. See bb.event.py</span>

@@ -26,10 +26,9 @@ def main() -> None:
     typical_setup(client, logging.DEBUG)
 
     # do test
-    ret: List[GetRecipeInheritsResult] = client.get_recipe_inherits()
-    itr = filter(lambda x: x.recipe_file_path == path_to_sample_recipe, ret)
-    result = next(itr, None)
-    print(result.inherit_file_paths)
+    client.generate_targets_tree("", ["gcc"])
+    ret: Any = client.wait_event(["bb.event.ReachableStamps"])
+    print(ret.__dict__)
 
     client.stop_server()
 
@@ -44,22 +43,6 @@ def typical_setup(client: BBClient, log_level: int) -> None:
     # wainting for parse files
     # TODO: use client.get_event
     sleep(3)
-
-
-def wait_event(client: BBClient, class_name: str) -> Optional[Any]:
-    count: int = 0
-    while count < 3000:
-        ret: Optional[Any] = client.get_event(0.03)
-        # if type(ret) == f"<class '{class_name}'>":
-        if not ret:
-            count = count + 1
-        elif get_class_name(ret) == class_name:
-            return ret
-        else:
-            print(ret)
-            count = 0
-        sleep(0.01)
-    return None
 
 
 def get_class_name(obj: Any) -> str:

@@ -752,13 +752,13 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.get_event">
-<span class="sig-name descname"><span class="pre">get_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.get_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.get_event" title="Permalink to this definition"></a></dt>
-<dd><p>Get latest event</p>
+<span class="sig-name descname"><span class="pre">get_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.get_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.get_event" title="Permalink to this definition"></a></dt>
+<dd><p>Get oldest event</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>timeout</strong> (<em>float</em>) – timeout. if timeout, return None</p></li>
+<li><p><strong>timeout</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – timeout. if timeout, return None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1520,6 +1520,31 @@
 <div class="line">environment is environment variables, like {“KEY”: “VALUE”, “KEY”: “VALUE”}. if you add/change/delete any environemt variable, bitbake will reset their cache.</div>
 <div class="line">command_line will set to BB_CMDLINE variable. BB_CMDLINE seems not to be used at all.</div>
 </div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.wait_event">
+<span class="sig-name descname"><span class="pre">wait_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.wait_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.wait_event" title="Permalink to this definition"></a></dt>
+<dd><p>Wait specific event</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
+<li><p><strong>event_names</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – event names you wait for</p></li>
+<li><p><strong>timeout</strong> (<em>float</em>) – timeout. (milliseconds)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The event you wait for or None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Optional[Any]</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This functions will return one event whenever finding a event in event_names. Please note that the other events will be discarded.</p>
 </div>
 </dd></dl>
 
