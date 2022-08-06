@@ -18,8 +18,12 @@ The typical use case is as follows. You can do it via python easily.
 ![](header.png)
 
 ## Installation
-At this point, please git clone and import this in your python code.  
-TODO: Enable to install by pip  
+At this point, please git clone and install.
+
+```
+# TODO: Enable to install by pypi  
+pip3 install -e .
+```
 
 <!--
 Linux:
@@ -31,12 +35,13 @@ npm install my-crazy-module --save
 
 ## Usage example
 
-Typical use case is as follows.   
-If you want to know all supported features, see bbclient.py at this point. (I'll make some documents sooner or later)
+Typical use case is as follows. If you want to know more detail, see following links may help you.  
+
+* [specification](https://angrymane.github.io/bbclient/bbclient.html).  
+* [use case](https://angrymane.github.io/bbclient/usecase.html).  
 
 #### start server
 ```python
-server_port = 8080
 client: BBClient = BBClient("/PATH/TO/poky", ". oe-init-build-env")
 # address and port. Please note that BBClient supports only localhost at this point.
 client.start_server("localhost", 8080) 
@@ -69,25 +74,12 @@ print(src_uri)
 
 #### get all inherit files of all recipes
 ```python
-ret: Mapping[str, List] = client.get_recipe_inherits()
-print(ret) 
-# {
-#   '/PATH/TO/RECIPE/build-appliance-image_15.0.0.bb': [
-#       '/PATH/TO/RECIPE/base.bbclass',
-#       '/PATH/TO/RECIPE/patch.bbclass',
-#       '/PATH/TO/RECIPE/staging.bbclass',
-#       '/PATH/TO/RECIPE/mirrors.bbclass',
-#       '/PATH/TO/RECIPE/utils.bbclass',
-#       '/PATH/TO/RECIPE/utility-tasks.bbclass',
-#       '/PATH/TO/RECIPE/metadata_scm.bbclass',
-#       '/PATH/TO/RECIPE/logging.bbclass',
-#   ],
-#   '/PATH/TO/RECIPE/xxx.bb': [
-#       '/PATH/TO/RECIPE/yyy.bbclass',
-#       '/PATH/TO/RECIPE/zzz.bbclass',
-#   ],
-#   ...
-# }
+ret: List[GetRecipeInheritsResult] = client.get_recipe_inherits()
+for i in ret:
+    print(f"target recipe file path: {i.recipe_file_path}") 
+    print(f"inherit recipe file paths: {i.inherit_file_paths}") 
+# target recipe file path: /PATH/TO/RECIPE/libcap_2.63.bb
+# inherit recipe file paths: ['/PATH/TO/RECIPE/base.bbclass', ...]
 ```
 
 #### get append files
@@ -100,6 +92,9 @@ print(ret)
 #   ...
 # ]
 ```
+
+## Document
+See [document](https://angrymane.github.io/bbclient/) for more detail.  
 
 ## Development setup
 

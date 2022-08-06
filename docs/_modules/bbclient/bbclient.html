@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bbclient.bbclient &mdash; bbclient_doc v0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> bbclient_doc
+          </a>
+              <div class="version">
+                v0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../bbclient.html">bbclient package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usecase.html">Use case</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">bbclient_doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>bbclient.bbclient</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for bbclient.bbclient</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">This file provides client class for bitbake server.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;AngryMane&quot;</span>
+<span class="n">__authors__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AngryMane&quot;</span><span class="p">]</span>
+<span class="n">__contact__</span> <span class="o">=</span> <span class="s2">&quot;regulationdango@gmail.com&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2022&quot;</span>
+<span class="n">__credits__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AngryMane&quot;</span><span class="p">]</span>
+<span class="n">__date__</span> <span class="o">=</span> <span class="s2">&quot;2022/07/31&quot;</span>
+<span class="n">__deprecated__</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;regulationdango@gmail.com&quot;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;MIT&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;AngryMane&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;in progress&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">tkinter</span> <span class="kn">import</span> <span class="n">W</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Mapping</span>
+
+<span class="kn">from</span> <span class="nn">.bbcommon</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="BBClient"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient">[docs]</a><span class="k">class</span> <span class="nc">BBClient</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Client for bitbake RPC Server</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        __project_path (str): poky directory path</span>
+<span class="sd">        __is_server_running (bool): server is running or not</span>
+<span class="sd">        __server_connection (bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection): touch point to server</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># --- setup functions ---</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">project_abs_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">init_script_path</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize BBClient instance</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            project_abs_path (str): abslute path to bitbake project, basically poky dir.</span>
+<span class="sd">            init_script_path (str): initialize bitbake proejct command running at project_abs_path. This is maybe &quot;. oe-init-build-env&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__project_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">project_abs_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">pipe</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">init_script_path</span><span class="si">}</span><span class="s2"> &gt; /dev/null; env&quot;</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">cwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__project_path</span><span class="p">,</span>
+            <span class="n">executable</span><span class="o">=</span><span class="s2">&quot;/bin/bash&quot;</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Finalize BBClient instance</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_server</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BBClient.start_server"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.start_server">[docs]</a>    <span class="k">def</span> <span class="nf">start_server</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">server_adder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server_port</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Start bitbake XML RPC server</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            server_adder (str): server address you want to use.</span>
+<span class="sd">            server_port (int): server port you want to use.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            At this point, BBClient doesn&#39;t support remote host(=you can only use localhost).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server_adder_with_port</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">server_adder</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">server_port</span><span class="p">)</span>
+
+        <span class="n">pipe</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;bitbake --server-only --bind </span><span class="si">{</span><span class="n">server_adder_with_port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">cwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__project_path</span><span class="p">,</span>
+            <span class="n">executable</span><span class="o">=</span><span class="s2">&quot;/bin/bash&quot;</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+        <span class="n">connection</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connect_server</span><span class="p">(</span>
+            <span class="n">server_adder_with_port</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__project_path</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span> <span class="o">=</span> <span class="n">connection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BBClient.stop_server"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.stop_server">[docs]</a>    <span class="k">def</span> <span class="nf">stop_server</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Stop bitbake XML RPC server</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">terminateServer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="BBClient.get_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_event">[docs]</a>    <span class="k">def</span> <span class="nf">get_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get latest event</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            timeout (float): timeout. if timeout, return None</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[Any]: event notification objects. See bb.event.py</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">waitEvent</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span></div>
+
+    <span class="c1"># --- bitbake server sync functions  ---</span>
+<div class="viewcode-block" id="BBClient.state_shutdown"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.state_shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">state_shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Terminate tasks</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            Terminate tasks defined in recipes. If there are running tasks, wait for them to exit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;stateShutdown&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.state_force_shutdown"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.state_force_shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">state_force_shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Terminate tasks</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            Terminate tasks defined in recipes. If there are running tasks, terminate them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;stateForceShutdown&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.get_all_keys_with_flags"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_all_keys_with_flags">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_keys_with_flags</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">flag_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">getAllKeysWithFlagsResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get value, history and specified flags of all global variables.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            flag_list(List[str]): Target flags. If flags are unnecessary, please set [].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[getAllKeysWithFlagsResult]: See getAllKeysWithFlagsResult.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            If you want to get variables defined at any recipes, please use `parse_recipe_file` and `data_store_connector_cmd`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getAllKeysWithFlags&quot;</span><span class="p">,</span> <span class="n">flag_list</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">getAllKeysWithFlagsResult</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ret</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_variable"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_variable">[docs]</a>    <span class="k">def</span> <span class="nf">get_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expand</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get variable value</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            name (str): variable name</span>
+<span class="sd">            expand (bool, optional): Whether to expand references to other variables. Defaults to True.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: variable value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getVariable&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">expand</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+
+<div class="viewcode-block" id="BBClient.set_variable"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.set_variable">[docs]</a>    <span class="k">def</span> <span class="nf">set_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Set vaiable value</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            name (str): variable name</span>
+<span class="sd">            value (str): variable value you want to set</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;setVariable&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.get_set_variable"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_set_variable">[docs]</a>    <span class="k">def</span> <span class="nf">get_set_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expand</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get variable from cache and set it into cache</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            name (str): variable name</span>
+<span class="sd">            expand (bool, optional): Whether to expand references to other variables. Defaults to True.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: variable value</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This is maybe for expand variable value in cache.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getSetVariable&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">expand</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.set_config"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.set_config">[docs]</a>    <span class="k">def</span> <span class="nf">set_config</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Set CookerConfigcation properties</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            name (str): property name</span>
+<span class="sd">            value (str): property value</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | If you want to know all CookerConfigcation properties, see poky/bitbake/lib/bb/cookerdata.py. But I don&#39;t know the detail and how to use it...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;setConfig&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.enable_data_tracking"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.enable_data_tracking">[docs]</a>    <span class="k">def</span> <span class="nf">enable_data_tracking</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Enable data tracking</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | If enable, cooker cacheata(VariableHistory class) logs the history of changin value. You can see the log by dataStoreConnectorVarHistCmdEmit command.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;enableDataTracking&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.disable_data_tracking"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.disable_data_tracking">[docs]</a>    <span class="k">def</span> <span class="nf">disable_data_tracking</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Disable data tracking</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            Please see enable_data_tracking command</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;disableDataTracking&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.set_pre_post_conf_files"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.set_pre_post_conf_files">[docs]</a>    <span class="k">def</span> <span class="nf">set_pre_post_conf_files</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">pre_files</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">post_files</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Set pre-load files and post-load files of bitbake.conf at parse_configuration_files command</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            pre_files (str): files loaded before bitbake.conf</span>
+<span class="sd">            post_files (str): files loaded after bitbake.conf</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            When parse_configuration_files command, pre_files will load before bitbake.conf and post_files will load after bitbake.conf.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;setPrePostConfFiles&quot;</span><span class="p">,</span> <span class="n">pre_files</span><span class="p">,</span> <span class="n">post_files</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.match_file"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.match_file">[docs]</a>    <span class="k">def</span> <span class="nf">match_file</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">file_path_regex</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mutli_conf_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Search file by regex</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            file_path_regex (str): search regex pattern</span>
+<span class="sd">            mutli_conf_name (str): target multi-config. Defaults to &#39;&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: matched file path</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | This command can extract only one file. If you input the regex matching to many file, this command will fail. This command maybe has a bug. The second parameter and the first one mixed up in the command.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;matchFile&quot;</span><span class="p">,</span> <span class="n">file_path_regex</span><span class="p">,</span> <span class="n">mutli_conf_name</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.get_uihandler_num"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_uihandler_num">[docs]</a>    <span class="k">def</span> <span class="nf">get_uihandler_num</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get ui handler num.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: ui hanlder num</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getUIHandlerNum&quot;</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+
+<div class="viewcode-block" id="BBClient.set_event_mask"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.set_event_mask">[docs]</a>    <span class="k">def</span> <span class="nf">set_event_mask</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span>
+        <span class="n">handler_num</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">log_level</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">debug_domains</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">mask</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Set log filter for specified ui handler</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            handler_num (int): target ui handler</span>
+<span class="sd">            log_level (int): logging.DEBUG, logging.INFO, etc...</span>
+<span class="sd">            debug_domains (Mapping[str, int]): logger name.</span>
+<span class="sd">            mask (List[str]): target event name. If you don&#39;t want to filter by event name, put [ &quot;*&quot; ].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: if handler_num is invalid, return False, otherwise True.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | debug_domains is a little bit complex. If you want to extract logging.getLogger(&quot;NAME&quot;), put { &quot;NAME&quot;: logging.INFO }. </span>
+<span class="sd">            | debug_domains value filters log level like log_level arg. log_level arg and debug_domains value are `or conditoin`.</span>
+<span class="sd">            |</span>
+<span class="sd">            | mask is also a little bit difficult. This args filters log by event class name like bb.event.BuildStarted, bb.command.CommandCompleted, etc..</span>
+<span class="sd">            | It is unclear what type of logs are available.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: investigate how to use</span>
+        <span class="c1"># log level : logging.DEBUG, logging.INFO, etc...</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;setEventMask&quot;</span><span class="p">,</span>
+            <span class="n">handler_num</span><span class="p">,</span>
+            <span class="n">log_level</span><span class="p">,</span>
+            <span class="n">debug_domains</span><span class="p">,</span>
+            <span class="n">mask</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.set_features"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.set_features">[docs]</a>    <span class="k">def</span> <span class="nf">set_features</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">features</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">BBFeature</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Set feature(Enable feature)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            features (List[BBFeature]): list of HOB_EXTRA_CACHES, BASEDATASTORE_TRACKING and SEND_SANITYEVENTS.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | if enable HOB_EXTRA_CACHES, recipecheces has extra-info like SUMMARY, LICENSE, DESCRIPTION, etc...</span>
+<span class="sd">            | if enable BASEDATASTORE_TRACKING, enable_data_tracking. See enable_data_tracking command.</span>
+<span class="sd">            | if enable SEND_SANITYEVENTS, this feature has not been implemented and is currently meaningless.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;setFeatures&quot;</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">features</span><span class="p">],</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.update_config"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.update_config">[docs]</a>    <span class="k">def</span> <span class="nf">update_config</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span>
+        <span class="n">options</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">environment</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="n">command_line</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Update config</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            options (Mapping[str, Any]): dict of prefile and postfile</span>
+<span class="sd">            environment (Mapping[str, str]): environment variables</span>
+<span class="sd">            command_line (str): will set to BB_CMDLINE</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | options will set like {&quot;prefile&quot;: [&quot;FILE_NAME&quot;, &quot;FILE_NAME&quot;], &quot;postfile&quot;: [&quot;FILE_NAME&quot;, &quot;FILE_NAME&quot;]}</span>
+<span class="sd">            | They are prefiles and postfiles settings. See set_pre_post_conf_files command. if you change prefiles or postfiles, bitbake will reset their cache.</span>
+<span class="sd">            | environment is environment variables, like {&quot;KEY&quot;: &quot;VALUE&quot;, &quot;KEY&quot;: &quot;VALUE&quot;}. if you add/change/delete any environemt variable, bitbake will reset their cache.</span>
+<span class="sd">            | command_line will set to BB_CMDLINE variable. BB_CMDLINE seems not to be used at all.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;updateConfig&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">environment</span><span class="p">,</span> <span class="n">command_line</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.parse_configuration"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.parse_configuration">[docs]</a>    <span class="k">def</span> <span class="nf">parse_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Parse configuration</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This command clears caches and re-builds them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;parseConfiguration&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.get_layer_priorities"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_layer_priorities">[docs]</a>    <span class="k">def</span> <span class="nf">get_layer_priorities</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetLayerPrioritiesResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get name, path, priority of all layers</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetLayerPrioritiesResult]: See GetLayerPrioritiesResult.</span>
+
+<span class="sd">        WARNING:</span>
+<span class="sd">            This command deletes caches(bug?).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getLayerPriorities&quot;</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetLayerPrioritiesResult</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_recipes"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_recipes">[docs]</a>    <span class="k">def</span> <span class="nf">get_recipes</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipesResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get all package name from cache</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetRecipesResult]: See GetRecipesResult.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRecipes&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetRecipesResult</span><span class="p">(</span><span class="n">recipe</span><span class="p">)</span> <span class="k">for</span> <span class="n">recipe</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_recipe_depends"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_recipe_depends">[docs]</a>    <span class="k">def</span> <span class="nf">get_recipe_depends</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeDependsResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get recipe depends</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetRecipeDependsResult]: See GetRecipeDependsResult.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRecipeDepends&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetRecipeDependsResult</span><span class="p">(</span><span class="n">recipe_file</span><span class="p">)</span> <span class="k">for</span> <span class="n">recipe_file</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_recipe_versions"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_recipe_versions">[docs]</a>    <span class="k">def</span> <span class="nf">get_recipe_versions</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeVersionsResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get all recipe versions</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetRecipeVersions]: See GetRecipeVersions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRecipeVersions&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetRecipeVersionsResult</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ret</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_recipe_provides"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_recipe_provides">[docs]</a>    <span class="k">def</span> <span class="nf">get_recipe_provides</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeProvidesResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get all recipe files and its packages</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetRecipeProvidesResult]: See GetRecipeProvidesResult</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRecipeProvides&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetRecipeProvidesResult</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ret</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_recipe_packages"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_recipe_packages">[docs]</a>    <span class="k">def</span> <span class="nf">get_recipe_packages</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipePackagesResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get all recipe files and its recipe files</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetRecipePackagesResult]: See GetRecipePackagesResult.</span>
+
+<span class="sd">        WARNING:</span>
+<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRecipePackages&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetRecipePackagesResult</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ret</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_recipe_packages_dynamic"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_recipe_packages_dynamic">[docs]</a>    <span class="k">def</span> <span class="nf">get_recipe_packages_dynamic</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipePackagesDynamicResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get all recipe files that provides PACKAGE_DYNAMIC and its PACKAGE_DYNAMIC</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetRecipePackagesDynamicResult]: See GetRecipePackagesDynamicResult</span>
+
+<span class="sd">        WARNING:</span>
+<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRecipePackagesDynamic&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">GetRecipePackagesDynamicResult</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ret</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_r_providers"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_r_providers">[docs]</a>    <span class="k">def</span> <span class="nf">get_r_providers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRProvidersResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get alias of PN and its recipe files</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetRProvidersResult]: See GetRProvidersResult</span>
+
+<span class="sd">        WARNING:</span>
+<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | If you want to know the detail of alias of PN, See `here &lt;https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES&gt;`_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRProviders&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetRProvidersResult</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ret</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_runtime_depends"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_runtime_depends">[docs]</a>    <span class="k">def</span> <span class="nf">get_runtime_depends</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRuntimeDependsResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get all runtime dependency by all recipe files</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetRuntimeDependsResult]: See GetRuntimeDependsResult</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRuntimeDepends&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetRuntimeDependsResult</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">)</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_runtime_recommends"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_runtime_recommends">[docs]</a>    <span class="k">def</span> <span class="nf">get_runtime_recommends</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRuntimeRecommendsResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get all runtime recoomends(=weak depends) by all recipe files</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetRuntimeRecommendsResult]: See GetRuntimeRecommendsResult</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRuntimeRecommends&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetRuntimeRecommendsResult</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">)</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_recipe_inherits"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_recipe_inherits">[docs]</a>    <span class="k">def</span> <span class="nf">get_recipe_inherits</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeInheritsResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get recipes and its inherit recipes</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetRecipeInheritsResult]: See GetRecipeInheritsResult</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRecipeInherits&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetRecipeInheritsResult</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ret</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_bb_file_priority"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_bb_file_priority">[docs]</a>    <span class="k">def</span> <span class="nf">get_bb_file_priority</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetBbFilePriorityResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get recipe files and its priority.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetBbFilePriorityResult]: See GetBbFilePriorityResult</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getBbFilePriority&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetBbFilePriorityResult</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ret</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_default_preference"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_default_preference">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_preference</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetDefaultPreferenceResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get recipes and default preference.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetDefaultPreference]: See GetDefaultPreference</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getDefaultPreference&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetDefaultPreferenceResult</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ret</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_skipped_recipes"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_skipped_recipes">[docs]</a>    <span class="k">def</span> <span class="nf">get_skipped_recipes</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetSkippedRecipesResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get skipped recipes and its reasons, provides, alias</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetSkippedRecipesResult]: See GetSkippedRecipesResult</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getSkippedRecipes&quot;</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetSkippedRecipesResult</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_overlayed_recipes"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_overlayed_recipes">[docs]</a>    <span class="k">def</span> <span class="nf">get_overlayed_recipes</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getOverlayedRecipes&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.get_file_appends"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_file_appends">[docs]</a>    <span class="k">def</span> <span class="nf">get_file_appends</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get append files</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            file_path (str): recipe file path</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: append files</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getFileAppends&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.get_all_appends"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_all_appends">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_appends</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GetAllAppendsResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get all append recipes</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[GetAllAppendsResult]: See GetAllAppendsResult</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getAllAppends&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">GetAllAppendsResult</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BBClient.find_providers"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_providers">[docs]</a>    <span class="k">def</span> <span class="nf">find_providers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FindProvidersResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get latest packages versions, prefered package versions, and whether there is an REQUIRED_VERSION</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[FindProvidersResult]: See FindProvidersResult</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;findProviders&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FindProvidersResult</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">FindProvidersResult</span><span class="p">(</span>
+                    <span class="n">package</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">package</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">package</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">package</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="BBClient.find_best_provider"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_best_provider">[docs]</a>    <span class="k">def</span> <span class="nf">find_best_provider</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get best provider infos</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            package_name (str): _description_</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: Now under investigation.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | Return value is like [None, None, None, &#39;/PATH/TO/RECIPE/gcc_11.3.bb&#39;]. Now under investigation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if you want to know the detail of this line, see bb.runqueue.split_mc.</span>
+        <span class="n">package_name</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;mc:&quot;</span> <span class="o">+</span> <span class="n">multi_config</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">package_name</span> <span class="k">if</span> <span class="n">multi_config</span> <span class="k">else</span> <span class="n">package_name</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;findBestProvider&quot;</span><span class="p">,</span> <span class="n">package_name</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.all_providers"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.all_providers">[docs]</a>    <span class="k">def</span> <span class="nf">all_providers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AllProvidersResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get all providers versions and recipe file path</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            multi_config (str, optional): Defaults to &quot;&quot;. See `here &lt;https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations&gt;`_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[AllProvidersResult]: See AllProvidersResult</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | Return value is like below.</span>
+<span class="sd">            | [</span>
+<span class="sd">            |   [&#39;nativesdk-go&#39;, [[[&#39;&#39;, &#39;1.17.10&#39;, &#39;r0&#39;], &#39;/PATH/TO/RECIPE/go_1.17.10.bb&#39;]]],  # PN, [PE, PV, PR], recipe file path</span>
+<span class="sd">            |   [&#39;go&#39;, [[[&#39;&#39;, &#39;1.17.10&#39;, &#39;r0&#39;], &#39;/PATH/TO/RECIPE/go_1.17.10.bb&#39;]]],</span>
+<span class="sd">            | ]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;allProviders&quot;</span><span class="p">,</span> <span class="n">multi_config</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">AllProvidersResult</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BBClient.get_runtime_providers"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_runtime_providers">[docs]</a>    <span class="k">def</span> <span class="nf">get_runtime_providers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">runtime_providers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">multi_config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">):</span>
+        <span class="c1"># TODO: What is runtime_provider</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;getRuntimeProviders&quot;</span><span class="p">,</span>
+            <span class="n">runtime_providers</span><span class="p">,</span>
+            <span class="n">multi_config</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.data_store_connector_cmd"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.data_store_connector_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">data_store_connector_cmd</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">datastore_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Data store management function</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.</span>
+<span class="sd">            command (str): the method name of bb.data_smart.DataSmart</span>
+<span class="sd">            args (Any): depends on command</span>
+<span class="sd">            kwargs (Any): depends on command</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Any: command return</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | User can input following commands. If you want to know detail of these, please see bb.data_smart.DataSmart.</span>
+
+<span class="sd">            * createCopy</span>
+<span class="sd">            * createCopy</span>
+<span class="sd">            * delVar</span>
+<span class="sd">            * delVarFlag</span>
+<span class="sd">            * delVarFlags</span>
+<span class="sd">            * disableTracking</span>
+<span class="sd">            * enableTracking</span>
+<span class="sd">            * expand</span>
+<span class="sd">            * expandVarref</span>
+<span class="sd">            * expandWithRefs</span>
+<span class="sd">            * finalize</span>
+<span class="sd">            * get</span>
+<span class="sd">            * getVar</span>
+<span class="sd">            * getVarFlag</span>
+<span class="sd">            * getVarFlags</span>
+<span class="sd">            * get_hash</span>
+<span class="sd">            * hasOverrides</span>
+<span class="sd">            * initVar</span>
+<span class="sd">            * internal_finalize</span>
+<span class="sd">            * items</span>
+<span class="sd">            * keys</span>
+<span class="sd">            * localkeys</span>
+<span class="sd">            * need_overrides</span>
+<span class="sd">            * pop</span>
+<span class="sd">            * popitem</span>
+<span class="sd">            * prependVar</span>
+<span class="sd">            * prependVarFlag</span>
+<span class="sd">            * renameVar</span>
+<span class="sd">            * setVar</span>
+<span class="sd">            * setVarFlag</span>
+<span class="sd">            * setVarFlags</span>
+<span class="sd">            * setdefault</span>
+<span class="sd">            * update</span>
+<span class="sd">            * values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;dataStoreConnectorCmd&quot;</span><span class="p">,</span>
+            <span class="n">datastore_index</span><span class="p">,</span>
+            <span class="n">command</span><span class="p">,</span>
+            <span class="n">args</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.data_store_connector_varhist_cmd"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.data_store_connector_varhist_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">data_store_connector_varhist_cmd</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">datastore_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Data store variable history function</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.</span>
+<span class="sd">            command (str): the method name of bb.data_smart.VariableHistory</span>
+<span class="sd">            args (Any): depends on command</span>
+<span class="sd">            kwargs (Any): depends on command</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Any: command return</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | User can input following commands. If you want to know detail of these, please see bb.data_smart.VariableHistory.</span>
+
+<span class="sd">            * copy</span>
+<span class="sd">            * del_var_history</span>
+<span class="sd">            * emit</span>
+<span class="sd">            * get_variable_files</span>
+<span class="sd">            * get_variable_items_files</span>
+<span class="sd">            * get_variable_lines</span>
+<span class="sd">            * get_variable_refs</span>
+<span class="sd">            * record</span>
+<span class="sd">            * rename_variable_hist</span>
+<span class="sd">            * variable</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;dataStoreConnectorVarHistCmd&quot;</span><span class="p">,</span>
+            <span class="n">datastore_index</span><span class="p">,</span>
+            <span class="n">command</span><span class="p">,</span>
+            <span class="n">args</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.data_store_connector_var_hist_cmd_emit"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.data_store_connector_var_hist_cmd_emit">[docs]</a>    <span class="k">def</span> <span class="nf">data_store_connector_var_hist_cmd_emit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span>
+        <span class="n">datastore_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">variable</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">comment</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">val</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">override_datastore_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Update variable in datastore by variable inoverride datastore</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.</span>
+<span class="sd">            variable (str): varibale name</span>
+<span class="sd">            comment (str): comment for update log()</span>
+<span class="sd">            override_datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: update log</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            To be investigate.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;dataStoreConnectorVarHistCmdEmit&quot;</span><span class="p">,</span>
+            <span class="n">datastore_index</span><span class="p">,</span>
+            <span class="n">variable</span><span class="p">,</span>
+            <span class="n">comment</span><span class="p">,</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>  <span class="c1"># this parameter is not used at all, but accessed, so we have to set a value. If not so, then exception will occur.</span>
+            <span class="n">override_datastore_index</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.data_store_connector_inc_hist_cmd"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.data_store_connector_inc_hist_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">data_store_connector_inc_hist_cmd</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">datastore_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Data store include history function</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.</span>
+<span class="sd">            command (str): the method name of bb.data_smart.IncludeHistory</span>
+<span class="sd">            args (Any): depends on command</span>
+<span class="sd">            kwargs (Any): depends on command</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Any: command return</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | User can input following commands. If you want to know detail of these, please see bb.data_smart.IncludeHistory.</span>
+
+<span class="sd">            * copy</span>
+<span class="sd">            * include</span>
+<span class="sd">            * emit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;dataStoreConnectorIncHistCmd&quot;</span><span class="p">,</span>
+            <span class="n">datastore_index</span><span class="p">,</span>
+            <span class="n">command</span><span class="p">,</span>
+            <span class="n">args</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.data_store_connector_release"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.data_store_connector_release">[docs]</a>    <span class="k">def</span> <span class="nf">data_store_connector_release</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">datastore_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Discard data store</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;dataStoreConnectorRelease&quot;</span><span class="p">,</span> <span class="n">datastore_index</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.parse_recipe_file"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.parse_recipe_file">[docs]</a>    <span class="k">def</span> <span class="nf">parse_recipe_file</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span>
+        <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">append</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">append_list</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">datastore_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Parse recipe file</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            file_path (str): recipe file path</span>
+<span class="sd">            append (bool, optional): whether to append. Defaults to True.</span>
+<span class="sd">            append_list (Optional[str], optional): Append file list. Defaults to None. If None, bitbake loads append files automatically.</span>
+<span class="sd">            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[int]: data store index</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | This commands parses recipe file and store result into datastore. User can access the result by data store index. It&#39;s not clear how the fifth parameter(datastore_index) works.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+                <span class="s2">&quot;parseRecipeFile&quot;</span><span class="p">,</span>
+                <span class="n">file_path</span><span class="p">,</span>
+                <span class="n">append</span><span class="p">,</span>
+                <span class="n">append_list</span><span class="p">,</span>
+                <span class="n">datastore_index</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">datastore_index</span>
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+                <span class="s2">&quot;parseRecipeFile&quot;</span><span class="p">,</span>
+                <span class="n">file_path</span><span class="p">,</span>
+                <span class="n">append</span><span class="p">,</span>
+                <span class="n">append_list</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;dsindex&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">ret</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+    <span class="c1"># --- bitbake server async functions  ---</span>
+<div class="viewcode-block" id="BBClient.build_file"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.build_file">[docs]</a>    <span class="k">def</span> <span class="nf">build_file</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">internal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Build recipe file</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            file_path (str): target recipe file path</span>
+<span class="sd">            task_name (str): task name which will run</span>
+<span class="sd">            internal (bool, optional): If True, bitbake will fire events that notify BuildStarted and BuildCompleted. Defaults to False.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | If you want to monitor BuildStarted and BuildCompleted event, use get_event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;buildFile&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">task_name</span><span class="p">,</span> <span class="n">internal</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.build_targets"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.build_targets">[docs]</a>    <span class="k">def</span> <span class="nf">build_targets</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span>
+        <span class="n">targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Build package</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            targets (List[str]): see Note section</span>
+<span class="sd">            task_name (str): task name which will run</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | User can input targets as follows.</span>
+<span class="sd">            | [</span>
+<span class="sd">            |   &quot;gcc&quot;,                              # only package name</span>
+<span class="sd">            |   &quot;mc:xxx_config:alsa&quot;,               # multiconfig and package name</span>
+<span class="sd">            |   &quot;multiconfig:yyy_config:vim&quot;,       # multiconfig and package name</span>
+<span class="sd">            |   &quot;mc:\*:clang&quot;                       # all multiconfig and package name</span>
+<span class="sd">            |   &quot;mc:yyy_config:python:do_patch&quot;,    # multiconfig, package name and task name</span>
+<span class="sd">            | ]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;buildTargets&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">task_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.generate_dep_tree_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_dep_tree_event">[docs]</a>    <span class="k">def</span> <span class="nf">generate_dep_tree_event</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Request dependency tree information</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            targets(List[str]): targets info. see Note section.</span>
+<span class="sd">            task_name (str): task name. e.g.) do_build, do_fetch, etc...</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | User can input targets as follows.</span>
+<span class="sd">            | [</span>
+<span class="sd">            |   &quot;gcc&quot;,                              # only package name</span>
+<span class="sd">            |   &quot;mc:xxx_config:alsa&quot;,               # multiconfig and package name</span>
+<span class="sd">            |   &quot;multiconfig:yyy_config:vim&quot;,       # multiconfig and package name</span>
+<span class="sd">            |   &quot;mc:\*:clang&quot;                        # all multiconfig and package name</span>
+<span class="sd">            |   &quot;mc:yyy_config:python:do_patch&quot;,    # multiconfig, package name and task name</span>
+<span class="sd">            | ]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;generateDepTreeEvent&quot;</span><span class="p">,</span>
+            <span class="n">targets</span><span class="p">,</span>
+            <span class="n">task_name</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.generate_dot_graph"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_dot_graph">[docs]</a>    <span class="k">def</span> <span class="nf">generate_dot_graph</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate task dependency graph(task-depends.dot)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            targets (List[str]): targets info. see Note section.</span>
+<span class="sd">            task_name (str): task name. e.g.) do_build, do_fetch, etc...</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | User can input targets as follows.</span>
+<span class="sd">            | [</span>
+<span class="sd">            |   &quot;gcc&quot;,                              # only package name</span>
+<span class="sd">            |   &quot;mc:xxx_config:alsa&quot;,               # multiconfig and package name</span>
+<span class="sd">            |   &quot;multiconfig:yyy_config:vim&quot;,       # multiconfig and package name</span>
+<span class="sd">            |   &quot;mc:\*:clang&quot;                        # all multiconfig and package name</span>
+<span class="sd">            |   &quot;mc:yyy_config:python:do_patch&quot;,    # multiconfig, package name and task name</span>
+<span class="sd">            | ]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;generateDotGraph&quot;</span><span class="p">,</span>
+            <span class="n">targets</span><span class="p">,</span>
+            <span class="n">task_name</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.generate_targets_tree"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_targets_tree">[docs]</a>    <span class="k">def</span> <span class="nf">generate_targets_tree</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">bb_klass_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">package_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate target tree</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            bb_klass_file_path (str): bbclass file path</span>
+<span class="sd">            package_names (List[str]): target package names</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | Use can receive result by bb.event.TargetsTreeGenerated event.</span>
+<span class="sd">            | If you specify bb_klass_file_path, bitbake will add the packages that inherits bb_klass_file_path to package_names. If you don&#39;t want to do it, please input None to bb_klass_file_path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;generateTargetsTree&quot;</span><span class="p">,</span>
+            <span class="n">bb_klass_file_path</span><span class="p">,</span>
+            <span class="n">package_names</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.find_config_files"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_config_files">[docs]</a>    <span class="k">def</span> <span class="nf">find_config_files</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">variable_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Find Config files that define specified variable.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            variable_name (str): _description_</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | Use can receive result by bb.event.ConfigFilesFound event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;findConfigFiles&quot;</span><span class="p">,</span> <span class="n">variable_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.find_files_matching_in_dir"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_files_matching_in_dir">[docs]</a>    <span class="k">def</span> <span class="nf">find_files_matching_in_dir</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">target_file_name_substring</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Find files that matches the regex_pattern from the directory.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            target_file_name_substring (str): Substrings of target file name. e.g.) &quot;.conf&quot;, &quot;xxx.bbappe&quot;, etc...</span>
+<span class="sd">            directory (str): Target directory. Base directory is ${BBPATH}.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | Use can receive result by bb.event.FilesMatchingFound event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;findFilesMatchingInDir&quot;</span><span class="p">,</span>
+            <span class="n">target_file_name_substring</span><span class="p">,</span>
+            <span class="n">directory</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.test_cooker_command_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.test_cooker_command_event">[docs]</a>    <span class="k">def</span> <span class="nf">test_cooker_command_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Dummy command</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            pattern (str): dummy param</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;testCookerCommandEvent&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.find_config_file_path"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_config_file_path">[docs]</a>    <span class="k">def</span> <span class="nf">find_config_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">config_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Find config file path</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            config_file_name (str): target config file name</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | Use can receive result by bb.event.ConfigFilePathFound event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;findConfigFilePath&quot;</span><span class="p">,</span> <span class="n">config_file_name</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.show_versions"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_versions">[docs]</a>    <span class="k">def</span> <span class="nf">show_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Show all packages versions</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | bbclient doesn&#39;t display any information. If you want to use this feature, please use bitbake-layers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;showVersions&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.show_environment_target"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_environment_target">[docs]</a>    <span class="k">def</span> <span class="nf">show_environment_target</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Show variables for specified package</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            package_name (str): target package name</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | bbclient doesn&#39;t display any information. If you want to use this feature, please use bitbake-gervar or bitbake -e.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;showEnvironmentTarget&quot;</span><span class="p">,</span> <span class="n">package_name</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.show_environment"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_environment">[docs]</a>    <span class="k">def</span> <span class="nf">show_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">bb_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Show variables for specified recipe</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            bb_file_path (str): target recipe path</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | bbclient doesn&#39;t display any information. If you want to use this feature, please use bitbake-gervar or bitbake -e.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;showEnvironment&quot;</span><span class="p">,</span> <span class="n">bb_file_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.parse_files"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.parse_files">[docs]</a>    <span class="k">def</span> <span class="nf">parse_files</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Parse all bb files.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | TODO: investigate what event will user receive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;parseFiles&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.compare_revisions"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.compare_revisions">[docs]</a>    <span class="k">def</span> <span class="nf">compare_revisions</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Exit async command</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | TODO: investigate the detail.</span>
+<span class="sd">            | This determines if the cache is out of date, and if so, this terminates asynchronous processing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;compareRevisions&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.trigger_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.trigger_event">[docs]</a>    <span class="k">def</span> <span class="nf">trigger_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">evene_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Send event</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            evene_name (str): event class name.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | Send evene_name event. User can receive this event by get_event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;triggerEvent&quot;</span><span class="p">,</span> <span class="n">evene_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.reset_cooker"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.reset_cooker">[docs]</a>    <span class="k">def</span> <span class="nf">reset_cooker</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Reset cooker state and caches.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | TODO: investigate the detail.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;resetCooker&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.client_complete"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.client_complete">[docs]</a>    <span class="k">def</span> <span class="nf">client_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Notify client will be close</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;clientComplete&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.find_sigInfo"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_sigInfo">[docs]</a>    <span class="k">def</span> <span class="nf">find_sigInfo</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span>
+        <span class="n">package_name_with_multi_config</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">sigs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Find signature info files via the signature generator(?)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            package_name_with_multi_config (str): TODO</span>
+<span class="sd">            task_name (str): TODO</span>
+<span class="sd">            sigs (List[str]): TODO</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            | Use can receive result by bb.event.FindSigInfoResult event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
+            <span class="s2">&quot;findSigInfo&quot;</span><span class="p">,</span>
+            <span class="n">package_name_with_multi_config</span><span class="p">,</span>
+            <span class="n">task_name</span><span class="p">,</span>
+            <span class="n">sigs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+    <span class="c1"># --- private functions ---</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__connect_server</span><span class="p">(</span>
+        <span class="n">server_adder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="s2">&quot;bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection&quot;</span><span class="p">,</span> <span class="s2">&quot;module&quot;</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+        <span class="sd">&quot;&quot;&quot;Connect to server</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            _type_: (&quot;bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection&quot;, &quot;module&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: use shell not to be depends on bb modules</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">project_path</span><span class="si">}</span><span class="s2">/bitbake/lib&quot;</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">bb.main</span> <span class="kn">import</span> <span class="n">setup_bitbake</span><span class="p">,</span> <span class="n">BitBakeConfigParameters</span>  <span class="c1"># type: ignore</span>
+        <span class="kn">from</span> <span class="nn">bb.tinfoil</span> <span class="kn">import</span> <span class="n">TinfoilConfigParameters</span>  <span class="c1"># type: ignore</span>
+
+        <span class="n">config_params</span><span class="p">:</span> <span class="n">TinfoilConfigParameters</span> <span class="o">=</span> <span class="n">TinfoilConfigParameters</span><span class="p">(</span>
+            <span class="n">config_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">quit</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="n">config_params</span><span class="o">.</span><span class="n">remote_server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">server_adder</span>  <span class="c1"># type: ignore</span>
+        <span class="n">server_connection</span><span class="p">,</span> <span class="n">ui_module</span> <span class="o">=</span> <span class="n">setup_bitbake</span><span class="p">(</span><span class="n">config_params</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">ui_module</span><span class="o">.</span><span class="n">main</span><span class="p">(</span>
+            <span class="n">server_connection</span><span class="o">.</span><span class="n">connection</span><span class="p">,</span> <span class="n">server_connection</span><span class="o">.</span><span class="n">events</span><span class="p">,</span> <span class="n">config_params</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">server_connection</span><span class="p">,</span> <span class="n">ui_module</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__run_command</span><span class="p">(</span><span class="n">server_connection</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Run command</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            server_connection (_type_): use return value of __connect_server()</span>
+<span class="sd">            command (str): commands bitbake defined</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[Any]: command return</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">commandline</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">command</span><span class="p">]</span>
+        <span class="n">commandline</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">params</span> <span class="k">if</span> <span class="n">params</span> <span class="k">else</span> <span class="p">[])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">server_connection</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">runCommand</span><span class="p">(</span><span class="n">commandline</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----------------------&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[ERROR]&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----------------------&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
