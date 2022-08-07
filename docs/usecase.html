@@ -95,6 +95,7 @@
 <h1>Use case<a class="headerlink" href="#use-case" title="Permalink to this heading"></a></h1>
 <p>This page introduce typical use cases for bbclient. Please do setup like below before each use cases.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">bbclient</span>
+<span class="n">logger</span><span class="p">:</span> <span class="n">Logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">()</span>
 <span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span> <span class="o">=</span> <span class="n">BBClient</span><span class="p">(</span><span class="n">project_path</span><span class="p">,</span> <span class="n">init_command</span><span class="p">)</span>
 <span class="n">client</span><span class="o">.</span><span class="n">start_server</span><span class="p">(</span><span class="n">server_adder</span><span class="p">,</span> <span class="n">server_port</span><span class="p">)</span>
 <span class="n">ui_handler</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_uihandler_num</span><span class="p">()</span>
@@ -102,6 +103,18 @@
 <span class="n">ret</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_configuration</span><span class="p">()</span>
 <span class="n">ret</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_files</span><span class="p">()</span>
 <span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
+
+<span class="k">def</span> <span class="nf">setup_logger</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Logger</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Sample logger setting</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ch</span> <span class="o">=</span> <span class="n">StreamHandler</span><span class="p">()</span>
+    <span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">%(name)s</span><span class="s1">][</span><span class="si">%(asctime)s</span><span class="s1">][</span><span class="si">%(levelname)s</span><span class="s1">]: </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">:</span> <span class="n">Logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;bbclient&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">logger</span>
 </pre></div>
 </div>
 <section id="use-cases-for-whole-project">
