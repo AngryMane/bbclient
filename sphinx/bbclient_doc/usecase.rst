@@ -6,6 +6,7 @@ This page introduce typical use cases for bbclient. Please do setup like below b
 .. code-block:: python
 
     import bbclient
+    logger: Logger = setup_logger()
     client: BBClient = BBClient(project_path, init_command)
     client.start_server(server_adder, server_port)
     ui_handler: int = client.get_uihandler_num()
@@ -13,6 +14,18 @@ This page introduce typical use cases for bbclient. Please do setup like below b
     ret = client.parse_configuration()
     ret = client.parse_files()
     client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
+
+    def setup_logger() -> Logger: 
+        """Sample logger setting
+        """
+        ch = StreamHandler()
+        ch.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('[%(name)s][%(asctime)s][%(levelname)s]: %(message)s')
+        ch.setFormatter(formatter)
+        logger: Logger = getLogger("bbclient")
+        logger.setLevel('DEBUG')
+        logger.addHandler(ch)
+        return logger
 
 Use cases for whole project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
