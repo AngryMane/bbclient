@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.insert(0, '~/work/git/bbclint/document_project')
+sys.path.insert(0, '~/work/git/bbclint')
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:

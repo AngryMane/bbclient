@@ -6,6 +6,11 @@ VERSION=v0.0.1
 OUTPUT_DIR=$(pwd)/../docs
 MY_THEME_FILE=$(pwd)/my_theme.css
 
+pushd ../
+pip3 uninstall bbclient -y
+pip3 install -e .
+popd
+
 #if [ -d ${PROJECT_DIR} ];then
   # rm -rf ${PROJECT_DIR}
 #fi
@@ -14,7 +19,7 @@ MY_THEME_FILE=$(pwd)/my_theme.css
   # rm -rf ${OUTPUT_DIR}
 #fi
 
-sphinx-apidoc -F -H ${PROJECT_NAME} -V ${VERSION} -o ${PROJECT_DIR} ${TARGET_MODULE}
+sphinx-apidoc -f -H ${PROJECT_NAME} -V ${VERSION} -o ${PROJECT_DIR} ${TARGET_MODULE}
 
 mkdir -p ${PROJECT_DIR}/_static/css
 cp ${MY_THEME_FILE} ${PROJECT_DIR}/_static/css
