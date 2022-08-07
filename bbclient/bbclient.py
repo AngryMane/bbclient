@@ -21,6 +21,7 @@ import sys
 import time
 import subprocess
 from logging import Logger
+from functools import wraps
 from typing import Any, List, Optional, Tuple, Mapping, Callable, Iterable, Type
 
 from .bbcommon import *
@@ -41,11 +42,12 @@ class BBClient:
         """Decorator for logging
 
         Args:
-            func (_type_): target function
+            func (Callable): target function
 
         Note:
             This is just for debuggging.
         """
+        @wraps(func)
         def inner_function(self: "BBClient", *args, **kwargs):
             if self.__logger:
                 self.__logger.debug(f"{func.__name__} start.")
