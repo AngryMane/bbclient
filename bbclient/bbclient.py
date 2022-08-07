@@ -20,9 +20,10 @@ import os
 import sys
 import time
 import subprocess
-from typing import Any, List, Optional, Tuple, Mapping, Callable
+from typing import Any, List, Optional, Tuple, Mapping, Callable, Iterable, Type
 
 from .bbcommon import *
+from .bbevent import *
 
 
 class BBClient:
@@ -108,31 +109,45 @@ class BBClient:
         self.__is_server_running = False
 
     # --- utility functions ---
-    def wait_event(self: "BBClient", event_names: List[str], timeout: Optional[float] = None) -> Optional[Any]:
+    def wait_done_async(self: "BBClient", timeout: Optional[float] = None) -> Optional[BBEventBase]:
+        """Wait CommandCompletedEvent, CommandExitEvent, CommandFailedEvent event
+
+        Args:
+            self (BBClient): none
+            timeout (Optional[float], optional): timeout. (seconds)
+
+        Returns:
+            Optional[BBEventBase]: target event or None
+        """
+        return self.wait_event([CommandCompletedEvent, CommandExitEvent, CommandFailedEvent], timeout)
+
+    def wait_event(self: "BBClient", event_types: List[Type[BBEventBase]], timeout: Optional[float] = None) -> Optional[BBEventBase]:
         """Wait specific event
 
         Args:
             self (BBClient): none
-            event_names (List[str]): event names you wait for
-            timeout (float): timeout. (milliseconds)
+            event_types (List[Type[BBEventBase]]): event types you wait for. BBEventBase and its inherits types is defined in bbcommon.py.
+            timeout (float): timeout. (seconds)
 
         Returns:
-            Optional[Any]: The event you wait for or None
+            Optional[BBEventBase]: The event you wait for or None
         
         Note:
-            This functions will return one event whenever finding a event in event_names. Please note that the other events will be discarded.
+            | This function will pop events from event queue. This event queue is reused between many commands, so this queue may have events from previous commands.
+            | When you wait bb.command.CommandCompleted event, please confirm there is no left bb.command.CommandCompleted event from previous command.
         """
         # f"<class '{event_name}'>" -> event_name
-        class_name_extractor: Callable = lambda x: str(type(x))[8:-2] 
         start_time: float = time.perf_counter()
-        ret: Any = None
+        ret: Optional[Any] = None
         while True:
-            cur_event: Optional[Any] = self.get_event(0.01)
-            cur_event_name: str = class_name_extractor(cur_event) if cur_event else ""
+            cur_event: Optional[BBEventBase] = self.get_event(0.01)
             #for debug 
-            #if cur_event_name and not cur_event_name == "bb.event.HeartbeatEvent" and not cur_event_name == "logging.LogRecord":
-            #    print(cur_event_name)
-            if cur_event_name in event_names:
+            #if cur_event and not cur_event.event_name == "bb.event.HeartbeatEvent" and not cur_event.event_name == "logging.LogRecord":
+            #    print(type(cur_event))
+            #    print(cur_event.__dict__)
+            find_matched_type: Optional[Type[BBEventBase]] = next(filter(lambda x: isinstance(cur_event, x), event_types), None) # type: ignore
+            is_instance_of_target: bool = True if find_matched_type else False
+            if is_instance_of_target:
                 ret = cur_event
                 break
             execution_time: float = time.perf_counter() - start_time
@@ -140,7 +155,7 @@ class BBClient:
                 break
         return ret
 
-    def get_event(self: "BBClient", timeout: Optional[float] = None) -> Optional[Any]:
+    def get_event(self: "BBClient", timeout: Optional[float] = None) -> Optional[BBEventBase]:
         """Get oldest event
 
         Args:
@@ -148,9 +163,16 @@ class BBClient:
             timeout (Optional[float]): timeout. if timeout, return None
 
         Returns:
-            Optional[Any]: event notification objects. See bb.event.py
+            Optional[BBEventBase]: event notification objects. See bbcommon.py
         """
-        return self.__server_connection.events.waitEvent(timeout)
+        cur_event: Any = self.__server_connection.events.waitEvent(timeout)
+        if not cur_event:
+            return None
+        cur_event_name: str = str(type(cur_event))[8:-2]
+        itr: Iterable = filter(lambda x: x.is_target(cur_event_name), ALL_BB_EVENTS)
+        event_class: Optional[Type[BBEventBase]] = next(itr, None) # type: ignore
+        return event_class(cur_event.__dict__) if event_class else UnknownEvent(cur_event_name, cur_event.__dict__)
+        
 
     # --- bitbake server sync functions  ---
     def state_shutdown(self: "BBClient") -> None:
@@ -994,6 +1016,25 @@ class BBClient:
     ) -> None:
         """Build recipe file
 
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+
+        * bb.event.BuildInit
+        * bb.event.RecipePreFinalise
+        * bb.event.RecipePostKeyExpansion
+        * bb.event.RecipeTaskPreProcess
+        * bb.event.RecipeParsed
+        * bb.event.BuildStarted
+        * bb.event.ProcessStarted
+        * bb.event.ProcessProgress
+        * bb.event.ProcessFinished
+        * bb.runqueue.runQueueTaskStarted
+        * bb.runqueue.runQueueTaskCompleted
+        * bb.event.BuildCompleted
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
+
         Args:
             self (BBClient): none
             file_path (str): target recipe file path
@@ -1013,6 +1054,19 @@ class BBClient:
         task_name: str,
     ) -> None:
         """Build package
+
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.runqueue.runQueueTaskStarted
+        * bb.build.TaskStarted
+        * bb.build.TaskProgress
+        * bb.build.TaskSucceeded
+        * bb.event.ProcessStarted
+        * bb.event.ProcessProgress
+        * bb.event.ProcessFinished
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
 
         Args:
             self (BBClient): none
@@ -1036,6 +1090,16 @@ class BBClient:
         self: "BBClient", targets: List[str], task_name: str
     ) -> None:
         """Request dependency tree information
+
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.event.TreeDataPreparationStarted
+        * bb.event.TreeDataPreparationProgress
+        * bb.event.TreeDataPreparationCompleted
+        * bb.event.DepTreeGenerated
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
 
         Args:
             self (BBClient): none
@@ -1064,6 +1128,15 @@ class BBClient:
     ) -> None:
         """Generate task dependency graph(task-depends.dot)
 
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.event.TreeDataPreparationStarted
+        * bb.event.TreeDataPreparationProgress
+        * bb.event.TreeDataPreparationCompleted
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
+
         Args:
             self (BBClient): none
             targets (List[str]): targets info. see Note section.
@@ -1091,6 +1164,16 @@ class BBClient:
     ) -> None:
         """Generate target tree
 
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.event.TreeDataPreparationStarted
+        * bb.event.TreeDataPreparationProgress
+        * bb.event.TreeDataPreparationCompleted
+        * bb.event.TargetsTreeGenerated
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
+
         Args:
             self (BBClient): none
             bb_klass_file_path (str): bbclass file path
@@ -1110,6 +1193,13 @@ class BBClient:
     def find_config_files(self: "BBClient", variable_name: str) -> None:
         """Find Config files that define specified variable.
 
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.event.ConfigFilesFound
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
+
         Args:
             self (BBClient): none
             variable_name (str): _description_
@@ -1123,6 +1213,13 @@ class BBClient:
         self: "BBClient", target_file_name_substring: str, directory: str
     ) -> None:
         """Find files that matches the regex_pattern from the directory.
+
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.event.FilesMatchingFound
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
 
         Args:
             self (BBClient): none
@@ -1142,6 +1239,13 @@ class BBClient:
     def test_cooker_command_event(self: "BBClient", pattern: str) -> None:
         """Dummy command
 
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.event.FilesMatchingFound
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
+
         Args:
             self (BBClient): none
             pattern (str): dummy param
@@ -1150,6 +1254,13 @@ class BBClient:
 
     def find_config_file_path(self: "BBClient", config_file_name: str) -> None:
         """Find config file path
+
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.event.ConfigFilePathFound
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
 
         Args:
             self (BBClient): none
@@ -1165,6 +1276,12 @@ class BBClient:
     def show_versions(self: "BBClient") -> None:
         """Show all packages versions
 
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
+
         Args:
             self (BBClient): none
 
@@ -1175,6 +1292,13 @@ class BBClient:
 
     def show_environment_target(self: "BBClient", package_name: str = "") -> None:
         """Show variables for specified package
+
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.event.ConfigParsed
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
 
         Args:
             self (BBClient): none
@@ -1190,6 +1314,21 @@ class BBClient:
     def show_environment(self: "BBClient", bb_file_path: str) -> None:
         """Show variables for specified recipe
 
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.event.ConfigParsed
+        * bb.event.CacheLoadStarted
+        * bb.event.CacheLoadProgress
+        * bb.event.CacheLoadCompleted
+        * bb.event.RecipePreFinalise
+        * bb.event.RecipePostKeyExpansion
+        * bb.event.RecipeTaskPreProcess
+        * bb.event.RecipeParsed
+        * bb.event.ConfigParsed
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
+
         Args:
             self (BBClient): none
             bb_file_path (str): target recipe path
@@ -1202,16 +1341,26 @@ class BBClient:
     def parse_files(self: "BBClient") -> None:
         """Parse all bb files.
 
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.event.ReachableStamps
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
+
         Args:
             self (BBClient): none
-
-        Note:
-            | TODO: investigate what event will user receive.
         """
         self.__run_command(self.__server_connection, "parseFiles")
 
     def compare_revisions(self: "BBClient") -> None:
         """Exit async command
+
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
 
         Args:
             self (BBClient): none
@@ -1237,6 +1386,13 @@ class BBClient:
     def reset_cooker(self: "BBClient") -> None:
         """Reset cooker state and caches.
 
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.event.ConfigParsed
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
+
         Args:
             self (BBClient): none
 
@@ -1247,6 +1403,12 @@ class BBClient:
 
     def client_complete(self: "BBClient") -> None:
         """Notify client will be close
+
+        This command will send following events. If you want to wait done, please use wait_done_async.
+
+        * bb.command.CommandCompleted
+        * bb.command.CommandFailed
+        * bb.command.CommandExit
 
         Args:
             self (BBClient): none

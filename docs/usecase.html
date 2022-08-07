@@ -97,11 +97,11 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">bbclient</span>
 <span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span> <span class="o">=</span> <span class="n">BBClient</span><span class="p">(</span><span class="n">project_path</span><span class="p">,</span> <span class="n">init_command</span><span class="p">)</span>
 <span class="n">client</span><span class="o">.</span><span class="n">start_server</span><span class="p">(</span><span class="n">server_adder</span><span class="p">,</span> <span class="n">server_port</span><span class="p">)</span>
+<span class="n">ui_handler</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_uihandler_num</span><span class="p">()</span>
+<span class="n">client</span><span class="o">.</span><span class="n">set_event_mask</span><span class="p">(</span><span class="n">ui_handler</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="p">{},</span> <span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">])</span>
 <span class="n">ret</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_configuration</span><span class="p">()</span>
 <span class="n">ret</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_files</span><span class="p">()</span>
-<span class="c1"># wainting for parse files</span>
-<span class="c1"># TODO: use client.get_event</span>
-<span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
 </pre></div>
 </div>
 <section id="use-cases-for-whole-project">
@@ -109,13 +109,11 @@
 <section id="build-package">
 <h3>Build package<a class="headerlink" href="#build-package" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">build_targets</span><span class="p">([</span><span class="s2">&quot;busybox&quot;</span><span class="p">],</span> <span class="s2">&quot;compile&quot;</span><span class="p">)</span>
-<span class="c1"># TODO: use client.get_event</span>
-<span class="n">sleep</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line">Please note that this command will kick all the tasks target depends, so it maybe taks so much time.</div>
-<div class="line">There are no means to notify complete task because bb.command.CommandCompleted event will occurs many times, and we can’t distinguish which event notifys complete.</div>
 </div>
 </section>
 <section id="get-all-recipes-in-layers">
@@ -193,8 +191,7 @@
 <div class="line">These files will be writtene at the root of the yocto porject.</div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">generate_dot_graph</span><span class="p">([</span><span class="s2">&quot;gcc&quot;</span><span class="p">],</span> <span class="s2">&quot;build&quot;</span><span class="p">)</span>
-<span class="c1"># TODO: use client.get_event</span>
-<span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
 </pre></div>
 </div>
 <p>task-depends provides dependency info between recipes. See <a class="reference external" href="https://docs.yoctoproject.org/current/dev-manual/common-tasks.html?highlight=task+depends+dot#viewing-task-variable-dependencies">here</a></p>
@@ -245,11 +242,9 @@
 <section id="run-a-task">
 <h3>Run a task<a class="headerlink" href="#run-a-task" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">build_targets</span><span class="p">([</span><span class="s2">&quot;busybox&quot;</span><span class="p">],</span> <span class="s2">&quot;fetch&quot;</span><span class="p">)</span>
-<span class="c1"># TODO: use client.get_event</span>
-<span class="n">sleep</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
 <span class="n">client</span><span class="o">.</span><span class="n">build_targets</span><span class="p">([</span><span class="s2">&quot;busybox&quot;</span><span class="p">],</span> <span class="s2">&quot;patch&quot;</span><span class="p">)</span>
-<span class="c1"># TODO: use client.get_event</span>
-<span class="n">sleep</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
 </pre></div>
 </div>
 </section>

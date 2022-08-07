@@ -8,11 +8,11 @@ This page introduce typical use cases for bbclient. Please do setup like below b
     import bbclient
     client: BBClient = BBClient(project_path, init_command)
     client.start_server(server_adder, server_port)
+    ui_handler: int = client.get_uihandler_num()
+    client.set_event_mask(ui_handler, logging.DEBUG, {}, ["*"])
     ret = client.parse_configuration()
     ret = client.parse_files()
-    # wainting for parse files
-    # TODO: use client.get_event
-    sleep(3)
+    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
 
 Use cases for whole project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -23,11 +23,9 @@ Build package
 .. code-block:: python
 
     client.build_targets(["busybox"], "compile")
-    # TODO: use client.get_event
-    sleep(3600)
+    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
 
 | Please note that this command will kick all the tasks target depends, so it maybe taks so much time.
-| There are no means to notify complete task because bb.command.CommandCompleted event will occurs many times, and we can't distinguish which event notifys complete.
 
 Get all recipes in layers
 --------------------------
@@ -117,8 +115,7 @@ Generate dependency dot file
 .. code-block:: python
 
     client.generate_dot_graph(["gcc"], "build")
-    # TODO: use client.get_event
-    sleep(10)
+    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
 
 task-depends provides dependency info between recipes. See `here <https://docs.yoctoproject.org/current/dev-manual/common-tasks.html?highlight=task+depends+dot#viewing-task-variable-dependencies>`_
 
@@ -177,8 +174,6 @@ Run a task
 .. code-block:: python
 
     client.build_targets(["busybox"], "fetch")
-    # TODO: use client.get_event
-    sleep(3600)
+    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
     client.build_targets(["busybox"], "patch")
-    # TODO: use client.get_event
-    sleep(3600)
+    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.

@@ -20,6 +20,14 @@ bbclient.bbcommon module
    :undoc-members:
    :show-inheritance:
 
+bbclient.bbevent module
+------------------------
+
+.. automodule:: bbclient.bbevent 
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

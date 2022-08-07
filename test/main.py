@@ -1,12 +1,9 @@
 #!/usr/bin/python3
 
-from gettext import find
 from bbclient import *
 
 import yaml
 import logging
-from typing import Optional, Any, List
-from time import sleep
 from typing import Tuple
 
 YML_KEY_BB_PROJECT_ABS_PATH: str = "bb_project_abs_path"
@@ -22,31 +19,18 @@ def main() -> None:
     )
     client: BBClient = BBClient(project_path, init_command)
     client.start_server(server_adder, server_port)
-
-    typical_setup(client, logging.DEBUG)
+    ui_handler: int = client.get_uihandler_num()
+    client.set_event_mask(ui_handler, logging.DEBUG, {}, ["*"])
+    client.parse_files()
+    client.wait_done_async()
 
     # do test
-    client.generate_targets_tree("", ["gcc"])
-    ret: Any = client.wait_event(["bb.event.ReachableStamps"])
-    print(ret.__dict__)
+    client.build_targets(["busybox"], "fetch")
+    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
+    client.build_targets(["busybox"], "patch")
+    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
 
     client.stop_server()
-
-
-def typical_setup(client: BBClient, log_level: int) -> None:
-    ret = client.get_uihandler_num()
-    client.set_event_mask(
-        ret, log_level, {"": 0}, ["*"]
-    )  # mask unnecessary logging info
-    ret = client.parse_configuration()
-    ret = client.parse_files()
-    # wainting for parse files
-    # TODO: use client.get_event
-    sleep(3)
-
-
-def get_class_name(obj: Any) -> str:
-    return str(type(obj))[8:-2]
 
 
 def load_test_settings(yml_file_path: str) -> Tuple[str, str, int]:

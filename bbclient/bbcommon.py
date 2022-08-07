@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+""" 
+This file provides common definition for ease of understanding in/out of commands
+"""
+
 from typing import Mapping, Any, List
 from collections import namedtuple
 from enum import Enum
