@@ -38,6 +38,7 @@ class TaskFailedEvent(BBEventBase):
 
     def __init__(self: "TaskFailedEvent", data: Mapping[str, Any]) -> None:
         super().__init__(self.EVENT_NAME)
+        # TODO
 
 class TaskProgressEvent(BBEventBase):
     EVENT_NAME: str = "bb.build.TaskProgress"
@@ -53,12 +54,37 @@ class TaskStartedEvent(BBEventBase):
 
     def __init__(self: "TaskStartedEvent", data: Mapping[str, Any]) -> None:
         super().__init__(self.EVENT_NAME)
+        self.pid: int = data["pid"]
+        self.task: str = data["_task"]
+        self.fn: str = data["_fn"]
+        self.package: str = data["_package"]
+        self.mc: str = data["_mc"]
+        self.taskfile: str = data["taskfile"]
+        self.taskname: str = data["taskname"]
+        self.logfile: str = data["logfile"]
+        self.time: float = data["time"]
+        self.pn: str = data["pn"]
+        self.pv: str = data["pv"]
+        self.message: str = data["_message"]
+        self.taskflags: Any = data["taskflags"]
 
 class TaskSucceededEvent(BBEventBase):
     EVENT_NAME: str = "bb.build.TaskSucceeded"
 
     def __init__(self: "TaskSucceededEvent", data: Mapping[str, Any]) -> None:
         super().__init__(self.EVENT_NAME)
+        self.pid: int = data["pid"]
+        self.task: str = data["_task"]
+        self.fn: str = data["_fn"]
+        self.package: str = data["_package"]
+        self.mc: str = data["_mc"]
+        self.taskfile: str = data["taskfile"]
+        self.taskname: str = data["taskname"]
+        self.logfile: str = data["logfile"]
+        self.time: float = data["time"]
+        self.pn: str = data["pn"]
+        self.pv: str = data["pv"]
+        self.message: str = data["_message"]
 
 class CommandCompletedEvent(BBEventBase):
     EVENT_NAME: str = "bb.command.CommandCompleted"
@@ -81,6 +107,7 @@ class CommandExitEvent(BBEventBase):
 
     def __init__(self: "CommandExitEvent", data: Mapping[str, Any]) -> None:
         super().__init__(self.EVENT_NAME)
+        # TODO
 
 class CacheLoadCompletedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.CacheLoadCompleted"
@@ -262,6 +289,7 @@ class runQueueTaskFailedEvent(BBEventBase):
 
     def __init__(self: "runQueueTaskFailedEvent", data: Mapping[str, Any]) -> None:
         super().__init__(self.EVENT_NAME)
+        # TODO
 
 class runQueueTaskStartedEvent(BBEventBase):
     EVENT_NAME: str = "bb.runqueue.runQueueTaskStarted"
@@ -274,7 +302,7 @@ class runQueueTaskStartedEvent(BBEventBase):
         self.taskname: str = data["taskname"]
         self.taskfile: str = data["taskfile"]
         self.taskhash: str = data["taskhash"]
-        self.stats: Any = data["stats"]
+        self.stats: Any = data["stats"].__dict__
         self.noexec: bool = data["noexec"]
 
 class runQueueTaskSkippedEvent(BBEventBase):

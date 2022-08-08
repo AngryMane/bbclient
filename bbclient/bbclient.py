@@ -51,9 +51,10 @@ class BBClient:
         def inner_function(self: "BBClient", *args, **kwargs):
             if self.__logger:
                 self.__logger.debug(f"{func.__name__} start.")
-            func(self, *args, **kwargs)
+            ret = func(self, *args, **kwargs)
             if self.__logger:
                 self.__logger.debug(f"{func.__name__} end.")
+            return ret
         return inner_function
 
     # --- setup functions ---
@@ -198,7 +199,9 @@ class BBClient:
         event_class: Optional[Type[BBEventBase]] = next(itr, None) # type: ignore
         ret: BBEventBase = event_class(cur_event.__dict__) if event_class else UnknownEvent(cur_event_name, cur_event.__dict__)
         if not isinstance(ret, UnknownEvent) and self.__logger:
-            self.__logger.debug(f"get {cur_event_name}: {cur_event.__dict__}")
+            self.__logger.debug(f"get {cur_event_name}: {ret.__dict__}")
+        if isinstance(ret, UnknownEvent) and self.__logger:
+            self.__logger.debug(f"get Unknow event {cur_event_name}: {ret.__dict__}")
         return ret
         
 
