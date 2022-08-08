@@ -27,8 +27,15 @@ def main() -> None:
     client.wait_done_async()
 
     # do test
-    client.generate_dot_graph(["python3"], "compile")
-    client.wait_done_async()
+    data_store_index: int = client.parse_recipe_file(path_to_sample_recipe)
+    ret: Any = client.data_store_connector_cmd(data_store_index, "getVar", "FILE")
+    print(ret)
+    ret: Any = client.data_store_connector_cmd(data_store_index, "items")
+    print(ret)
+    ret: Any = client.data_store_connector_cmd(data_store_index, "keys")
+    print(ret)
+    #client.build_targets(["meson"], "compile")
+    #client.wait_done_async()
 
     client.stop_server()
 
