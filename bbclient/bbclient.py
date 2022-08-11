@@ -1165,7 +1165,7 @@ class BBClient:
             task_name (str): task name which will run
 
         Note:
-            | User can input targets as follows.
+            | User can input targets as follows. Please note that if you want to specify task by targets, you have to write do_xxx, not only xxx.
             | [
             |   "gcc",                              # only package name
             |   "mc:xxx_config:alsa",               # multiconfig and package name

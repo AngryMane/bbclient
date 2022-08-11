@@ -3,6 +3,8 @@ from bbclient import *
 
 params = [
     (["busybox"], "fetch", CommandCompletedEvent),
+    (["busybox", "python3:patch"], "fetch", CommandFailedEvent),
+    (["busybox", "python3:do_patch"], "fetch", CommandCompletedEvent),
     (["busybox", "dummy_package"], "fetch", CommandFailedEvent),
 ]
 
