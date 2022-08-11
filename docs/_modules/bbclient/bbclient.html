@@ -103,7 +103,7 @@
     <span class="sd">&quot;&quot;&quot;Client for bitbake RPC Server</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        __project_path (str): poky directory path</span>
+<span class="sd">        project_path (str): poky directory path</span>
 <span class="sd">        __is_server_running (bool): server is running or not</span>
 <span class="sd">        __server_connection (bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection): touch point to server</span>
 <span class="sd">        __logger (Optional[Logger]): Logger instance for debugging. Default is None.</span>
@@ -140,14 +140,14 @@
 <span class="sd">            init_script_path (str): initialize bitbake proejct command running at project_abs_path. This is maybe &quot;. oe-init-build-env&quot;.</span>
 <span class="sd">            logger (Logger): logger instance for debuggind. Default is None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__project_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">project_abs_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">project_abs_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="n">logger</span>
         <span class="n">pipe</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">init_script_path</span><span class="si">}</span><span class="s2"> &gt; /dev/null; env&quot;</span><span class="p">,</span>
             <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">cwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__project_path</span><span class="p">,</span>
+            <span class="n">cwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">project_path</span><span class="p">,</span>
             <span class="n">executable</span><span class="o">=</span><span class="s2">&quot;/bin/bash&quot;</span><span class="p">,</span>
             <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
@@ -181,13 +181,13 @@
             <span class="sa">f</span><span class="s2">&quot;bitbake --server-only --bind </span><span class="si">{</span><span class="n">server_adder_with_port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">cwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__project_path</span><span class="p">,</span>
+            <span class="n">cwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">project_path</span><span class="p">,</span>
             <span class="n">executable</span><span class="o">=</span><span class="s2">&quot;/bin/bash&quot;</span><span class="p">,</span>
             <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
         <span class="n">connection</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connect_server</span><span class="p">(</span>
-            <span class="n">server_adder_with_port</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__project_path</span>
+            <span class="n">server_adder_with_port</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_path</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span> <span class="o">=</span> <span class="n">connection</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span> <span class="o">=</span> <span class="kc">True</span></div>
@@ -201,6 +201,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span><span class="p">:</span>
             <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_shutdown</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_force_shutdown</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">terminateServer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span> <span class="o">=</span> <span class="kc">False</span></div>
@@ -334,7 +338,8 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            str: variable value</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getVariable&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">expand</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+        <span class="n">expand_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span> <span class="k">if</span> <span class="n">expand</span> <span class="k">else</span> <span class="s2">&quot;False&quot;</span> <span class="c1"># bitbake decide whether or not to expand variable by expand == &quot;True&quot; </span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getVariable&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">expand_str</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
 
 <div class="viewcode-block" id="BBClient.set_variable"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.set_variable">[docs]</a>    <span class="nd">@logger_decorator</span>
     <span class="k">def</span> <span class="nf">set_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -363,8 +368,9 @@
 <span class="sd">        Note:</span>
 <span class="sd">            This is maybe for expand variable value in cache.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">expand_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span> <span class="k">if</span> <span class="n">expand</span> <span class="k">else</span> <span class="s2">&quot;False&quot;</span> <span class="c1"># bitbake decide whether or not to expand variable by expand == &quot;True&quot; </span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getSetVariable&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">expand</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getSetVariable&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">expand_str</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="BBClient.set_config"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.set_config">[docs]</a>    <span class="nd">@logger_decorator</span>

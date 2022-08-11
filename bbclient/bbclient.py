@@ -32,7 +32,7 @@ class BBClient:
     """Client for bitbake RPC Server
 
     Attributes:
-        __project_path (str): poky directory path
+        project_path (str): poky directory path
         __is_server_running (bool): server is running or not
         __server_connection (bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection): touch point to server
         __logger (Optional[Logger]): Logger instance for debugging. Default is None.
@@ -69,14 +69,14 @@ class BBClient:
             init_script_path (str): initialize bitbake proejct command running at project_abs_path. This is maybe ". oe-init-build-env".
             logger (Logger): logger instance for debuggind. Default is None.
         """
-        self.__project_path: str = project_abs_path
+        self.project_path: str = project_abs_path
         self.__is_server_running: bool = False
         self.__logger: Optional[Logger] = logger
         pipe: subprocess.Popen = subprocess.Popen(
             f"{init_script_path} > /dev/null; env",
             stdout=subprocess.PIPE,
             shell=True,
-            cwd=self.__project_path,
+            cwd=self.project_path,
             executable="/bin/bash",
             text=True,
         )
@@ -110,13 +110,13 @@ class BBClient:
             f"bitbake --server-only --bind {server_adder_with_port}",
             stdout=subprocess.PIPE,
             shell=True,
-            cwd=self.__project_path,
+            cwd=self.project_path,
             executable="/bin/bash",
             text=True,
         )
         output, _ = pipe.communicate()
         connection, _ = self.__connect_server(
-            server_adder_with_port, self.__project_path
+            server_adder_with_port, self.project_path
         )
         self.__server_connection = connection
         self.__is_server_running = True
@@ -130,6 +130,10 @@ class BBClient:
         """
         if not self.__is_server_running:
             return
+        self.state_shutdown()
+        time.sleep(1)
+        self.state_force_shutdown()
+        time.sleep(2)
         self.__server_connection.connection.terminateServer()
         self.__server_connection.terminate()
         self.__is_server_running = False
@@ -263,7 +267,8 @@ class BBClient:
         Returns:
             str: variable value
         """
-        return self.__run_command(self.__server_connection, "getVariable", name, expand, logger=self.__logger)  # type: ignore
+        expand_str: str = "True" if expand else "False" # bitbake decide whether or not to expand variable by expand == "True" 
+        return self.__run_command(self.__server_connection, "getVariable", name, expand_str, logger=self.__logger)  # type: ignore
 
     @logger_decorator
     def set_variable(self: "BBClient", name: str, value: str) -> None:
@@ -292,8 +297,9 @@ class BBClient:
         Note:
             This is maybe for expand variable value in cache.
         """
+        expand_str: str = "True" if expand else "False" # bitbake decide whether or not to expand variable by expand == "True" 
         return self.__run_command(  # type: ignore
-            self.__server_connection, "getSetVariable", name, expand, logger=self.__logger
+            self.__server_connection, "getSetVariable", name, expand_str, logger=self.__logger
         )
 
     @logger_decorator

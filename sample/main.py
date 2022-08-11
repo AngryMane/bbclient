@@ -15,8 +15,8 @@ YML_KEY_PATH_TO_SAMPLE_RECIPE: str = "path_to_sample_recipe"
 
 
 def main() -> None:
-    project_path, server_adder, server_port, init_command, path_to_sample_recipe = load_test_settings(
-        "./test.yml"
+    project_path, server_adder, server_port, init_command, path_to_sample_recipe = load_settings(
+        "./sample.yml"
     )
     logger: Logger = setup_logger()
     client: BBClient = BBClient(project_path, init_command, logger)
@@ -27,15 +27,13 @@ def main() -> None:
     client.wait_done_async()
 
     # do test
-    data_store_index: int = client.parse_recipe_file(path_to_sample_recipe)
-    ret: Any = client.data_store_connector_cmd(data_store_index, "getVar", "FILE")
+    client.set_variable("DUMMY", r"${MACHINE}")
+    ret: str = client.get_variable("DUMMY", False)
     print(ret)
-    ret: Any = client.data_store_connector_cmd(data_store_index, "items")
+    ret: str = client.get_set_variable("DUMMY")
     print(ret)
-    ret: Any = client.data_store_connector_cmd(data_store_index, "keys")
+    ret: str = client.get_variable("DUMMY", False)
     print(ret)
-    #client.build_targets(["meson"], "compile")
-    #client.wait_done_async()
 
     client.stop_server()
 
@@ -49,7 +47,7 @@ def setup_logger() -> Logger:
     logger.addHandler(ch)
     return logger
 
-def load_test_settings(yml_file_path: str) -> Tuple[str, str, int]:
+def load_settings(yml_file_path: str) -> Tuple[str, str, int]:
     with open(yml_file_path) as yml_file:
         yml_content = yaml.safe_load(yml_file)
         return (
