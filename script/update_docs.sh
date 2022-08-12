@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+BBCLIENT_PROJECT_ROOT_DIR=$(cd $(dirname $0); cd ..; pwd)
+pushd ${BBCLIENT_PROJECT_ROOT_DIR}/sphinx
+
 PROJECT_NAME=bbclient_doc
 PROJECT_DIR=$(pwd)/${PROJECT_NAME}
 TARGET_MODULE=$(pwd)/bbclient
@@ -37,3 +40,5 @@ sphinx-build ${PROJECT_DIR} ${OUTPUT_DIR}
 #if [ -d ${PROJECT_DIR} ];then
   #rm -rf ${PROJECT_DIR}
 #fi
+
+popd
