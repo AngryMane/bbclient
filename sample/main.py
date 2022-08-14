@@ -27,12 +27,7 @@ def main() -> None:
     client.wait_done_async()
 
     # do test
-    client.set_variable("DUMMY", r"${MACHINE}")
-    ret: str = client.get_variable("DUMMY", False)
-    print(ret)
-    ret: str = client.get_set_variable("DUMMY")
-    print(ret)
-    ret: str = client.get_variable("DUMMY", False)
+    ret = client.get_r_providers()
     print(ret)
 
     client.stop_server()

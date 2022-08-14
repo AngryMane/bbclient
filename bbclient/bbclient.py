@@ -802,7 +802,8 @@ class BBClient:
         for package in result[0].keys():
             ret.append(
                 FindProvidersResult(
-                    package, result[0][package], result[1][package], result[2][package]
+                    # yocto dunfell doesn't support result[3](required or not), so checking len(result) == 3
+                    package, result[0][package], result[1][package], result[2][package] if len(result) == 3 else None 
                 )
             )
         return ret
