@@ -372,8 +372,11 @@ class BBClient:
         Returns:
             str: matched file path
 
+        WARNING:
+            This command will fail because the second parameter and the first one mixed up in the command.
+
         Note:
-            | This command can extract only one file. If you input the regex matching to many file, this command will fail. This command maybe has a bug. The second parameter and the first one mixed up in the command.
+            | This command can extract only one file. If you input the regex matching to many file, this command will fail. 
         """
 
         return self.__run_command(  # type: ignore

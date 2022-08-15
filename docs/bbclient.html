@@ -1275,10 +1275,14 @@
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This command will fail because the second parameter and the first one mixed up in the command.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">This command can extract only one file. If you input the regex matching to many file, this command will fail. This command maybe has a bug. The second parameter and the first one mixed up in the command.</div>
+<div class="line">This command can extract only one file. If you input the regex matching to many file, this command will fail.</div>
 </div>
 </div>
 </dd></dl>
@@ -1792,7 +1796,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbcommon.</span></span><span class="sig-name descname"><span class="pre">FindProvidersResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latest_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perffered_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbcommon.html#FindProvidersResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbcommon.</span></span><span class="sig-name descname"><span class="pre">FindProvidersResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latest_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perffered_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbcommon.html#FindProvidersResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>findProviders result</p>
 <dl class="py attribute">
@@ -1897,10 +1901,10 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.required_version">
 <span class="sig-name descname"><span class="pre">required_version</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.required_version" title="Permalink to this definition"></a></dt>
-<dd><p>whether required version exists or not</p>
+<dd><p>whether required version exists or not. If the yocto version is old, it does not support this and will be None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>bool</p>
+<dd class="field-odd"><p>Optional[bool]</p>
 </dd>
 </dl>
 </dd></dl>

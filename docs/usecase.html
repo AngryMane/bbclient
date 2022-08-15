@@ -54,7 +54,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#use-cases-for-one-specific-recipe">Use cases for one specific recipe</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#get-one-specific-variable-in-one-specific-recipe">Get one specific variable in one specific recipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-one-specific-variable-in-one-specific-package">Get one specific variable in one specific package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#get-all-variables-in-one-specific-recipe">Get all variables in one specific recipe</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#get-all-appends-files-for-one-specific-recipe">Get all appends files for one specific recipe</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#get-all-inherit-files-for-one-specific-recipe">Get all inherit files for one specific recipe</a></li>
@@ -211,9 +211,11 @@
 </div>
 <div class="section" id="use-cases-for-one-specific-recipe">
 <h2>Use cases for one specific recipe<a class="headerlink" href="#use-cases-for-one-specific-recipe" title="Permalink to this heading"></a></h2>
-<div class="section" id="get-one-specific-variable-in-one-specific-recipe">
-<h3>Get one specific variable in one specific recipe<a class="headerlink" href="#get-one-specific-variable-in-one-specific-recipe" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_store_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_recipe_file</span><span class="p">(</span><span class="s2">&quot;/PATH/TO/RECIPE/gcc_11.3.bb&quot;</span><span class="p">)</span>
+<div class="section" id="get-one-specific-variable-in-one-specific-package">
+<h3>Get one specific variable in one specific package<a class="headerlink" href="#get-one-specific-variable-in-one-specific-package" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">find_best_provider</span><span class="p">(</span><span class="s2">&quot;gcc&quot;</span><span class="p">)</span>
+<span class="n">target_recipe_file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">data_store_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_recipe_file</span><span class="p">(</span><span class="n">target_recipe_file_path</span><span class="p">)</span>
 <span class="n">ret</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="n">data_store_index</span><span class="p">,</span> <span class="s2">&quot;getVar&quot;</span><span class="p">,</span> <span class="s2">&quot;FILE&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
 </pre></div>

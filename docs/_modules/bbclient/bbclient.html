@@ -443,8 +443,11 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            str: matched file path</span>
 
+<span class="sd">        WARNING:</span>
+<span class="sd">            This command will fail because the second parameter and the first one mixed up in the command.</span>
+
 <span class="sd">        Note:</span>
-<span class="sd">            | This command can extract only one file. If you input the regex matching to many file, this command will fail. This command maybe has a bug. The second parameter and the first one mixed up in the command.</span>
+<span class="sd">            | This command can extract only one file. If you input the regex matching to many file, this command will fail. </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
@@ -873,7 +876,8 @@
         <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">FindProvidersResult</span><span class="p">(</span>
-                    <span class="n">package</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">package</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">package</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">package</span><span class="p">]</span>
+                    <span class="c1"># yocto dunfell doesn&#39;t support result[3](required or not), so checking len(result) == 3</span>
+                    <span class="n">package</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">package</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">package</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">package</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="kc">None</span> 
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">ret</span></div>
