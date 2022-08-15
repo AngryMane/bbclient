@@ -3,7 +3,7 @@
 This file provides common definition for ease of understanding in/out of commands
 """
 
-from typing import Mapping, Any, List
+from typing import Mapping, Any, List, Optional
 from collections import namedtuple
 from enum import Enum
 
@@ -301,14 +301,14 @@ class FindProvidersResult:
         preffered_pv (List[Any]): preffered package version
         preffered_pr (List[Any]): preffered package revision
         preffered_recipe_file_path (List[Any]): preffered package recipe file path
-        required_version (bool): whether required version exists or not
+        required_version (Optional[bool]): whether required version exists or not. If the yocto version is old, it does not support this and will be None.
     """
     def __init__(
         self: "FindProvidersResult",
         package_name: str,
         latest_version: List[Any],
         perffered_version: List[Any],
-        required_version: bool,
+        required_version: Optional[bool],
     ) -> None:
         self.package_name: str = package_name
         self.latest_pe: List[Any] = latest_version[0][0]
@@ -319,7 +319,7 @@ class FindProvidersResult:
         self.preffered_pv: List[Any] = perffered_version[0][1]
         self.preffered_pr: List[Any] = perffered_version[0][2]
         self.preffered_recipe_file_path: List[Any] = perffered_version[1]
-        self.required_version: bool = required_version
+        self.required_version: Optional[bool] = required_version
 
 
 class AllProvidersResult:

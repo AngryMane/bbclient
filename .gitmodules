@@ -1,0 +1,11 @@
+[submodule "tests/main"]
+	path = tests/main
+	url = git://git.yoctoproject.org/poky
+[submodule "tests/kirkstone"]
+	path = tests/kirkstone
+	url = git://git.yoctoproject.org/poky
+	branch = kirkstone
+[submodule "tests/dunfell"]
+	path = tests/dunfell
+	url = git://git.yoctoproject.org/poky
+	branch = dunfell

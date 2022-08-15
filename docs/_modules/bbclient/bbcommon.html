@@ -74,7 +74,7 @@
 <span class="sd">This file provides common definition for ease of understanding in/out of commands</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 
@@ -372,14 +372,14 @@
 <span class="sd">        preffered_pv (List[Any]): preffered package version</span>
 <span class="sd">        preffered_pr (List[Any]): preffered package revision</span>
 <span class="sd">        preffered_recipe_file_path (List[Any]): preffered package recipe file path</span>
-<span class="sd">        required_version (bool): whether required version exists or not</span>
+<span class="sd">        required_version (Optional[bool]): whether required version exists or not. If the yocto version is old, it does not support this and will be None.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;FindProvidersResult&quot;</span><span class="p">,</span>
         <span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">latest_version</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
         <span class="n">perffered_version</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
-        <span class="n">required_version</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">required_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">package_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">latest_pe</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">latest_version</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -390,7 +390,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">preffered_pv</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">perffered_version</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">preffered_pr</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">perffered_version</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">preffered_recipe_file_path</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">perffered_version</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">required_version</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">required_version</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">required_version</span></div>
 
 
 <div class="viewcode-block" id="AllProvidersResult"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbcommon.AllProvidersResult">[docs]</a><span class="k">class</span> <span class="nc">AllProvidersResult</span><span class="p">:</span>

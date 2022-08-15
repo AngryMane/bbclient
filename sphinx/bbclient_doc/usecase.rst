@@ -136,12 +136,14 @@ task-depends provides dependency info between recipes. See `here <https://docs.y
 Use cases for one specific recipe
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Get one specific variable in one specific recipe
+Get one specific variable in one specific package
 -------------------------------------------------
 
 .. code-block:: python
 
-    data_store_index: int = client.parse_recipe_file("/PATH/TO/RECIPE/gcc_11.3.bb")
+    ret: List[str] = client.find_best_provider("gcc")
+    target_recipe_file_path: str = ret[3]
+    data_store_index: int = client.parse_recipe_file(target_recipe_file_path)
     ret: Any = client.data_store_connector_cmd(data_store_index, "getVar", "FILE")
     print(ret)
 

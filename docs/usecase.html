@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Use case &mdash; bbclient_doc v0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -55,7 +54,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#use-cases-for-one-specific-recipe">Use cases for one specific recipe</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#get-one-specific-variable-in-one-specific-recipe">Get one specific variable in one specific recipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-one-specific-variable-in-one-specific-package">Get one specific variable in one specific package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#get-all-variables-in-one-specific-recipe">Get all variables in one specific recipe</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#get-all-appends-files-for-one-specific-recipe">Get all appends files for one specific recipe</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#get-all-inherit-files-for-one-specific-recipe">Get all inherit files for one specific recipe</a></li>
@@ -91,7 +90,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="use-case">
+  <div class="section" id="use-case">
 <h1>Use case<a class="headerlink" href="#use-case" title="Permalink to this heading"></a></h1>
 <p>This page introduce typical use cases for bbclient. Please do setup like below before each use cases.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">bbclient</span>
@@ -117,9 +116,9 @@
     <span class="k">return</span> <span class="n">logger</span>
 </pre></div>
 </div>
-<section id="use-cases-for-whole-project">
+<div class="section" id="use-cases-for-whole-project">
 <h2>Use cases for whole project<a class="headerlink" href="#use-cases-for-whole-project" title="Permalink to this heading"></a></h2>
-<section id="build-package">
+<div class="section" id="build-package">
 <h3>Build package<a class="headerlink" href="#build-package" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">build_targets</span><span class="p">([</span><span class="s2">&quot;busybox&quot;</span><span class="p">],</span> <span class="s2">&quot;compile&quot;</span><span class="p">)</span>
 <span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
@@ -128,8 +127,8 @@
 <div class="line-block">
 <div class="line">Please note that this command will kick all the tasks target depends, so it maybe taks so much time.</div>
 </div>
-</section>
-<section id="get-all-recipes-in-layers">
+</div>
+<div class="section" id="get-all-recipes-in-layers">
 <h3>Get all recipes in layers<a class="headerlink" href="#get-all-recipes-in-layers" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipesResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipes</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
@@ -147,8 +146,8 @@
 </pre></div>
 </div>
 <p>There are many other commands to get all recipes in layers.</p>
-</section>
-<section id="get-all-recipes-that-inherits-specific-recipe">
+</div>
+<div class="section" id="get-all-recipes-that-inherits-specific-recipe">
 <h3>Get all recipes that inherits specific recipe<a class="headerlink" href="#get-all-recipes-that-inherits-specific-recipe" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeInheritsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_inherits</span><span class="p">()</span>
 <span class="n">imatges</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span> <span class="k">if</span> <span class="s2">&quot;/PATH/TO/poky/meta/classes/core-image.bbclass&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">inherit_file_paths</span><span class="p">]</span>
@@ -156,8 +155,8 @@
     <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">recipe_file_path</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="get-all-recipes-that-provides-specific-package">
+</div>
+<div class="section" id="get-all-recipes-that-provides-specific-package">
 <h3>Get all recipes that provides specific package<a class="headerlink" href="#get-all-recipes-that-provides-specific-package" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FindProvidersResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">find_providers</span><span class="p">()</span>
 <span class="n">imatges</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span> <span class="k">if</span> <span class="s2">&quot;gcc&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">package_name</span><span class="p">]</span>
@@ -174,15 +173,15 @@
     <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">required_version</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="get-global-variable">
+</div>
+<div class="section" id="get-global-variable">
 <h3>Get global variable<a class="headerlink" href="#get-global-variable" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;MACHINE&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="get-all-layers">
+</div>
+<div class="section" id="get-all-layers">
 <h3>Get all layers<a class="headerlink" href="#get-all-layers" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetLayerPrioritiesResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_layer_priorities</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
@@ -196,8 +195,8 @@
 <span class="nb">print</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="generate-dependency-dot-file">
+</div>
+<div class="section" id="generate-dependency-dot-file">
 <h3>Generate dependency dot file<a class="headerlink" href="#generate-dependency-dot-file" title="Permalink to this heading"></a></h3>
 <div class="line-block">
 <div class="line">You can get task-depends.dot and pn-depends file like below.</div>
@@ -208,33 +207,35 @@
 </pre></div>
 </div>
 <p>task-depends provides dependency info between recipes. See <a class="reference external" href="https://docs.yoctoproject.org/current/dev-manual/common-tasks.html?highlight=task+depends+dot#viewing-task-variable-dependencies">here</a></p>
-</section>
-</section>
-<section id="use-cases-for-one-specific-recipe">
+</div>
+</div>
+<div class="section" id="use-cases-for-one-specific-recipe">
 <h2>Use cases for one specific recipe<a class="headerlink" href="#use-cases-for-one-specific-recipe" title="Permalink to this heading"></a></h2>
-<section id="get-one-specific-variable-in-one-specific-recipe">
-<h3>Get one specific variable in one specific recipe<a class="headerlink" href="#get-one-specific-variable-in-one-specific-recipe" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_store_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_recipe_file</span><span class="p">(</span><span class="s2">&quot;/PATH/TO/RECIPE/gcc_11.3.bb&quot;</span><span class="p">)</span>
+<div class="section" id="get-one-specific-variable-in-one-specific-package">
+<h3>Get one specific variable in one specific package<a class="headerlink" href="#get-one-specific-variable-in-one-specific-package" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">find_best_provider</span><span class="p">(</span><span class="s2">&quot;gcc&quot;</span><span class="p">)</span>
+<span class="n">target_recipe_file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">data_store_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_recipe_file</span><span class="p">(</span><span class="n">target_recipe_file_path</span><span class="p">)</span>
 <span class="n">ret</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="n">data_store_index</span><span class="p">,</span> <span class="s2">&quot;getVar&quot;</span><span class="p">,</span> <span class="s2">&quot;FILE&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="get-all-variables-in-one-specific-recipe">
+</div>
+<div class="section" id="get-all-variables-in-one-specific-recipe">
 <h3>Get all variables in one specific recipe<a class="headerlink" href="#get-all-variables-in-one-specific-recipe" title="Permalink to this heading"></a></h3>
 <div class="line-block">
 <div class="line">bitbake IPC Interface does not provide any means to get all the variables in one specific recipe.</div>
 <div class="line">Use can only get this info by bitbak -e command because this command outputs this info to stdo on the server process.</div>
 </div>
-</section>
-<section id="get-all-appends-files-for-one-specific-recipe">
+</div>
+<div class="section" id="get-all-appends-files-for-one-specific-recipe">
 <h3>Get all appends files for one specific recipe<a class="headerlink" href="#get-all-appends-files-for-one-specific-recipe" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_file_appends</span><span class="p">(</span><span class="s2">&quot;/PATH/TO/RECIPE/psplash_git.bb&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="get-all-inherit-files-for-one-specific-recipe">
+</div>
+<div class="section" id="get-all-inherit-files-for-one-specific-recipe">
 <h3>Get all inherit files for one specific recipe<a class="headerlink" href="#get-all-inherit-files-for-one-specific-recipe" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeInheritsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_inherits</span><span class="p">()</span>
 <span class="n">imatges</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span> <span class="k">if</span> <span class="s2">&quot;/PATH/TO/poky/meta/classes/core-image.bbclass&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">inherit_file_paths</span><span class="p">]</span>
@@ -242,8 +243,8 @@
     <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">recipe_file_path</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="id1">
+</div>
+<div class="section" id="id1">
 <h3>Get all inherit files for one specific recipe<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeInheritsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_inherits</span><span class="p">()</span>
 <span class="n">itr</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">recipe_file_path</span> <span class="o">==</span> <span class="s2">&quot;/PATH/TO/RECIPE/psplash_git.bb&quot;</span><span class="p">,</span> <span class="n">ret</span><span class="p">)</span>
@@ -251,8 +252,8 @@
 <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">inherit_file_paths</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="run-a-task">
+</div>
+<div class="section" id="run-a-task">
 <h3>Run a task<a class="headerlink" href="#run-a-task" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">build_targets</span><span class="p">([</span><span class="s2">&quot;busybox&quot;</span><span class="p">],</span> <span class="s2">&quot;fetch&quot;</span><span class="p">)</span>
 <span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
@@ -260,9 +261,9 @@
 <span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
 </pre></div>
 </div>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
 
            </div>

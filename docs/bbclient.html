@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>bbclient package &mdash; bbclient_doc v0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -78,12 +77,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="bbclient-package">
+  <div class="section" id="bbclient-package">
 <h1>bbclient package<a class="headerlink" href="#bbclient-package" title="Permalink to this heading"></a></h1>
-<section id="submodules">
+<div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
-</section>
-<section id="module-bbclient.bbclient">
+</div>
+<div class="section" id="module-bbclient.bbclient">
 <span id="bbclient-bbclient-module"></span><h2>bbclient.bbclient module<a class="headerlink" href="#module-bbclient.bbclient" title="Permalink to this heading"></a></h2>
 <p>This file provides client class for bitbake server.</p>
 <dl class="py class">
@@ -92,8 +91,8 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Client for bitbake RPC Server</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.__project_path">
-<span class="sig-name descname"><span class="pre">__project_path</span></span><a class="headerlink" href="#bbclient.bbclient.BBClient.__project_path" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.project_path">
+<span class="sig-name descname"><span class="pre">project_path</span></span><a class="headerlink" href="#bbclient.bbclient.BBClient.project_path" title="Permalink to this definition"></a></dt>
 <dd><p>poky directory path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -236,7 +235,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">User can input targets as follows.</div>
+<div class="line">User can input targets as follows. Please note that if you want to specify task by targets, you have to write do_xxx, not only xxx.</div>
 <div class="line">[</div>
 <div class="line-block">
 <div class="line">“gcc”,                              # only package name</div>
@@ -1276,10 +1275,14 @@
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This command will fail because the second parameter and the first one mixed up in the command.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">This command can extract only one file. If you input the regex matching to many file, this command will fail. This command maybe has a bug. The second parameter and the first one mixed up in the command.</div>
+<div class="line">This command can extract only one file. If you input the regex matching to many file, this command will fail.</div>
 </div>
 </div>
 </dd></dl>
@@ -1736,8 +1739,8 @@
 
 </dd></dl>
 
-</section>
-<section id="module-bbclient.bbcommon">
+</div>
+<div class="section" id="module-bbclient.bbcommon">
 <span id="bbclient-bbcommon-module"></span><h2>bbclient.bbcommon module<a class="headerlink" href="#module-bbclient.bbcommon" title="Permalink to this heading"></a></h2>
 <p>This file provides common definition for ease of understanding in/out of commands</p>
 <dl class="py class">
@@ -1793,7 +1796,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbcommon.</span></span><span class="sig-name descname"><span class="pre">FindProvidersResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latest_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perffered_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbcommon.html#FindProvidersResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbcommon.</span></span><span class="sig-name descname"><span class="pre">FindProvidersResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latest_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perffered_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbcommon.html#FindProvidersResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>findProviders result</p>
 <dl class="py attribute">
@@ -1898,10 +1901,10 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.required_version">
 <span class="sig-name descname"><span class="pre">required_version</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.required_version" title="Permalink to this definition"></a></dt>
-<dd><p>whether required version exists or not</p>
+<dd><p>whether required version exists or not. If the yocto version is old, it does not support this and will be None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>bool</p>
+<dd class="field-odd"><p>Optional[bool]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2501,8 +2504,8 @@
 
 </dd></dl>
 
-</section>
-<section id="module-bbclient.bbevent">
+</div>
+<div class="section" id="module-bbclient.bbevent">
 <span id="bbclient-bbevent-module"></span><h2>bbclient.bbevent module<a class="headerlink" href="#module-bbclient.bbevent" title="Permalink to this heading"></a></h2>
 <p>This file provides definition for events from bitbake server</p>
 <dl class="py class">
@@ -2974,11 +2977,11 @@
 
 </dd></dl>
 
-</section>
-<section id="module-bbclient">
+</div>
+<div class="section" id="module-bbclient">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-bbclient" title="Permalink to this heading"></a></h2>
-</section>
-</section>
+</div>
+</div>
 
 
            </div>
