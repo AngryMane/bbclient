@@ -39,11 +39,9 @@ Please note that this command(and also bitbake) doesn't support dunfell with pyt
 This is because `collections.Iterable` has been removed, so dunfell with python3.10 will cause exception.
 
 ## Installation
-At this point, please git clone and install.
 
 ```
-# TODO: Enable to install by pypi  
-pip3 install -e .
+pip3 install bbclient
 ```
 
 <!--
