@@ -27,8 +27,12 @@ def main() -> None:
     client.wait_done_async()
 
     # do test
-    ret = client.get_r_providers()
-    print(ret)
+    ret: List[GetRecipeVersionsResult] = client.get_recipe_versions()
+    for i in ret:
+        print(i.recipe_file_path)
+        print(i.pe)
+        print(i.pv)
+        print(i.pr)
 
     client.stop_server()
 
