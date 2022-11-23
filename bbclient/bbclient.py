@@ -59,14 +59,14 @@ class BBClient:
 
     # --- setup functions ---
     def __init__(
-        self: "BBClient", project_abs_path: str, init_script_path: str, logger: Optional[Logger] = None
+        self: "BBClient", project_abs_path: str, init_script_path: str = ":", logger: Optional[Logger] = None
     ) -> None:
         """Initialize BBClient instance
 
         Args:
             self (BBClient): none
             project_abs_path (str): abslute path to bitbake project, basically poky dir.
-            init_script_path (str): initialize bitbake proejct command running at project_abs_path. This is maybe ". oe-init-build-env".
+            init_script_path (str): initialize bitbake proejct command running at project_abs_path. This is maybe ". oe-init-build-env". if you already executed initialize command, you don't need to input this.
             logger (Logger): logger instance for debuggind. Default is None.
         """
         self.project_path: str = project_abs_path
@@ -1573,7 +1573,7 @@ class BBClient:
         from bb.tinfoil import TinfoilConfigParameters  # type: ignore
 
         config_params: TinfoilConfigParameters = TinfoilConfigParameters(
-            config_only=False, quit=2
+            config_only=False, quiet=0
         )
         config_params.remote_server: str = server_adder  # type: ignore
         server_connection, ui_module = setup_bitbake(config_params, [])

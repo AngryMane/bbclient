@@ -29,5 +29,10 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3 :: Only",
     ],
+    entry_points={
+            'console_scripts':[
+                'bbclient=bbclient.console:main',
+            ],
+    },
     packages=find_packages(),
 )

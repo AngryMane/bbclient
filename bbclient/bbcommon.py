@@ -3,6 +3,7 @@
 This file provides common definition for ease of understanding in/out of commands
 """
 
+import json
 from typing import Mapping, Any, List, Optional
 from collections import namedtuple
 from enum import Enum
@@ -339,3 +340,9 @@ class AllProvidersResult:
 
 
 GetRuntimeRecommendsResult = GetRuntimeDependsResult
+
+class JsonEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, getAllKeysWithFlagsResult) and hasattr(obj, '__dict__'):
+            return {"type": str(type(obj)), "value": obj.__dict__}
+        return json.JSONEncoder.default(self, obj)
