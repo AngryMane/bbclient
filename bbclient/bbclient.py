@@ -1573,7 +1573,7 @@ class BBClient:
         from bb.tinfoil import TinfoilConfigParameters  # type: ignore
 
         config_params: TinfoilConfigParameters = TinfoilConfigParameters(
-            config_only=False, quiet=0
+            config_only=False, quiet=4
         )
         config_params.remote_server: str = server_adder  # type: ignore
         server_connection, ui_module = setup_bitbake(config_params, [])

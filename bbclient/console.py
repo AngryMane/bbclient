@@ -43,6 +43,31 @@ def get_config() -> List[Union[str, int]]:
     get_all_keys_with_flags_subcommand.add_argument("-f", "--flags", default=[], help="Target flags. The default is [].", action='append')
     get_all_keys_with_flags_subcommand.set_defaults(subcommand=get_all_keys_with_flags_command)
 
+    get_variable_subcommand: ArgumentParser = sub_parsers.add_parser("get_variable", help="Get value, history and specified flags of all global variables.")
+    get_variable_subcommand.add_argument("name", help="variable name")
+    get_variable_subcommand.add_argument("-e", "--expand",  default=True, help="Whether to expand references to other variables. Defaults to True.")
+    get_variable_subcommand.set_defaults(subcommand=get_variable)
+
+    match_file_subcommand: ArgumentParser = sub_parsers.add_parser("match_file", help="Search file by regex.")
+    match_file_subcommand.add_argument("file_path_regex", help="search regex pattern")
+    match_file_subcommand.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    match_file_subcommand.set_defaults(subcommand=match_file)
+
+    get_layer_priorities_subcommand: ArgumentParser = sub_parsers.add_parser("get_layer_priorities", help="Get name, path, priority of all layers.")
+    get_layer_priorities_subcommand.set_defaults(subcommand=get_layer_priorities)
+
+    get_recipes_subcommand: ArgumentParser = sub_parsers.add_parser("get_recipes", help="Get all package name from cache.")
+    get_recipes_subcommand.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_recipes_subcommand.set_defaults(subcommand=get_recipes)
+
+    get_recipe_depends_subcommand: ArgumentParser = sub_parsers.add_parser("get_recipe_depends", help="Get recipe depends.")
+    get_recipe_depends_subcommand.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_recipe_depends_subcommand.set_defaults(subcommand=get_recipe_depends)
+
+    get_recipe_versions_subcommand: ArgumentParser = sub_parsers.add_parser("get_recipe_versions", help="Get all recipe versions.")
+    get_recipe_versions_subcommand.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_recipe_versions_subcommand.set_defaults(subcommand=get_recipe_versions)
+
     args: Namespace = parser.parse_args()
 
     # TODO: support remote server
@@ -66,52 +91,49 @@ def get_all_keys_with_flags_command(
     ret: List[getAllKeysWithFlagsResult] = client.get_all_keys_with_flags(args.flags)
     json_str = json.dumps(ret, cls=JsonEncoder)
     print(json_str)
-    #for i in ret:
-    #    print(i.name)
-    #    print(i.value)
-    #    print(i.histories)
-    #    print(i.flags)
+
+def get_variable(
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: str = client.get_variable(args.name, args.expand)
+    print(ret)
+
+def match_file(
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: str = client.match_file(args.file_path_regex, args.mutli_conf_name)
+    print("NOTE: This command can't run normaly because of bitbake bug. See https://angrymane.github.io/bbclient/bbclient.html#bbclient.bbclient.BBClient.match_file.")
+    print(ret)
+
+def get_layer_priorities(
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetLayerPrioritiesResult] = client.get_layer_priorities()
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
+def get_recipes(
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetRecipesResult] = client.get_recipes(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
+def get_recipe_depends(
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetRecipeDependsResult] = client.get_recipe_depends(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
+def get_recipe_versions(
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetRecipeVersionsResult] = client.get_recipe_versions(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
 
 """
-def get_all_keys_with_flags(
-    self: "BBClient", flag_list: List[str]
-) -> List[getAllKeysWithFlagsResult]:
-def get_variable(self: "BBClient", name: str, expand: bool = True) -> str:
-def set_variable(self: "BBClient", name: str, value: str) -> None:
-def get_set_variable(self: "BBClient", name: str, expand: bool = True) -> str:
-def set_config(self: "BBClient", name: str, value: str) -> None:
-def enable_data_tracking(self: "BBClient") -> None:
-def disable_data_tracking(self: "BBClient") -> None:
-def set_pre_post_conf_files(
-    self: "BBClient", pre_files: str, post_files: str
-) -> None:
-def match_file(
-    self: "BBClient", file_path_regex: str, mutli_conf_name: str = ""
-) -> str:
-def get_uihandler_num(self: "BBClient") -> int:
-def set_event_mask(
-    self: "BBClient",
-    handler_num: int,
-    log_level: int,
-    debug_domains: Mapping[str, int],
-    mask: List[str],
-) -> bool:
-def set_features(self: "BBClient", features: List[BBFeature]) -> None:
-def update_config(
-    self: "BBClient",
-    options: Mapping[str, Any],
-    environment: Mapping[str, str],
-    command_line: str,
-) -> None:
-def parse_configuration(self: "BBClient") -> None:
-def get_layer_priorities(self: "BBClient") -> List[GetLayerPrioritiesResult]:
-def get_recipes(self: "BBClient", multi_config: str = "") -> List[GetRecipesResult]:
-def get_recipe_depends(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetRecipeDependsResult]:
-def get_recipe_versions(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetRecipeVersionsResult]:
 def get_recipe_provides(
     self: "BBClient", multi_config: str = ""
 ) -> List[GetRecipeProvidesResult]:
@@ -205,20 +227,10 @@ def find_config_files(self: "BBClient", variable_name: str) -> None:
 def find_files_matching_in_dir(
     self: "BBClient", target_file_name_substring: str, directory: str
 ) -> None:
-def test_cooker_command_event(self: "BBClient", pattern: str) -> None:
 def find_config_file_path(self: "BBClient", config_file_name: str) -> None:
 def show_versions(self: "BBClient") -> None:
 def show_environment_target(self: "BBClient", package_name: str = "") -> None:
 def show_environment(self: "BBClient", bb_file_path: str) -> None:
 def parse_files(self: "BBClient") -> None:
 def compare_revisions(self: "BBClient") -> None:
-def trigger_event(self: "BBClient", evene_name: str) -> None:
-def reset_cooker(self: "BBClient") -> None:
-def client_complete(self: "BBClient") -> None:
-def find_sigInfo(
-    self: "BBClient",
-    package_name_with_multi_config: str,
-    task_name: str,
-    sigs: List[str],
-) -> None:
 """

@@ -343,6 +343,14 @@ GetRuntimeRecommendsResult = GetRuntimeDependsResult
 
 class JsonEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, getAllKeysWithFlagsResult) and hasattr(obj, '__dict__'):
-            return {"type": str(type(obj)), "value": obj.__dict__}
+        if isinstance(obj, getAllKeysWithFlagsResult):
+            return obj.__dict__
+        if isinstance(obj, GetLayerPrioritiesResult):
+            return obj.__dict__
+        if isinstance(obj, GetRecipesResult):
+            return obj.__dict__
+        if isinstance(obj, GetRecipeDependsResult):
+            return obj.__dict__
+        if isinstance(obj, GetRecipeVersionsResult):
+            return obj.__dict__
         return json.JSONEncoder.default(self, obj)
