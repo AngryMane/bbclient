@@ -8,7 +8,7 @@ def read(fname):
 
 setup(
     name="bbclient",
-    version="0.5.0",
+    version="0.6.0",
     description="bbclient provides utility commands for bitbake.",
     long_description_content_type="text/markdown",
     long_description=read("README.md"),
@@ -30,9 +30,9 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     entry_points={
-            'console_scripts':[
-                'bbclient=bbclient.console:main',
-            ],
+        "console_scripts": [
+            "bbclient=bbclient.console:main",
+        ],
     },
     packages=find_packages(),
 )

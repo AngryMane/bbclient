@@ -819,7 +819,7 @@ class BBClient:
 
         Args:
             self (BBClient): none
-            package_name (str): _description_
+            package_name (str): a package name you want to know the detail of best provider
             multi_config (str, optional): Defaults to "". See `here <https://docs.yoctoproject.org/dev-manual/common-tasks.html?highlight=multiconfigs#building-images-for-multiple-targets-using-multiple-configurations>`_
 
         Returns:
@@ -1307,7 +1307,7 @@ class BBClient:
             variable_name (str): _description_
 
         Note:
-            | Use can receive result by bb.event.ConfigFilesFound event.
+            | User can receive result by bb.event.ConfigFilesFound event.
         """
         self.__run_command(self.__server_connection, "findConfigFiles", variable_name, logger=self.__logger)
 

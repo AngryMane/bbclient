@@ -43,7 +43,7 @@ def get_config() -> List[Union[str, int]]:
     get_all_keys_with_flags_subcommand.add_argument("-f", "--flags", default=[], help="Target flags. The default is [].", action='append')
     get_all_keys_with_flags_subcommand.set_defaults(subcommand=get_all_keys_with_flags_command)
 
-    get_variable_subcommand: ArgumentParser = sub_parsers.add_parser("get_variable", help="Get value, history and specified flags of all global variables.")
+    get_variable_subcommand: ArgumentParser = sub_parsers.add_parser("get_variable", help="Get variable value.")
     get_variable_subcommand.add_argument("name", help="variable name")
     get_variable_subcommand.add_argument("-e", "--expand",  default=True, help="Whether to expand references to other variables. Defaults to True.")
     get_variable_subcommand.set_defaults(subcommand=get_variable)
@@ -67,6 +67,68 @@ def get_config() -> List[Union[str, int]]:
     get_recipe_versions_subcommand: ArgumentParser = sub_parsers.add_parser("get_recipe_versions", help="Get all recipe versions.")
     get_recipe_versions_subcommand.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
     get_recipe_versions_subcommand.set_defaults(subcommand=get_recipe_versions)
+
+    get_recipe_provides_subcommand: ArgumentParser = sub_parsers.add_parser("get_recipe_provides", help="Get all recipe files and its packages.")
+    get_recipe_provides_subcommand.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_recipe_provides_subcommand.set_defaults(subcommand=get_recipe_provides)
+
+    get_recipe_packages_subcommand: ArgumentParser = sub_parsers.add_parser("get_recipe_packages", help="Get all recipe files and its recipe files.")
+    get_recipe_packages_subcommand.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_recipe_packages_subcommand.set_defaults(subcommand=get_recipe_packages)
+
+    get_recipe_packages_dynamic_subcommand: ArgumentParser = sub_parsers.add_parser("get_recipe_packages_dynamic", help="Get all recipe files that provides PACKAGE_DYNAMIC and its PACKAGE_DYNAMIC.")
+    get_recipe_packages_dynamic_subcommand.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_recipe_packages_dynamic_subcommand.set_defaults(subcommand=get_recipe_packages_dynamic)
+
+    get_r_providers_subcommand: ArgumentParser = sub_parsers.add_parser("get_r_providers", help="Get alias of PN and its recipe files.")
+    get_r_providers_subcommand.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_r_providers_subcommand.set_defaults(subcommand=get_r_providers)
+
+    get_runtime_depends_subcommand: ArgumentParser = sub_parsers.add_parser("get_runtime_depends", help="Get all runtime dependency by all recipe files.")
+    get_runtime_depends_subcommand.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_runtime_depends_subcommand.set_defaults(subcommand=get_runtime_depends)
+
+    get_runtime_recommends_subcommand: ArgumentParser = sub_parsers.add_parser("get_runtime_recommends", help="Get all runtime recoomends(=weak depends) by all recipe files.")
+    get_runtime_recommends_subcommand.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_runtime_recommends_subcommand.set_defaults(subcommand=get_runtime_recommends)
+
+    get_recipe_inherits_subcommands: ArgumentParser = sub_parsers.add_parser("get_recipe_inherits", help="Get recipes and its inherit recipes.")
+    get_recipe_inherits_subcommands.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_recipe_inherits_subcommands.set_defaults(subcommand=get_recipe_inherits)
+    
+    get_bb_file_priority_subcommands: ArgumentParser = sub_parsers.add_parser("get_bb_file_priority", help="Get recipe files and its priority.")
+    get_bb_file_priority_subcommands.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_bb_file_priority_subcommands.set_defaults(subcommand=get_bb_file_priority)
+
+    get_default_preference_subcommands: ArgumentParser = sub_parsers.add_parser("get_default_preference", help="Get recipes and default preference.")
+    get_default_preference_subcommands.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_default_preference_subcommands.set_defaults(subcommand=get_default_preference)
+
+    get_skipped_recipes_subcommands: ArgumentParser = sub_parsers.add_parser("get_skipped_recipes", help="Get skipped recipes and its reasons, provides, alias.")
+    get_skipped_recipes_subcommands.set_defaults(subcommand=get_skipped_recipes)
+
+    get_file_appends_subcommands: ArgumentParser = sub_parsers.add_parser("get_file_appends", help="Get append files.")
+    get_file_appends_subcommands.add_argument("file_path", help="recipe file path")
+    get_file_appends_subcommands.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_file_appends_subcommands.set_defaults(subcommand=get_file_appends)
+
+    get_all_appends_subcommands: ArgumentParser = sub_parsers.add_parser("get_all_appends", help="Get all append recipes.")
+    get_all_appends_subcommands.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    get_all_appends_subcommands.set_defaults(subcommand=get_all_appends)
+
+    find_providers_subcommands: ArgumentParser = sub_parsers.add_parser("find_providers", help="Get latest packages versions, prefered package versions, and whether there is an REQUIRED_VERSION.")
+    find_providers_subcommands.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    find_providers_subcommands.set_defaults(subcommand=find_providers)
+
+    find_best_provider_subcommands: ArgumentParser = sub_parsers.add_parser("find_best_provider", help="Get best provider infos.")
+    find_best_provider_subcommands.add_argument("package_name", help="a package name you want to know the detail of best provider")
+    find_best_provider_subcommands.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    find_best_provider_subcommands.set_defaults(subcommand=find_best_provider)
+
+    all_providers_subcommands: ArgumentParser = sub_parsers.add_parser("all_providers", help="Get all providers versions and recipe file path.")
+    all_providers_subcommands.add_argument("-m", "--mutli_conf_name",  default="", help="target multi-config. Defaults to ''")
+    all_providers_subcommands.set_defaults(subcommand=all_providers)
+
 
     args: Namespace = parser.parse_args()
 
@@ -101,9 +163,9 @@ def get_variable(
 def match_file(
     client: "BBClient", args: Namespace
 ) -> None:
-    ret: str = client.match_file(args.file_path_regex, args.mutli_conf_name)
     print("NOTE: This command can't run normaly because of bitbake bug. See https://angrymane.github.io/bbclient/bbclient.html#bbclient.bbclient.BBClient.match_file.")
-    print(ret)
+    #ret: str = client.match_file(args.file_path_regex, args.mutli_conf_name)
+    #print(ret)
 
 def get_layer_priorities(
     client: "BBClient", args: Namespace
@@ -133,68 +195,133 @@ def get_recipe_versions(
     json_str = json.dumps(ret, cls=JsonEncoder)
     print(json_str)
 
-"""
 def get_recipe_provides(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetRecipeProvidesResult]:
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetRecipeProvidesResult] = client.get_recipe_provides(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
 def get_recipe_packages(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetRecipePackagesResult]:
+    client: "BBClient", args: Namespace
+) -> None:
+    print("NOTE: This command can't run normaly because of bitbake bug. See https://angrymane.github.io/bbclient/bbclient.html#bbclient.bbclient.BBClient.get_recipe_packages.")
+    #ret: List[GetRecipePackagesResult] = client.get_recipe_packages(args.mutli_conf_name)
+    #json_str = json.dumps(ret, cls=JsonEncoder)
+    #print(json_str)
+
 def get_recipe_packages_dynamic(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetRecipePackagesDynamicResult]:
+    client: "BBClient", args: Namespace
+) -> None:
+    print("NOTE: This command can't run normaly because of bitbake bug. See https://angrymane.github.io/bbclient/bbclient.html#bbclient.bbclient.BBClient.get_recipe_packages_dynamic.")
+    #ret: List[GetRecipePackagesDynamicResult] = client.get_recipe_packages_dynamic(args.mutli_conf_name)
+    #json_str = json.dumps(ret, cls=JsonEncoder)
+    #print(json_str)
+
 def get_r_providers(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetRProvidersResult]:
+    client: "BBClient", args: Namespace
+) -> None:
+    print("NOTE: This command can't run normaly because of bitbake bug. See https://angrymane.github.io/bbclient/bbclient.html#bbclient.bbclient.BBClient.get_r_providers.")
+    #ret: List[GetRProvidersResult] = client.get_r_providers(args.mutli_conf_name)
+    #json_str = json.dumps(ret, cls=JsonEncoder)
+    #print(json_str)
+
 def get_runtime_depends(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetRuntimeDependsResult]:
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetRuntimeDependsResult] = client.get_runtime_depends(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
 def get_runtime_recommends(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetRuntimeRecommendsResult]:
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetRuntimeRecommendsResult] = client.get_runtime_recommends(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
 def get_recipe_inherits(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetRecipeInheritsResult]:
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetRecipeInheritsResult] = client.get_recipe_inherits(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
 def get_bb_file_priority(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetBbFilePriorityResult]:
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetBbFilePriorityResult] = client.get_bb_file_priority(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
 def get_default_preference(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetDefaultPreferenceResult]:
-def get_skipped_recipes(self: "BBClient") -> List[GetSkippedRecipesResult]:
-def get_overlayed_recipes(self: "BBClient", multi_config: str = ""):
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetDefaultPreferenceResult] = client.get_default_preference(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
+def get_skipped_recipes(
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetSkippedRecipesResult] = client.get_skipped_recipes()
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
 def get_file_appends(
-    self: "BBClient", file_path: str, multi_config: str = ""
-) -> List[str]:
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[str] = client.get_file_appends(args.file_path, args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
 def get_all_appends(
-    self: "BBClient", multi_config: str = ""
-) -> List[GetAllAppendsResult]:
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[GetAllAppendsResult] = client.get_all_appends(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
 def find_providers(
-    self: "BBClient", multi_config: str = ""
-) -> List[FindProvidersResult]:
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[FindProvidersResult] = client.find_providers(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
 def find_best_provider(
-    self: "BBClient", package_name: str, multi_config: str = ""
-) -> List[str]:
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[str] = client.find_best_provider(args.package_name, args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
 def all_providers(
-    self: "BBClient", multi_config: str = ""
-) -> List[AllProvidersResult]:
+    client: "BBClient", args: Namespace
+) -> None:
+    ret: List[AllProvidersResult] = client.all_providers(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
+
 def get_runtime_providers(
-    self: "BBClient", runtime_providers: List[str], multi_config: str = ""
-):
+    client: "BBClient", args: Namespace
+) -> None:
+    # TODO
+    pass
+
 def data_store_connector_cmd(
-    self: "BBClient", datastore_index: int, command: str, *args, **kwargs
-) -> Any:
+    client: "BBClient", args: Namespace
+) -> None:
+    # TODO
+    pass
+
 def data_store_connector_varhist_cmd(
-    self: "BBClient", datastore_index: int, command: str, *args, **kwargs
-) -> Any:
-def data_store_connector_var_hist_cmd_emit(
-    self: "BBClient",
-    datastore_index: int,
-    variable: str,
-    comment: str,
-    val: str,
-    override_datastore_index: int,
-) -> str:
+    client: "BBClient", args: Namespace
+) -> None:
+    # TODO
+    pass
+
+"""
 def data_store_connector_inc_hist_cmd(
     self: "BBClient", datastore_index: int, command: str, *args, **kwargs
 ) -> Any:
@@ -232,5 +359,6 @@ def show_versions(self: "BBClient") -> None:
 def show_environment_target(self: "BBClient", package_name: str = "") -> None:
 def show_environment(self: "BBClient", bb_file_path: str) -> None:
 def parse_files(self: "BBClient") -> None:
+
 def compare_revisions(self: "BBClient") -> None:
 """

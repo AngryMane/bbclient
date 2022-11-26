@@ -353,4 +353,30 @@ class JsonEncoder(json.JSONEncoder):
             return obj.__dict__
         if isinstance(obj, GetRecipeVersionsResult):
             return obj.__dict__
+        if isinstance(obj, GetRecipeProvidesResult):
+            return obj.__dict__
+        if isinstance(obj, GetRecipePackagesResult):
+            return obj.__dict__
+        if isinstance(obj, GetRecipePackagesDynamicResult):
+            return obj.__dict__
+        if isinstance(obj, GetRProvidersResult):
+            return obj.__dict__
+        if isinstance(obj, GetRuntimeDependsResult):
+            return obj.__dict__
+        if isinstance(obj, GetRuntimeRecommendsResult):
+            return obj.__dict__
+        if isinstance(obj, GetRecipeInheritsResult):
+            return obj.__dict__
+        if isinstance(obj, GetBbFilePriorityResult):
+            return obj.__dict__
+        if isinstance(obj, GetDefaultPreferenceResult):
+            return obj.__dict__
+        if isinstance(obj, GetSkippedRecipesResult):
+            return obj.__dict__
+        if isinstance(obj, GetAllAppendsResult):
+            return obj.__dict__
+        if isinstance(obj, FindProvidersResult):
+            return obj.__dict__
+        if isinstance(obj, AllProvidersResult):
+            return obj.__dict__
         return json.JSONEncoder.default(self, obj)
