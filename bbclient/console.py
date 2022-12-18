@@ -20,6 +20,9 @@ Config = namedtuple(
 
 def main() -> None:
     config: Config = get_config()
+    if not config.subcommand:
+        print("bbclient command needs subcommand. See bbclient --help.")
+        return 
     logger: Logger = setup_logger()
     client: BBClient = BBClient(config.project_path, logger=logger)
     client.start_server(config.server_adder, config.port)
@@ -134,7 +137,7 @@ def get_config() -> List[Union[str, int]]:
 
     # TODO: support remote server
     server_adder: str = "localhost"
-    return Config(args.project_path, server_adder, args.port, args.subcommand, args)
+    return Config(args.project_path, server_adder, args.port, getattr(args, "subcommand", None), args)
 
 
 def setup_logger() -> Logger:
