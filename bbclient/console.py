@@ -14,7 +14,7 @@ from collections import namedtuple
 
 Config = namedtuple(
     "Config",
-    ["project_path", "server_adder", "port", "subcommand", "command_args"],
+    ["project_path", "subcommand", "command_args"],
 )
 
 
@@ -25,7 +25,7 @@ def main() -> None:
         return 
     logger: Logger = setup_logger()
     client: BBClient = BBClient(config.project_path, logger=logger)
-    client.start_server(config.server_adder, config.port)
+    client.start_server()
     ui_handler: int = client.get_uihandler_num()
     client.set_event_mask(ui_handler, logging.DEBUG, {}, ["*"])
     client.parse_files()
@@ -38,7 +38,6 @@ def main() -> None:
 def get_config() -> List[Union[str, int]]:
     parser: ArgumentParser = ArgumentParser(description='')
     parser.add_argument("-p", "--project_path", default="../", help="path to bitbake project, basically poky dir")
-    parser.add_argument("-i", "--port", type=int, default=8081, help="server port you want to use.")
 
     # sub commands
     sub_parsers: _SubParsersAction = parser.add_subparsers(title='get_all_keys_with_flags', description='valid subcommands', help='additional help')
@@ -136,8 +135,7 @@ def get_config() -> List[Union[str, int]]:
     args: Namespace = parser.parse_args()
 
     # TODO: support remote server
-    server_adder: str = "localhost"
-    return Config(args.project_path, server_adder, args.port, getattr(args, "subcommand", None), args)
+    return Config(args.project_path, getattr(args, "subcommand", None), args)
 
 
 def setup_logger() -> Logger:
@@ -225,9 +223,9 @@ def get_r_providers(
     client: "BBClient", args: Namespace
 ) -> None:
     print("NOTE: This command can't run normaly because of bitbake bug. See https://angrymane.github.io/bbclient/bbclient.html#bbclient.bbclient.BBClient.get_r_providers.")
-    #ret: List[GetRProvidersResult] = client.get_r_providers(args.mutli_conf_name)
-    #json_str = json.dumps(ret, cls=JsonEncoder)
-    #print(json_str)
+    ret: List[GetRProvidersResult] = client.get_r_providers(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
 
 def get_runtime_depends(
     client: "BBClient", args: Namespace

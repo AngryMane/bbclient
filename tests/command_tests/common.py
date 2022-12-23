@@ -9,14 +9,13 @@ from logging import Logger, StreamHandler, getLogger
 
 
 CUR_FILE_PATH: str = os.path.dirname(__file__)
-SERVER_ADDR: str = "localhost"
 INIT_COMMAND: str = ". oe-init-build-env"
 
 @pytest.fixture(scope="module")
 def main_client():
     PATH_TO_MAIN = CUR_FILE_PATH + "/../main"
     client: BBClient = BBClient(PATH_TO_MAIN, INIT_COMMAND, None)
-    client.start_server(SERVER_ADDR, 8082)
+    client.start_server()
     ui_handler: int = client.get_uihandler_num()
     client.set_event_mask(ui_handler, logging.WARNING, {}, ["*"])
     client.parse_files()
@@ -28,7 +27,7 @@ def main_client():
 def kirkstone_client():
     PATH_TO_KIRKSTONE = CUR_FILE_PATH + "/../kirkstone"
     client: BBClient = BBClient(PATH_TO_KIRKSTONE, INIT_COMMAND, None)
-    client.start_server(SERVER_ADDR, 8083)
+    client.start_server()
     ui_handler: int = client.get_uihandler_num()
     client.set_event_mask(ui_handler, logging.WARNING, {}, ["*"])
     client.parse_files()
@@ -40,7 +39,7 @@ def kirkstone_client():
 def dunfell_client():
     PATH_TO_DUNFELL = CUR_FILE_PATH + "/../dunfell"
     client: BBClient = BBClient(PATH_TO_DUNFELL, INIT_COMMAND, None)
-    client.start_server(SERVER_ADDR, 8084)
+    client.start_server()
     ui_handler: int = client.get_uihandler_num()
     client.set_event_mask(ui_handler, logging.WARNING, {}, ["*"])
     client.parse_files()

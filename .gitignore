@@ -136,4 +136,7 @@ sample.yml
 # auto generated-documents
 .doctrees
 
+pn-buildlist
+task-depends.dot
+
 

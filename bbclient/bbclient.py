@@ -93,30 +93,17 @@ class BBClient:
         self.stop_server()
 
     @logger_decorator
-    def start_server(self: "BBClient", server_adder: str, server_port: int) -> None:
+    def start_server(self: "BBClient") -> None:
         """Start bitbake XML RPC server
 
         Args:
             self (BBClient): none
-            server_adder (str): server address you want to use.
-            server_port (int): server port you want to use.
 
         Note:
-            At this point, BBClient doesn't support remote host(=you can only use localhost).
+            Remote server support deprecated becuase bitbake has some minor software bug when using remote server.
         """
-        server_adder_with_port: str = server_adder + ":" + str(server_port)
-
-        pipe: subprocess.Popen = subprocess.Popen(
-            f"bitbake --server-only --bind {server_adder_with_port}",
-            stdout=subprocess.PIPE,
-            shell=True,
-            cwd=self.project_path,
-            executable="/bin/bash",
-            text=True,
-        )
-        output, _ = pipe.communicate()
         connection, _ = self.__connect_server(
-            server_adder_with_port, self.project_path
+            self.project_path
         )
         self.__server_connection = connection
         self.__is_server_running = True
@@ -1101,7 +1088,8 @@ class BBClient:
                 logger=self.__logger
             )
         )
-        return ret["dsindex"] if ret else None
+
+        return ret.dsindex if hasattr(ret, "dsindex") else ret["dsindex"] if ret else None
 
     # --- bitbake server async functions  ---
     @logger_decorator
@@ -1560,7 +1548,7 @@ class BBClient:
 
     @staticmethod
     def __connect_server(
-        server_adder: str, project_path: str
+        project_path: str
     ) -> Tuple["bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection", "module"]:  # type: ignore
         """Connect to server
 
@@ -1571,12 +1559,19 @@ class BBClient:
         sys.path.append(f"{project_path}/bitbake/lib")
         from bb.main import setup_bitbake, BitBakeConfigParameters  # type: ignore
         from bb.tinfoil import TinfoilConfigParameters  # type: ignore
+        from bb.cookerdata import CookerConfiguration  # type: ignore
 
         config_params: TinfoilConfigParameters = TinfoilConfigParameters(
             config_only=False, quiet=4
         )
-        config_params.remote_server: str = server_adder  # type: ignore
-        server_connection, ui_module = setup_bitbake(config_params, [])
+        try:
+            # dunfell or more older
+            cookerconfig = CookerConfiguration()
+            cookerconfig.setConfigParameters(config_params)
+            server_connection, ui_module = setup_bitbake(config_params, cookerconfig)
+        except:
+            # kirkstone or more newer
+            server_connection, ui_module = setup_bitbake(config_params)
         ui_module.main(
             server_connection.connection, server_connection.events, config_params
         )

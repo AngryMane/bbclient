@@ -28,5 +28,3 @@ def __test_impl(client: BBClient, targets: List[str], task: str) -> None:
     assert isinstance(ret, TreeDataPreparationCompletedEvent)
     ret: Optional[BBEventBase] = client.wait_done_async()
     assert isinstance(ret, CommandCompletedEvent)
-    dot_file_path: str = client.project_path + "/task-depends.dot"
-    assert os.path.isfile(dot_file_path)
