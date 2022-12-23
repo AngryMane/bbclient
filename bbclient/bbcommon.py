@@ -4,7 +4,7 @@ This file provides common definition for ease of understanding in/out of command
 """
 
 import json
-from typing import Mapping, Any, List, Optional
+from typing import Mapping, Any, List, Optional, Union
 from collections import namedtuple
 from enum import Enum
 
@@ -266,14 +266,21 @@ class GetSkippedRecipesResult:
         rprovides (List[str]): package alias names provided by the recipe file
     """
     def __init__(
-        self: "GetSkippedRecipesResult", recipe_file_path: str, data: Mapping[str, Any]
+        self: "GetSkippedRecipesResult", recipe_file_path: str, data: Union[Mapping[str, Any], "SkippedPackage"]
     ) -> None:
         self.recipe_file_path: str = recipe_file_path
-        self.pn: str = data.get("pn", None)
-        self.skipreason: str = data.get("skipreason", None)
-        self.provides: List[str] = data.get("provides", None)
-        self.rprovides: List[str] = data.get("rprovides", None)
 
+        if isinstance(data, dict):
+            self.pn: str = data.get("pn", None)
+            self.skipreason: str = data.get("skipreason", None)
+            self.provides: List[str] = data.get("provides", None)
+            self.rprovides: List[str] = data.get("rprovides", None)
+            return
+
+        self.pn: str = data.pn if getattr(data, "pn") else None
+        self.skipreason: str =  data.skipreason if getattr(data, "skipreason") else None
+        self.provides: List[str] =  data.provides if getattr(data, "provides") else None
+        self.rprovides: List[str] =  data.rprovides if getattr(data, "rprovides") else None
 
 class GetAllAppendsResult:
     """getAllAppends result

@@ -13,7 +13,6 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -57,9 +56,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>bbclient.bbclient</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">bbclient.bbclient</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -164,30 +163,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">stop_server</span><span class="p">()</span>
 
 <div class="viewcode-block" id="BBClient.start_server"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.start_server">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">start_server</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">server_adder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server_port</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">start_server</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Start bitbake XML RPC server</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
-<span class="sd">            server_adder (str): server address you want to use.</span>
-<span class="sd">            server_port (int): server port you want to use.</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            At this point, BBClient doesn&#39;t support remote host(=you can only use localhost).</span>
+<span class="sd">            Remote server support deprecated becuase bitbake has some minor software bug when using remote server.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">server_adder_with_port</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">server_adder</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">server_port</span><span class="p">)</span>
-
-        <span class="n">pipe</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;bitbake --server-only --bind </span><span class="si">{</span><span class="n">server_adder_with_port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
-            <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">cwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">project_path</span><span class="p">,</span>
-            <span class="n">executable</span><span class="o">=</span><span class="s2">&quot;/bin/bash&quot;</span><span class="p">,</span>
-            <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
         <span class="n">connection</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connect_server</span><span class="p">(</span>
-            <span class="n">server_adder_with_port</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project_path</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span> <span class="o">=</span> <span class="n">connection</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span> <span class="o">=</span> <span class="kc">True</span></div>
@@ -1172,7 +1158,8 @@
                 <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
             <span class="p">)</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;dsindex&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">ret</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+        <span class="k">return</span> <span class="n">ret</span><span class="o">.</span><span class="n">dsindex</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="s2">&quot;dsindex&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;dsindex&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">ret</span> <span class="k">else</span> <span class="kc">None</span></div>
 
     <span class="c1"># --- bitbake server async functions  ---</span>
 <div class="viewcode-block" id="BBClient.build_file"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.build_file">[docs]</a>    <span class="nd">@logger_decorator</span>
@@ -1631,7 +1618,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">__connect_server</span><span class="p">(</span>
-        <span class="n">server_adder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="s2">&quot;bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection&quot;</span><span class="p">,</span> <span class="s2">&quot;module&quot;</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
         <span class="sd">&quot;&quot;&quot;Connect to server</span>
 
@@ -1642,12 +1629,19 @@
         <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">project_path</span><span class="si">}</span><span class="s2">/bitbake/lib&quot;</span><span class="p">)</span>
         <span class="kn">from</span> <span class="nn">bb.main</span> <span class="kn">import</span> <span class="n">setup_bitbake</span><span class="p">,</span> <span class="n">BitBakeConfigParameters</span>  <span class="c1"># type: ignore</span>
         <span class="kn">from</span> <span class="nn">bb.tinfoil</span> <span class="kn">import</span> <span class="n">TinfoilConfigParameters</span>  <span class="c1"># type: ignore</span>
+        <span class="kn">from</span> <span class="nn">bb.cookerdata</span> <span class="kn">import</span> <span class="n">CookerConfiguration</span>  <span class="c1"># type: ignore</span>
 
         <span class="n">config_params</span><span class="p">:</span> <span class="n">TinfoilConfigParameters</span> <span class="o">=</span> <span class="n">TinfoilConfigParameters</span><span class="p">(</span>
             <span class="n">config_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="mi">4</span>
         <span class="p">)</span>
-        <span class="n">config_params</span><span class="o">.</span><span class="n">remote_server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">server_adder</span>  <span class="c1"># type: ignore</span>
-        <span class="n">server_connection</span><span class="p">,</span> <span class="n">ui_module</span> <span class="o">=</span> <span class="n">setup_bitbake</span><span class="p">(</span><span class="n">config_params</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># dunfell or more older</span>
+            <span class="n">cookerconfig</span> <span class="o">=</span> <span class="n">CookerConfiguration</span><span class="p">()</span>
+            <span class="n">cookerconfig</span><span class="o">.</span><span class="n">setConfigParameters</span><span class="p">(</span><span class="n">config_params</span><span class="p">)</span>
+            <span class="n">server_connection</span><span class="p">,</span> <span class="n">ui_module</span> <span class="o">=</span> <span class="n">setup_bitbake</span><span class="p">(</span><span class="n">config_params</span><span class="p">,</span> <span class="n">cookerconfig</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c1"># kirkstone or more newer</span>
+            <span class="n">server_connection</span><span class="p">,</span> <span class="n">ui_module</span> <span class="o">=</span> <span class="n">setup_bitbake</span><span class="p">(</span><span class="n">config_params</span><span class="p">)</span>
         <span class="n">ui_module</span><span class="o">.</span><span class="n">main</span><span class="p">(</span>
             <span class="n">server_connection</span><span class="o">.</span><span class="n">connection</span><span class="p">,</span> <span class="n">server_connection</span><span class="o">.</span><span class="n">events</span><span class="p">,</span> <span class="n">config_params</span>
         <span class="p">)</span>
