@@ -8,7 +8,7 @@ This page introduce typical use cases for bbclient. Please do setup like below b
     import bbclient
     logger: Logger = setup_logger()
     client: BBClient = BBClient(project_path, init_command)
-    client.start_server(server_adder, server_port)
+    client.start_server()
     ui_handler: int = client.get_uihandler_num()
     client.set_event_mask(ui_handler, logging.DEBUG, {}, ["*"])
     ret = client.parse_configuration()

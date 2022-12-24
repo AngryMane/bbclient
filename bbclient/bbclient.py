@@ -571,9 +571,6 @@ class BBClient:
 
         Returns:
             List[GetRecipePackagesResult]: See GetRecipePackagesResult.
-
-        WARNING:
-            | This command doesn't work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
         """
         ret: Mapping[str, List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRecipePackages", multi_config, logger=self.__logger
@@ -592,9 +589,6 @@ class BBClient:
 
         Returns:
             List[GetRecipePackagesDynamicResult]: See GetRecipePackagesDynamicResult
-
-        WARNING:
-            | This command doesn't work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
         """
         ret: Mapping[str, List[str]] = self.__run_command(  # type: ignore
             self.__server_connection, "getRecipePackagesDynamic", multi_config, logger=self.__logger
@@ -615,9 +609,6 @@ class BBClient:
 
         Returns:
             List[GetRProvidersResult]: See GetRProvidersResult
-
-        WARNING:
-            | This command doesn't work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can't support this type.
 
         Note:
             | If you want to know the detail of alias of PN, See `here <https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES>`_
