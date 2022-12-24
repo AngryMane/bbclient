@@ -206,23 +206,20 @@ def get_recipe_provides(
 def get_recipe_packages(
     client: "BBClient", args: Namespace
 ) -> None:
-    print("NOTE: This command can't run normaly because of bitbake bug. See https://angrymane.github.io/bbclient/bbclient.html#bbclient.bbclient.BBClient.get_recipe_packages.")
-    #ret: List[GetRecipePackagesResult] = client.get_recipe_packages(args.mutli_conf_name)
-    #json_str = json.dumps(ret, cls=JsonEncoder)
-    #print(json_str)
+    ret: List[GetRecipePackagesResult] = client.get_recipe_packages(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
 
 def get_recipe_packages_dynamic(
     client: "BBClient", args: Namespace
 ) -> None:
-    print("NOTE: This command can't run normaly because of bitbake bug. See https://angrymane.github.io/bbclient/bbclient.html#bbclient.bbclient.BBClient.get_recipe_packages_dynamic.")
-    #ret: List[GetRecipePackagesDynamicResult] = client.get_recipe_packages_dynamic(args.mutli_conf_name)
-    #json_str = json.dumps(ret, cls=JsonEncoder)
-    #print(json_str)
+    ret: List[GetRecipePackagesDynamicResult] = client.get_recipe_packages_dynamic(args.mutli_conf_name)
+    json_str = json.dumps(ret, cls=JsonEncoder)
+    print(json_str)
 
 def get_r_providers(
     client: "BBClient", args: Namespace
 ) -> None:
-    print("NOTE: This command can't run normaly because of bitbake bug. See https://angrymane.github.io/bbclient/bbclient.html#bbclient.bbclient.BBClient.get_r_providers.")
     ret: List[GetRProvidersResult] = client.get_r_providers(args.mutli_conf_name)
     json_str = json.dumps(ret, cls=JsonEncoder)
     print(json_str)
