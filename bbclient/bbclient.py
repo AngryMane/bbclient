@@ -169,7 +169,6 @@ class BBClient:
         ret: Optional[BBEventBase] = None
         while True:
             cur_event: Optional[BBEventBase] = self.get_event(0.01)
-            self.__logger.debug(cur_event)
             find_matched_type: Optional[Type[BBEventBase]] = next(filter(lambda x: isinstance(cur_event, x), event_types), None) # type: ignore
             is_instance_of_target: bool = True if find_matched_type else False
             if is_instance_of_target:
@@ -1551,14 +1550,12 @@ class BBClient:
 
     @staticmethod
     def __connect_server(
-        project_path: str,
-        logger: Optional[Logger]
+        project_path: str
     ) -> Optional["bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection"]:  # type: ignore
         """Connect to server
 
         Args:
             project_path (str): abslute path to bitbake project, basically poky dir.
-            logger (Optional[Logger]): logger for debugging
 
         Returns:
             Optional["bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection"]: Connection instance

@@ -2,7 +2,34 @@
 This file provides definition for events from bitbake server
 """
 
-from typing import Mapping, Any, List, Type
+from typing import Mapping, Any, List, Type, Callable
+
+class BBEventObservatory:
+    """Reciver class for BBEvents.
+
+    Attributes:
+        TODO:
+    """
+    def __init__(self: "BBEventCallBack") -> None:
+        self.__callbacks: Map[BBEventBase, Callable[[BBEventBase], bool]] = {}
+
+    def notify(self: "BBEventCallBack", event_raw_data: Any) -> bool:
+        event: Optional[BBEventBase] = self.__convert(event_raw_data)
+        event_type: Type = type(event)
+        if not event_type in self.__callbacks.keys():
+            return True
+        return self.__callbacks[type(event)](event)
+
+    def __register_callback(self: "BBEventCallBack", target: Type[BBEventBase], callback: Callable[[BBEventBase], bool]) -> None:
+        pass
+
+    def __convert(self: "BBClient", event_raw_data: Any) -> Optional[BBEventBase]:
+        cur_event_name: str = str(type(event_raw_data))[8:-2]
+        itr: Iterable = filter(lambda x: x.is_target(cur_event_name), ALL_BB_EVENTS)
+        event_class: Optional[Type[BBEventBase]] = next(itr, None) # type: ignore
+        ret: BBEventBase = event_class(cur_event.__dict__) if event_class else UnknownEvent(cur_event_name, cur_event.__dict__)
+        return ret
+
 
 class BBEventBase:
     """Base class for all the events

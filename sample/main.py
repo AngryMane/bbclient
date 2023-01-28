@@ -19,14 +19,13 @@ def main() -> None:
     client.wait_done_async()
 
     # do test
-    client.build_file("curl")
+    client.build_file("curl", "fetch")
     ret: Optional[BBEventBase] = client.wait_done_async()
-    print(type(ret))
     client.stop_server()
 
 def setup_logger() -> Logger:
     ch = StreamHandler()
-    ch.setLevel(logging.DEBUG)
+    ch.setLevel(logging.CRITICAL)
     formatter = logging.Formatter('[%(name)s][%(asctime)s][%(levelname)s]: %(message)s')
     ch.setFormatter(formatter)
     logger: Logger = getLogger("bbclient")
