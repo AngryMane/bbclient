@@ -19,13 +19,9 @@ def main() -> None:
     client.wait_done_async()
 
     # do test
-    ret: List[GetRecipeVersionsResult] = client.get_recipe_versions()
-    for i in ret:
-        print(i.recipe_file_path)
-        print(i.pe)
-        print(i.pv)
-        print(i.pr)
-
+    client.build_file("curl")
+    ret: Optional[BBEventBase] = client.wait_done_async()
+    print(type(ret))
     client.stop_server()
 
 def setup_logger() -> Logger:

@@ -21,6 +21,14 @@ class BBEventBase:
         """
         self.event_name: str = event_name
 
+    def __str__(self: "BBEventBase") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
     @classmethod
     def is_target(cls, event_name: str) -> bool:
         """Determine if the event is a target event.
@@ -40,6 +48,14 @@ class TaskFailedEvent(BBEventBase):
         super().__init__(self.EVENT_NAME)
         # TODO
 
+    def __str__(self: "TaskFailedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class TaskProgressEvent(BBEventBase):
     EVENT_NAME: str = "bb.build.TaskProgress"
 
@@ -48,6 +64,14 @@ class TaskProgressEvent(BBEventBase):
         self.pid: int = data["pid"]
         self.progress: int = data["progress"]
         self.rate: str = data["rate"]
+
+    def __str__(self: "TaskProgressEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class TaskStartedEvent(BBEventBase):
     EVENT_NAME: str = "bb.build.TaskStarted"
@@ -68,6 +92,14 @@ class TaskStartedEvent(BBEventBase):
         self.message: str = data["_message"]
         self.taskflags: Any = data["taskflags"]
 
+    def __str__(self: "TaskStartedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class TaskSucceededEvent(BBEventBase):
     EVENT_NAME: str = "bb.build.TaskSucceeded"
 
@@ -86,12 +118,28 @@ class TaskSucceededEvent(BBEventBase):
         self.pv: str = data["pv"]
         self.message: str = data["_message"]
 
+    def __str__(self: "TaskSucceededEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class CommandCompletedEvent(BBEventBase):
     EVENT_NAME: str = "bb.command.CommandCompleted"
 
     def __init__(self: "CommandCompletedEvent", data: Mapping[str, Any]) -> None:
         super().__init__(self.EVENT_NAME)
         self.pid: int = data["pid"]
+
+    def __str__(self: "CommandCompletedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class CommandFailedEvent(BBEventBase):
     EVENT_NAME: str = "bb.command.CommandFailed"
@@ -102,12 +150,28 @@ class CommandFailedEvent(BBEventBase):
         self.error: str = data["error"]
         self.exitcode: str = data["exitcode"]
 
+    def __str__(self: "CommandFailedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class CommandExitEvent(BBEventBase):
     EVENT_NAME: str = "bb.command.CommandExit"
 
     def __init__(self: "CommandExitEvent", data: Mapping[str, Any]) -> None:
         super().__init__(self.EVENT_NAME)
         # TODO
+
+    def __str__(self: "CommandExitEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class CacheLoadCompletedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.CacheLoadCompleted"
@@ -119,6 +183,14 @@ class CacheLoadCompletedEvent(BBEventBase):
         self.msg: str = data["msg"]
         self.num_entries: int = data["num_entries"]
 
+    def __str__(self: "CacheLoadCompletedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class CacheLoadProgressEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.CacheLoadProgress"
 
@@ -129,6 +201,14 @@ class CacheLoadProgressEvent(BBEventBase):
         self.total: int = data["total"]
         self.msg: str = data["msg"]
 
+    def __str__(self: "CacheLoadProgressEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class CacheLoadStartedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.CacheLoadStarted"
 
@@ -138,6 +218,14 @@ class CacheLoadStartedEvent(BBEventBase):
         self.msg: str = data["msg"]
         self.total: int = data["total"]
 
+    def __str__(self: "CacheLoadStartedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class ConfigFilePathFoundEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.ConfigFilePathFound"
 
@@ -145,6 +233,14 @@ class ConfigFilePathFoundEvent(BBEventBase):
         super().__init__(self.EVENT_NAME)
         self.pid: int = data["pid"]
         self.path: str = data["_path"]
+
+    def __str__(self: "ConfigFilePathFoundEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class ConfigFilesFoundEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.ConfigFilesFound"
@@ -155,12 +251,28 @@ class ConfigFilesFoundEvent(BBEventBase):
         self.variable: str = data["_variable"]
         self.values: List[str] = data["_values"]
 
+    def __str__(self: "ConfigFilesFoundEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class ConfigParsedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.ConfigParsed"
 
     def __init__(self: "ConfigParsedEvent", data: Mapping[str, Any]) -> None:
         super().__init__(self.EVENT_NAME)
         self.pid: int = data["pid"]
+
+    def __str__(self: "ConfigParsedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class DepTreeGeneratedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.DepTreeGenerated"
@@ -171,6 +283,14 @@ class DepTreeGeneratedEvent(BBEventBase):
         # TODO: _depgraph has complex content.
         self.depgraph : Mapping[str, Any] = data["_depgraph"]
 
+    def __str__(self: "DepTreeGeneratedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class FilesMatchingFoundEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.FilesMatchingFound"
 
@@ -180,6 +300,14 @@ class FilesMatchingFoundEvent(BBEventBase):
         self.pattern: str = data["_pattern"]
         self.matches: List[str] = data["_matches"]
 
+    def __str__(self: "FilesMatchingFoundEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class ProcessFinishedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.ProcessFinished"
 
@@ -187,6 +315,14 @@ class ProcessFinishedEvent(BBEventBase):
         super().__init__(self.EVENT_NAME)
         self.pid: int = data["pid"]
         self.processname: str = data["processname"]
+
+    def __str__(self: "ProcessFinishedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class ProcessProgressEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.ProcessProgress"
@@ -197,6 +333,14 @@ class ProcessProgressEvent(BBEventBase):
         self.processname: int = data["processname"]
         self.progress: float = data["progress"]
 
+    def __str__(self: "ProcessProgressEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class ProcessStartedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.ProcessStarted"
 
@@ -205,6 +349,14 @@ class ProcessStartedEvent(BBEventBase):
         self.pid: int = data["pid"]
         self.processname: int = data["processname"]
         self.total: int = data["total"]
+
+    def __str__(self: "ProcessStartedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class ReachableStampsEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.ReachableStamps"
@@ -215,6 +367,14 @@ class ReachableStampsEvent(BBEventBase):
         # TODO: define more detail
         self.stamps: Mapping[str, str] = data["stamps"]
 
+    def __str__(self: "ReachableStampsEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class RecipeParsedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.RecipeParsed"
 
@@ -222,6 +382,14 @@ class RecipeParsedEvent(BBEventBase):
         super().__init__(self.EVENT_NAME)
         self.pid: int = data["pid"]
         self.fn: str = data["fn"]
+
+    def __str__(self: "RecipeParsedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class RecipePostKeyExpansionEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.RecipePostKeyExpansion"
@@ -231,6 +399,14 @@ class RecipePostKeyExpansionEvent(BBEventBase):
         self.pid: int = data["pid"]
         self.fn: str = data["fn"]
 
+    def __str__(self: "RecipePostKeyExpansionEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class RecipePreFinaliseEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.RecipePreFinalise"
 
@@ -238,6 +414,14 @@ class RecipePreFinaliseEvent(BBEventBase):
         super().__init__(self.EVENT_NAME)
         self.pid: int = data["pid"]
         self.fn: str = data["fn"]
+
+    def __str__(self: "RecipePreFinaliseEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class RecipeTaskPreProcessEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.RecipeTaskPreProcess"
@@ -248,6 +432,14 @@ class RecipeTaskPreProcessEvent(BBEventBase):
         self.fn: str = data["fn"]
         self.tasklist: List[str] = data["tasklist"]
 
+    def __str__(self: "RecipeTaskPreProcessEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class TargetsTreeGeneratedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.TargetsTreeGenerated"
 
@@ -255,6 +447,14 @@ class TargetsTreeGeneratedEvent(BBEventBase):
         super().__init__(self.EVENT_NAME)
         self.pid: int = data["pid"]
         self.model: Mapping[str, Any] = data["_model"]
+
+    def __str__(self: "TargetsTreeGeneratedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class TreeDataPreparationCompletedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.TreeDataPreparationCompleted"
@@ -264,6 +464,14 @@ class TreeDataPreparationCompletedEvent(BBEventBase):
         self.pid: int = data["pid"]
         self.total: int = data["total"]
         self.msg: str = data["msg"]
+
+    def __str__(self: "TreeDataPreparationCompletedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class TreeDataPreparationProgressEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.TreeDataPreparationProgress"
@@ -276,6 +484,14 @@ class TreeDataPreparationProgressEvent(BBEventBase):
         self.total: int = data["total"]
         self.msg: str = data["msg"]
 
+    def __str__(self: "TreeDataPreparationProgressEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class TreeDataPreparationStartedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.TreeDataPreparationStarted"
 
@@ -284,12 +500,28 @@ class TreeDataPreparationStartedEvent(BBEventBase):
         self.pid: int = data["pid"]
         self.msg: str = data["msg"]
 
+    def __str__(self: "TreeDataPreparationStartedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class runQueueTaskFailedEvent(BBEventBase):
     EVENT_NAME: str = "bb.runqueue.runQueueTaskFailed"
 
     def __init__(self: "runQueueTaskFailedEvent", data: Mapping[str, Any]) -> None:
         super().__init__(self.EVENT_NAME)
         # TODO
+
+    def __str__(self: "runQueueTaskFailedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class runQueueTaskStartedEvent(BBEventBase):
     EVENT_NAME: str = "bb.runqueue.runQueueTaskStarted"
@@ -305,6 +537,14 @@ class runQueueTaskStartedEvent(BBEventBase):
         self.stats: Any = data["stats"].__dict__
         self.noexec: bool = data["noexec"]
 
+    def __str__(self: "runQueueTaskStartedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class runQueueTaskSkippedEvent(BBEventBase):
     EVENT_NAME: str = "bb.runqueue.runQueueTaskSkipped"
 
@@ -319,6 +559,14 @@ class runQueueTaskSkippedEvent(BBEventBase):
         self.stats: Any = data["stats"]
         self.reason: str = data["reason"]
 
+    def __str__(self: "runQueueTaskSkippedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class sceneQueueCompleteEvent(BBEventBase):
     EVENT_NAME: str = "bb.runqueue.sceneQueueComplete"
 
@@ -326,6 +574,14 @@ class sceneQueueCompleteEvent(BBEventBase):
         super().__init__(self.EVENT_NAME)
         self.pid: int = data["pid"]
         self.stats: Any = data["stats"]
+
+    def __str__(self: "sceneQueueCompleteEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class runQueueTaskCompletedEvent(BBEventBase):
     EVENT_NAME: str = "bb.runqueue.runQueueTaskCompleted"
@@ -340,6 +596,14 @@ class runQueueTaskCompletedEvent(BBEventBase):
         self.taskhash: str = data["taskhash"]
         self.stats: Any = data["stats"]
 
+    def __str__(self: "runQueueTaskCompletedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class BuildInitEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.BuildInit"
 
@@ -349,6 +613,14 @@ class BuildInitEvent(BBEventBase):
         self.pkgs: List[Any] = data["_pkgs"]
         self.pid: int = data["pid"]
         self.failures: int = data["_failures"]
+
+    def __str__(self: "BuildInitEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class BuildStartedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.BuildStarted"
@@ -361,6 +633,14 @@ class BuildStartedEvent(BBEventBase):
         self.pkgs: List[str] = data["_pkgs"]
         self.failures: int = data["_failures"]
 
+    def __str__(self: "BuildStartedEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class HeartbeatEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.HeartbeatEvent"
 
@@ -368,6 +648,14 @@ class HeartbeatEvent(BBEventBase):
         super().__init__(self.EVENT_NAME)
         self.pid: int = data["pid"]
         self.time: float = data["time"]
+
+    def __str__(self: "HeartbeatEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 class NoProviderEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.NoProvider"
@@ -381,6 +669,14 @@ class NoProviderEvent(BBEventBase):
         self.reasons: List[Any] = data["_reasons"]
         self.close_matches: List[Any] = data["_close_matches"]
         
+    def __str__(self: "NoProviderEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 
 class MonitorDiskEventEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.MonitorDiskEvent"
@@ -390,6 +686,14 @@ class MonitorDiskEventEvent(BBEventBase):
         self.pid: int = data["pid"]
         self.disk_usage: Mapping[str, Any] = data["disk_usage"]
 
+    def __str__(self: "MonitorDiskEventEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 class LogRecord(BBEventBase):
     EVENT_NAME: str = "logging.LogRecord"
 
@@ -397,12 +701,28 @@ class LogRecord(BBEventBase):
         super().__init__(self.EVENT_NAME)
         self.log: Mapping[str, Any] = data
 
+    def __str__(self: "LogRecord") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
+
 
 class UnknownEvent(BBEventBase):
 
     def __init__(self: "UnknownEvent", event_name: str, data: Mapping[str, Any]) -> None:
         super().__init__(event_name)
         self.data: Mapping[str, Any] = data
+
+    def __str__(self: "UnknownEvent") -> str:
+        """__str__
+
+        Returns:
+            str: brief description of the class
+        """
+        raise NotImplementedError
 
 ALL_BB_EVENTS: List[Type[BBEventBase]] = [
     TaskFailedEvent,

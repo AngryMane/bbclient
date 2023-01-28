@@ -93,20 +93,29 @@ class BBClient:
         self.stop_server()
 
     @logger_decorator
-    def start_server(self: "BBClient") -> None:
+    def start_server(self: "BBClient") -> bool:
         """Start bitbake XML RPC server
 
         Args:
             self (BBClient): none
 
+        Returns:
+            bool: start_server result
+
         Note:
             Remote server support deprecated becuase bitbake has some minor software bug when using remote server.
         """
-        connection, _ = self.__connect_server(
-            self.project_path
-        )
+        try:
+            connection: Optional[Any] = self.__connect_server(
+                self.project_path
+            )
+        except BBProjectNotFoundError as e:
+            self.__logger.error(e)
+            self.__logger.error("bbclient needs bitbake library in your project path.Please check your project path.")
+            return False
         self.__server_connection = connection
-        self.__is_server_running = True
+        self.__is_server_running = True if connection else False
+        return self.__is_server_running
 
     @logger_decorator
     def stop_server(self: "BBClient") -> None:
@@ -160,6 +169,7 @@ class BBClient:
         ret: Optional[BBEventBase] = None
         while True:
             cur_event: Optional[BBEventBase] = self.get_event(0.01)
+            self.__logger.debug(cur_event)
             find_matched_type: Optional[Type[BBEventBase]] = next(filter(lambda x: isinstance(cur_event, x), event_types), None) # type: ignore
             is_instance_of_target: bool = True if find_matched_type else False
             if is_instance_of_target:
@@ -1082,6 +1092,8 @@ class BBClient:
 
         return ret.dsindex if hasattr(ret, "dsindex") else ret["dsindex"] if ret else None
 
+    # --- bitbake server async functions  wrapper---
+
     # --- bitbake server async functions  ---
     @logger_decorator
     def build_file(
@@ -1539,15 +1551,22 @@ class BBClient:
 
     @staticmethod
     def __connect_server(
-        project_path: str
-    ) -> Tuple["bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection", "module"]:  # type: ignore
+        project_path: str,
+        logger: Optional[Logger]
+    ) -> Optional["bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection"]:  # type: ignore
         """Connect to server
 
+        Args:
+            project_path (str): abslute path to bitbake project, basically poky dir.
+            logger (Optional[Logger]): logger for debugging
+
         Returns:
-            _type_: ("bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection", "module")
+            Optional["bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection"]: Connection instance
         """
-        # TODO: use shell not to be depends on bb modules
-        sys.path.append(f"{project_path}/bitbake/lib")
+        bb_lib_path: str = f"{project_path}/bitbake/lib"
+        if not os.path.isdir(bb_lib_path):
+            raise BBProjectNotFoundError(bb_lib_path)
+        sys.path.append(bb_lib_path)
         from bb.main import setup_bitbake, BitBakeConfigParameters  # type: ignore
         from bb.tinfoil import TinfoilConfigParameters  # type: ignore
         from bb.cookerdata import CookerConfiguration  # type: ignore
@@ -1566,7 +1585,7 @@ class BBClient:
         ui_module.main(
             server_connection.connection, server_connection.events, config_params
         )
-        return server_connection, ui_module
+        return server_connection
 
     @staticmethod
     def __run_command(server_connection, command: str, *params: Any, logger: Optional[Logger]) -> Optional[Any]:

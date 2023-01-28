@@ -25,7 +25,9 @@ def main() -> None:
         return 
     logger: Logger = setup_logger()
     client: BBClient = BBClient(config.project_path, logger=logger)
-    client.start_server()
+    if not client.start_server():
+        print("bbclient command uses current path as your project path. If the parent dir of current dir isn't your project path, please use --project_path option.")
+        return
     ui_handler: int = client.get_uihandler_num()
     client.set_event_mask(ui_handler, logging.DEBUG, {}, ["*"])
     client.parse_files()
