@@ -13,14 +13,8 @@ def main() -> None:
     logger: Logger = setup_logger()
     client: BBClient = BBClient(project_path, init_command, logger)
     client.start_server()
-    ui_handler: int = client.get_uihandler_num()
-    client.set_event_mask(ui_handler, logging.DEBUG, {}, ["*"])
     client.parse_files()
-    client.wait_done_async()
-
-    # do test
-    client.build_file("curl", "fetch")
-    ret: Optional[BBEventBase] = client.wait_done_async()
+    client.build_targets(["curl"], "fetch")
     client.stop_server()
 
 def setup_logger() -> Logger:

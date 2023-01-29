@@ -2,34 +2,7 @@
 This file provides definition for events from bitbake server
 """
 
-from typing import Mapping, Any, List, Type, Callable
-
-class BBEventObservatory:
-    """Reciver class for BBEvents.
-
-    Attributes:
-        TODO:
-    """
-    def __init__(self: "BBEventCallBack") -> None:
-        self.__callbacks: Map[BBEventBase, Callable[[BBEventBase], bool]] = {}
-
-    def notify(self: "BBEventCallBack", event_raw_data: Any) -> bool:
-        event: Optional[BBEventBase] = self.__convert(event_raw_data)
-        event_type: Type = type(event)
-        if not event_type in self.__callbacks.keys():
-            return True
-        return self.__callbacks[type(event)](event)
-
-    def __register_callback(self: "BBEventCallBack", target: Type[BBEventBase], callback: Callable[[BBEventBase], bool]) -> None:
-        pass
-
-    def __convert(self: "BBClient", event_raw_data: Any) -> Optional[BBEventBase]:
-        cur_event_name: str = str(type(event_raw_data))[8:-2]
-        itr: Iterable = filter(lambda x: x.is_target(cur_event_name), ALL_BB_EVENTS)
-        event_class: Optional[Type[BBEventBase]] = next(itr, None) # type: ignore
-        ret: BBEventBase = event_class(cur_event.__dict__) if event_class else UnknownEvent(cur_event_name, cur_event.__dict__)
-        return ret
-
+from typing import Mapping, Any, List, Type, Callable, Optional, Iterable
 
 class BBEventBase:
     """Base class for all the events
@@ -73,7 +46,6 @@ class TaskFailedEvent(BBEventBase):
 
     def __init__(self: "TaskFailedEvent", data: Mapping[str, Any]) -> None:
         super().__init__(self.EVENT_NAME)
-        # TODO
 
     def __str__(self: "TaskFailedEvent") -> str:
         """__str__
@@ -98,7 +70,7 @@ class TaskProgressEvent(BBEventBase):
         Returns:
             str: brief description of the class
         """
-        raise NotImplementedError
+        return f"pid:{self.pid} progress:{self.progress} rate:{self.rate}"
 
 class TaskStartedEvent(BBEventBase):
     EVENT_NAME: str = "bb.build.TaskStarted"
@@ -234,7 +206,7 @@ class CacheLoadProgressEvent(BBEventBase):
         Returns:
             str: brief description of the class
         """
-        raise NotImplementedError
+        return f"pid:{self.pid} current:{self.current} total:{self.total} msg:{self.msg}"
 
 class CacheLoadStartedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.CacheLoadStarted"
@@ -366,7 +338,7 @@ class ProcessProgressEvent(BBEventBase):
         Returns:
             str: brief description of the class
         """
-        raise NotImplementedError
+        return f"pid:{self.pid} processname:{self.processname} progress:{self.progress}"
 
 class ProcessStartedEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.ProcessStarted"
@@ -734,7 +706,7 @@ class LogRecord(BBEventBase):
         Returns:
             str: brief description of the class
         """
-        raise NotImplementedError
+        return "[LOG EVENT]" + self.log["msg"] % self.log["args"]
 
 
 class UnknownEvent(BBEventBase):
