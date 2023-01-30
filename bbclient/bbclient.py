@@ -1783,10 +1783,7 @@ class BBClient:
 
     @staticmethod
     def __default_event_callback(event: Optional[BBEventBase]) -> None:
-        try:
-            print(event)
-        except:
-            print(type(event))
+        print(event)
 
 
 

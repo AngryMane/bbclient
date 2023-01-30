@@ -13,8 +13,9 @@ def main() -> None:
     logger: Logger = setup_logger()
     client: BBClient = BBClient(project_path, init_command, logger)
     client.start_server()
-    client.parse_files()
-    client.build_targets(["curl"], "fetch")
+    #client.parse_files()
+    client.build_targets(["curl"], "clean")
+    client.build_targets(["curl"], "compile")
     client.stop_server()
 
 def setup_logger() -> Logger:
