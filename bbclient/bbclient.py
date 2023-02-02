@@ -22,15 +22,29 @@ import uuid
 import time
 import threading
 import subprocess
-from logging import Logger, DEBUG
+
 from functools import wraps
-from typing import Any, List, Optional, Tuple, Mapping, Callable, Iterable, Type
+from logging import Logger, StreamHandler, getLogger, DEBUG, CRITICAL, Formatter
+from typing import Any, List, Optional, Mapping, Callable, Iterable, Type
 
 from .bbcommon import *
 from .bbevent import *
 
 class CallBack:
+    """CallBack for bitbake events
+
+    Attributes:
+        target_event_type (Optional[BBEventBase]): trigger event type for callback function
+        callback (Callable[[BBEventBase], None]): callback function
+    """
     def __init__(self: "CallBack", target_event_type: Optional[BBEventBase], callback: Callable[[BBEventBase], None]) -> None:
+        """Initialze
+
+        Args:
+            self (CallBack): CallBack instance
+            target_event_type (Optional[BBEventBase]): trigger event type for callback function
+            callback (Callable[[BBEventBase], None]): callback function
+        """        
         self.target_event_type: Optional[BBEventBase] = target_event_type
         self.callback: Callable[[BBEventBase], None] = callback
 
@@ -51,7 +65,7 @@ class BBClient:
             func (Callable): target function
 
         Note:
-            This is just for debuggging.
+            This is just for logging.
         """
         @wraps(func)
         def inner_function(self: "BBClient", *args, **kwargs):
@@ -64,6 +78,14 @@ class BBClient:
         return inner_function
 
     def syncronize_decorator(func: Callable) -> None:
+        """Decorator for syncronize
+
+        Args:
+            func (Callable): target function
+
+        Note:
+            This decorator automatically waits for async
+        """
         @wraps(func)
         def inner_function(self: "BBClient", *args, **kwargs):
             event_monitor: threading.Event = threading.Event()
@@ -94,7 +116,7 @@ class BBClient:
         """
         self.project_path: str = project_abs_path
         self.__is_server_running: bool = False
-        self.__logger: Optional[Logger] = logger
+        self.__logger: Optional[Logger] = logger if logger else self.__get_default_logger()
         pipe: subprocess.Popen = subprocess.Popen(
             f"{init_script_path} > /dev/null; env",
             stdout=subprocess.PIPE,
@@ -145,6 +167,7 @@ class BBClient:
         self.__event_thread.start()
         ui_handler: int = self.get_uihandler_num()
         self.set_event_mask(ui_handler, DEBUG, {}, ["*"])
+        self.parse_files()
         return self.__is_server_running
 
     @logger_decorator
@@ -168,6 +191,16 @@ class BBClient:
     # --- utility functions ---
     @logger_decorator
     def register_callback(self: "BBClient", target: Type["BBEventBase"], callback: Callable[["BBEventBase"], None]) -> uuid.UUID:
+        """Register callback functions for events
+
+        Args:
+            self (BBClient): none
+            target (Type[&quot;BBEventBase&quot;]): trigger event type for callback function
+            callback (Callable[[&quot;BBEventBase&quot;], None]): callback function
+
+        Returns:
+            uuid.UUID: Callback id. The user can use this to unregister.
+        """
         unique_id: uuid.UUID = uuid.uuid4()
         cur_callback: CallBack = CallBack(target, callback)
         self.__callbacks_lock.acquire()
@@ -177,6 +210,12 @@ class BBClient:
 
     @logger_decorator
     def unregister_callback(self: "BBClient", unique_id: uuid.UUID) -> None:
+        """Unregister callback functions for events
+
+        Args:
+            self (BBClient): none
+            unique_id (uuid.UUID): Callback id. The user can get this when registering.
+        """
         self.__callbacks_lock.acquire()
         del self.__callbacks[unique_id]
         self.__callbacks_lock.release()
@@ -192,64 +231,8 @@ class BBClient:
         Returns:
             Optional[BBEventBase]: target event or None
         """
-        return self.wait_event([CommandCompletedEvent, CommandExitEvent, CommandFailedEvent], timeout) # type: ignore
+        return self.__wait_event([CommandCompletedEvent, CommandExitEvent, CommandFailedEvent], timeout) # type: ignore
 
-    @logger_decorator
-    def wait_event(self: "BBClient", event_types: List[Type[BBEventBase]], timeout: Optional[float] = None) -> Optional[BBEventBase]:
-        """Wait specific event
-
-        Args:
-            self (BBClient): none
-            event_types (List[Type[BBEventBase]]): event types you wait for. BBEventBase and its inherits types is defined in bbcommon.py.
-            timeout (float): timeout. (seconds)
-
-        Returns:
-            Optional[BBEventBase]: The event you wait for or None
-        
-        Note:
-            | This function will pop events from event queue. This event queue is reused between many commands, so this queue may have events from previous commands.
-            | When you wait bb.command.CommandCompleted event, please confirm there is no left bb.command.CommandCompleted event from previous command.
-        """
-        start_time: float = time.perf_counter()
-        ret: Optional[BBEventBase] = None
-        while True:
-            cur_event: Optional[BBEventBase] = self.get_event(0.01)
-            find_matched_type: Optional[Type[BBEventBase]] = next(filter(lambda x: isinstance(cur_event, x), event_types), None) # type: ignore
-            is_instance_of_target: bool = True if find_matched_type else False
-            if is_instance_of_target:
-                ret = cur_event
-                break
-            execution_time: float = time.perf_counter() - start_time
-            if timeout and timeout < execution_time:
-                if self.__logger:
-                    self.__logger.warning(f"Timeout occurred because {execution_time} second has elapsed")
-                break
-        return ret
-
-    def get_event(self: "BBClient", timeout: Optional[float] = None) -> Optional[BBEventBase]:
-        """Get oldest event
-
-        Args:
-            self (BBClient): none
-            timeout (Optional[float]): timeout. if timeout, return None
-
-        Returns:
-            Optional[BBEventBase]: event notification objects. See bbcommon.py
-        """
-        cur_event: Any = self.__server_connection.events.waitEvent(timeout)
-        if not cur_event:
-            return None
-        # f"<class '{event_name}'>" -> event_name
-        cur_event_name: str = str(type(cur_event))[8:-2]
-        itr: Iterable = filter(lambda x: x.is_target(cur_event_name), ALL_BB_EVENTS)
-        event_class: Optional[Type[BBEventBase]] = next(itr, None) # type: ignore
-        ret: BBEventBase = event_class(cur_event.__dict__) if event_class else UnknownEvent(cur_event_name, cur_event.__dict__)
-        if not isinstance(ret, UnknownEvent) and self.__logger:
-            self.__logger.debug(f"get {cur_event_name}: {ret.__dict__}")
-        if isinstance(ret, UnknownEvent) and self.__logger:
-            self.__logger.debug(f"get Unknow event {cur_event_name}: {ret.__dict__}")
-        return ret
-        
 
     # --- bitbake server sync functions  ---
     @logger_decorator
@@ -1143,6 +1126,12 @@ class BBClient:
     def build_file(
         self: "BBClient", file_path: str, task_name: str, internal: bool = False
     ) -> None:
+        """Build recipe file
+
+        Note:
+            This function will block until complete to build_file_async is complete. 
+            For more details, see build_file_async.
+        """
         self.build_file_async(file_path, task_name, internal)
 
     @logger_decorator
@@ -1152,6 +1141,12 @@ class BBClient:
         targets: List[str],
         task_name: str,
     ) -> None:
+        """Build package
+
+        Note:
+            This function will block until complete to build_targets_async is complete. 
+            For more details, see build_targets_async.
+        """
         self.build_targets_async(targets, task_name)
         
     @logger_decorator
@@ -1159,6 +1154,12 @@ class BBClient:
     def generate_dep_tree_event(
         self: "BBClient", targets: List[str], task_name: str
     ) -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.generate_dep_tree_event_async(targets, task_name)
 
     @logger_decorator
@@ -1166,6 +1167,12 @@ class BBClient:
     def generate_dot_graph(
         self: "BBClient", targets: List[str], task_name: str
     ) -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.generate_dot_graph_async(targets, task_name)
 
     @logger_decorator
@@ -1173,11 +1180,23 @@ class BBClient:
     def generate_targets_tree(
         self: "BBClient", bb_klass_file_path: str, package_names: List[str]
     ) -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.generate_targets_tree_async(bb_klass_file_path, package_names)
 
     @logger_decorator
     @syncronize_decorator
     def find_config_files(self: "BBClient", variable_name: str) -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.find_config_files_async(variable_name)
 
     @logger_decorator
@@ -1185,56 +1204,122 @@ class BBClient:
     def find_files_matching_in_dir(
         self: "BBClient", target_file_name_substring: str, directory: str
     ) -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.find_files_matching_in_dir_async(target_file_name_substring, directory)
 
     @logger_decorator
     @syncronize_decorator
     def test_cooker_command_event(self: "BBClient", pattern: str) -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.test_cooker_command_event_async(pattern)
 
     @logger_decorator
     @syncronize_decorator
     def find_config_file_path(self: "BBClient", config_file_name: str) -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.find_config_file_path_async(config_file_name)
 
     @logger_decorator
     @syncronize_decorator
     def show_versions(self: "BBClient") -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.show_versions_async()
 
     @logger_decorator
     @syncronize_decorator
     def show_environment_target(self: "BBClient", package_name: str = "") -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.show_environment_target_async(package_name)
 
     @logger_decorator
     @syncronize_decorator
     def show_environment(self: "BBClient", bb_file_path: str) -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.show_environment_async(bb_file_path)
 
     @logger_decorator
     @syncronize_decorator
     def parse_files(self: "BBClient") -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.parse_files_async()
 
     @logger_decorator
     @syncronize_decorator
     def compare_revisions(self: "BBClient") -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.compare_revisions_async()
 
     @logger_decorator
     @syncronize_decorator
     def trigger_event(self: "BBClient", evene_name: str) -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.trigger_event_async(evene_name)
 
     @logger_decorator
     @syncronize_decorator
     def reset_cooker(self: "BBClient") -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.reset_cooker_async()
 
     @logger_decorator
     @syncronize_decorator
     def client_complete(self: "BBClient") -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.client_complete_async()
 
     @logger_decorator
@@ -1245,6 +1330,12 @@ class BBClient:
         task_name: str,
         sigs: List[str],
     ) -> None:
+        """xxxxx
+
+        Note:
+            This function will block until complete to xxxxx is complete. 
+            For more details, see xxxxx.
+        """
         self.find_sigInfo_async(package_name_with_multi_config, task_name, sigs)
 
     # --- bitbake server async functions  ---
@@ -1256,7 +1347,6 @@ class BBClient:
 
         This command doen't resolve any dependencies. If you also want to buid dependencies, please use build_targets command.
         This command will send following events. If you want to wait done, please use wait_done_async.
-
 
         * bb.event.BuildInit
         * bb.event.RecipePreFinalise
@@ -1281,7 +1371,7 @@ class BBClient:
             internal (bool, optional): If True, bitbake will fire events that notify BuildStarted and BuildCompleted. Defaults to False.
 
         Note:
-            | If you want to monitor BuildStarted and BuildCompleted event, use get_event.
+            | If you want to monitor BuildStarted and BuildCompleted event, use register_callback.
         """
         self.__run_command(
             self.__server_connection, "buildFile", file_path, task_name, internal, logger=self.__logger
@@ -1636,7 +1726,7 @@ class BBClient:
             evene_name (str): event class name.
 
         Note:
-            | Send evene_name event. User can receive this event by get_event.
+            | Send evene_name event. User can receive this event by register_callback.
         """
         self.__run_command(self.__server_connection, "triggerEvent", evene_name, logger=self.__logger)
 
@@ -1702,6 +1792,73 @@ class BBClient:
         )
 
     # --- private functions ---
+    def __get_event(self: "BBClient", timeout: Optional[float] = None) -> Optional[BBEventBase]:
+        """Get oldest event
+
+        Args:
+            self (BBClient): none
+            timeout (Optional[float]): timeout. if timeout, return None
+
+        Returns:
+            Optional[BBEventBase]: event notification objects. See bbcommon.py
+        """
+        cur_event: Any = self.__server_connection.events.waitEvent(timeout)
+        if not cur_event:
+            return None
+        # f"<class '{event_name}'>" -> event_name
+        cur_event_name: str = str(type(cur_event))[8:-2]
+        itr: Iterable = filter(lambda x: x.is_target(cur_event_name), ALL_BB_EVENTS)
+        event_class: Optional[Type[BBEventBase]] = next(itr, None) # type: ignore
+        ret: BBEventBase = event_class(cur_event.__dict__) if event_class else UnknownEvent(cur_event_name, cur_event.__dict__)
+        if not isinstance(ret, UnknownEvent) and self.__logger:
+            self.__logger.debug(f"get {cur_event_name}: {ret.__dict__}")
+        if isinstance(ret, UnknownEvent) and self.__logger:
+            self.__logger.debug(f"get Unknow event {cur_event_name}: {ret.__dict__}")
+        return ret
+        
+
+    def __wait_event(self: "BBClient", event_types: List[Type[BBEventBase]], timeout: Optional[float] = None) -> Optional[BBEventBase]:
+        """Wait specific event
+
+        Args:
+            self (BBClient): none
+            event_types (List[Type[BBEventBase]]): event types you wait for. BBEventBase and its inherits types is defined in bbcommon.py.
+            timeout (float): timeout. (seconds)
+
+        Returns:
+            Optional[BBEventBase]: The event you wait for or None
+        
+        Note:
+            | This function will pop events from event queue. This event queue is reused between many commands, so this queue may have events from previous commands.
+            | When you wait bb.command.CommandCompleted event, please confirm there is no left bb.command.CommandCompleted event from previous command.
+        """
+        start_time: float = time.perf_counter()
+        ret: Optional[BBEventBase] = None
+        while True:
+            cur_event: Optional[BBEventBase] = self.__get_event(0.01)
+            find_matched_type: Optional[Type[BBEventBase]] = next(filter(lambda x: isinstance(cur_event, x), event_types), None) # type: ignore
+            is_instance_of_target: bool = True if find_matched_type else False
+            if is_instance_of_target:
+                ret = cur_event
+                break
+            execution_time: float = time.perf_counter() - start_time
+            if timeout and timeout < execution_time:
+                if self.__logger:
+                    self.__logger.warning(f"Timeout occurred because {execution_time} second has elapsed")
+                break
+        return ret
+
+
+    @staticmethod
+    def __get_default_logger() -> Logger:
+        ch = StreamHandler()
+        ch.setLevel(CRITICAL)
+        formatter = Formatter('[%(name)s][%(asctime)s][%(levelname)s]: %(message)s')
+        ch.setFormatter(formatter)
+        logger: Logger = getLogger("bbclient")
+        logger.setLevel("CRITICAL")
+        logger.addHandler(ch)
+        return logger
 
     @staticmethod
     def __connect_server(
@@ -1764,7 +1921,7 @@ class BBClient:
 
     def __monitor_event_loop(self: "BBClient") -> None:
         while self.__is_server_running:
-            ret: Optional[BBEventBase] = self.get_event(1)
+            ret: Optional[BBEventBase] = self.__get_event(1)
             self.__callbacks_lock.acquire()
             iter: Iterable = filter(lambda x: x.target_event_type == type(ret), self.__callbacks.values())
             for cur_callback in iter:
