@@ -23,18 +23,11 @@ def main() -> None:
     if not config.subcommand:
         print("bbclient command needs subcommand. See bbclient --help.")
         return 
-    logger: Logger = setup_logger()
-    client: BBClient = BBClient(config.project_path, logger=logger)
+    client: BBClient = BBClient(config.project_path)
     if not client.start_server():
         print("bbclient command uses current path as your project path. If the parent dir of current dir isn't your project path, please use --project_path option.")
         return
-    ui_handler: int = client.get_uihandler_num()
-    client.set_event_mask(ui_handler, logging.DEBUG, {}, ["*"])
-    client.parse_files()
-    client.wait_done_async()
-
     config.subcommand(client, config.command_args)
-
     client.stop_server()
 
 def get_config() -> List[Union[str, int]]:
@@ -139,16 +132,6 @@ def get_config() -> List[Union[str, int]]:
     # TODO: support remote server
     return Config(args.project_path, getattr(args, "subcommand", None), args)
 
-
-def setup_logger() -> Logger:
-    ch = StreamHandler()
-    ch.setLevel(logging.INFO)
-    formatter = logging.Formatter('[%(name)s][%(asctime)s][%(levelname)s]: %(message)s')
-    ch.setFormatter(formatter)
-    logger: Logger = getLogger("bbclient")
-    logger.setLevel('DEBUG')
-    logger.addHandler(ch)
-    return logger
 
 def get_all_keys_with_flags_command(
     client: "BBClient", args: Namespace

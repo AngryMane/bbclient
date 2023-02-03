@@ -35,21 +35,21 @@ class CallBack:
 
     Attributes:
         target_event_type (Optional[BBEventBase]): trigger event type for callback function
-        callback (Callable[[BBEventBase], None]): callback function
+        callback (Callable[["BBClient", BBEventBase], None]): callback function
     """
-    def __init__(self: "CallBack", target_event_type: Optional[BBEventBase], callback: Callable[[BBEventBase], None]) -> None:
+    def __init__(self: "CallBack", target_event_type: Optional[BBEventBase], callback: Callable[["BBClient", BBEventBase], None]) -> None:
         """Initialze
 
         Args:
             self (CallBack): CallBack instance
             target_event_type (Optional[BBEventBase]): trigger event type for callback function
-            callback (Callable[[BBEventBase], None]): callback function
+            callback (Callable[["BBClient", BBEventBase], None]): callback function
         """        
         self.target_event_type: Optional[BBEventBase] = target_event_type
-        self.callback: Callable[[BBEventBase], None] = callback
+        self.callback: Callable[["BBClient", BBEventBase], None] = callback
 
 class BBClient:
-    """Client for bitbake RPC Server
+    """Client for bitbake Server
 
     Attributes:
         project_path (str): poky directory path
@@ -89,7 +89,7 @@ class BBClient:
         @wraps(func)
         def inner_function(self: "BBClient", *args, **kwargs):
             event_monitor: threading.Event = threading.Event()
-            def event_watcher(event: BBEventBase):
+            def event_watcher(self: BBClient, event: BBEventBase):
                 event_monitor.set()
             unique_ids: List[uuid.UUID] = []
             unique_ids.append(self.register_callback(CommandCompletedEvent, event_watcher))
@@ -104,7 +104,7 @@ class BBClient:
 
     # --- setup functions ---
     def __init__(
-        self: "BBClient", project_abs_path: str, init_script_path: str = ":", logger: Optional[Logger] = None
+        self: "BBClient", project_abs_path: str, init_script_path: str = ":", logging_level: int = CRITICAL
     ) -> None:
         """Initialize BBClient instance
 
@@ -112,11 +112,19 @@ class BBClient:
             self (BBClient): none
             project_abs_path (str): abslute path to bitbake project, basically poky dir.
             init_script_path (str): initialize bitbake proejct command running at project_abs_path. This is maybe ". oe-init-build-env". if you already executed initialize command, you don't need to input this.
-            logger (Logger): logger instance for debuggind. Default is None.
+            logging_level (int): logging level. please select from the following items. default value is logging.CRITICAL.
+                * CRITICAL = 50
+                * FATAL = CRITICAL
+                * ERROR = 40
+                * WARNING = 30
+                * WARN = WARNING
+                * INFO = 20
+                * DEBUG = 10
+                * NOTSET = 0
         """
         self.project_path: str = project_abs_path
         self.__is_server_running: bool = False
-        self.__logger: Optional[Logger] = logger if logger else self.__get_default_logger()
+        self.__logger: Logger = self.__get_default_logger(logging_level)
         pipe: subprocess.Popen = subprocess.Popen(
             f"{init_script_path} > /dev/null; env",
             stdout=subprocess.PIPE,
@@ -143,7 +151,7 @@ class BBClient:
 
     @logger_decorator
     def start_server(self: "BBClient") -> bool:
-        """Start bitbake XML RPC server
+        """Start bitbake server
 
         Args:
             self (BBClient): none
@@ -172,7 +180,7 @@ class BBClient:
 
     @logger_decorator
     def stop_server(self: "BBClient") -> None:
-        """Stop bitbake XML RPC server
+        """Stop bitbake server
 
         Args:
             self (BBClient): none
@@ -190,13 +198,13 @@ class BBClient:
 
     # --- utility functions ---
     @logger_decorator
-    def register_callback(self: "BBClient", target: Type["BBEventBase"], callback: Callable[["BBEventBase"], None]) -> uuid.UUID:
+    def register_callback(self: "BBClient", target: Type["BBEventBase"], callback: Callable[["BBClient", "BBEventBase"], None]) -> uuid.UUID:
         """Register callback functions for events
 
         Args:
             self (BBClient): none
-            target (Type[&quot;BBEventBase&quot;]): trigger event type for callback function
-            callback (Callable[[&quot;BBEventBase&quot;], None]): callback function
+            target (Type[BBEventBase]): trigger event type for callback function
+            callback (Callable[[BBClient, BBEventBase], None]): callback function
 
         Returns:
             uuid.UUID: Callback id. The user can use this to unregister.
@@ -1810,9 +1818,7 @@ class BBClient:
         itr: Iterable = filter(lambda x: x.is_target(cur_event_name), ALL_BB_EVENTS)
         event_class: Optional[Type[BBEventBase]] = next(itr, None) # type: ignore
         ret: BBEventBase = event_class(cur_event.__dict__) if event_class else UnknownEvent(cur_event_name, cur_event.__dict__)
-        if not isinstance(ret, UnknownEvent) and self.__logger:
-            self.__logger.debug(f"get {cur_event_name}: {ret.__dict__}")
-        if isinstance(ret, UnknownEvent) and self.__logger:
+        if isinstance(ret, UnknownEvent):
             self.__logger.debug(f"get Unknow event {cur_event_name}: {ret.__dict__}")
         return ret
         
@@ -1837,26 +1843,29 @@ class BBClient:
         while True:
             cur_event: Optional[BBEventBase] = self.__get_event(0.01)
             find_matched_type: Optional[Type[BBEventBase]] = next(filter(lambda x: isinstance(cur_event, x), event_types), None) # type: ignore
-            is_instance_of_target: bool = True if find_matched_type else False
-            if is_instance_of_target:
+            if find_matched_type:
                 ret = cur_event
                 break
             execution_time: float = time.perf_counter() - start_time
             if timeout and timeout < execution_time:
-                if self.__logger:
-                    self.__logger.warning(f"Timeout occurred because {execution_time} second has elapsed")
+                self.__logger.warning(f"Timeout occurred because {execution_time} second has elapsed")
                 break
         return ret
 
 
     @staticmethod
-    def __get_default_logger() -> Logger:
+    def __get_default_logger(logging_level: int) -> Logger:
+        """Get default logger
+
+        Returns:
+            Logger: default logger
+        """
         ch = StreamHandler()
-        ch.setLevel(CRITICAL)
+        ch.setLevel(DEBUG)
         formatter = Formatter('[%(name)s][%(asctime)s][%(levelname)s]: %(message)s')
         ch.setFormatter(formatter)
         logger: Logger = getLogger("bbclient")
-        logger.setLevel("CRITICAL")
+        logger.setLevel(logging_level)
         logger.addHandler(ch)
         return logger
 
@@ -1920,12 +1929,20 @@ class BBClient:
         return result[0]
 
     def __monitor_event_loop(self: "BBClient") -> None:
+        """Monitor event loop
+
+        Args:
+            self (BBClient): none
+
+        Note:
+            This function monitors events from bbclient, and do callback.
+        """
         while self.__is_server_running:
             ret: Optional[BBEventBase] = self.__get_event(1)
             self.__callbacks_lock.acquire()
             iter: Iterable = filter(lambda x: x.target_event_type == type(ret), self.__callbacks.values())
             for cur_callback in iter:
-                cur_callback.callback(ret)
+                cur_callback.callback(self, ret)
             self.__callbacks_lock.release()
 
     def __initialize_callback(self: "BBClient") -> None:
@@ -1934,13 +1951,13 @@ class BBClient:
             if LogRecord == event_type:
                 continue
             unique_id: uuid.UUID = uuid.uuid4()
-            cur_callback: CallBack = CallBack(event_type, self.__default_event_callback)
+            cur_callback: CallBack = CallBack(event_type, BBClient.__default_event_callback)
             self.__callbacks[unique_id] = cur_callback
         self.__callbacks_lock.release()
 
     @staticmethod
-    def __default_event_callback(event: Optional[BBEventBase]) -> None:
-        print(event)
+    def __default_event_callback(bbclient: "BBClient", event: Optional[BBEventBase]) -> None:
+        bbclient.__logger.debug(event)
 
 
 

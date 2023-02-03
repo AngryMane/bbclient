@@ -62,6 +62,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#run-a-task">Run a task</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#monitor-callback-events">Monitor callback events</a></li>
 </ul>
 </li>
 </ul>
@@ -94,26 +95,15 @@
 <h1>Use case<a class="headerlink" href="#use-case" title="Permalink to this headline"></a></h1>
 <p>This page introduce typical use cases for bbclient. Please do setup like below before each use cases.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">bbclient</span>
-<span class="n">logger</span><span class="p">:</span> <span class="n">Logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">()</span>
+<span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;path/to/poky&quot;</span>
+<span class="n">init_command</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;any_init_script_like_oe_init_env&quot;</span>
 <span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span> <span class="o">=</span> <span class="n">BBClient</span><span class="p">(</span><span class="n">project_path</span><span class="p">,</span> <span class="n">init_command</span><span class="p">)</span>
-<span class="n">client</span><span class="o">.</span><span class="n">start_server</span><span class="p">(</span><span class="n">server_adder</span><span class="p">,</span> <span class="n">server_port</span><span class="p">)</span>
-<span class="n">ui_handler</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_uihandler_num</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">set_event_mask</span><span class="p">(</span><span class="n">ui_handler</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="p">{},</span> <span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">])</span>
-<span class="n">ret</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_configuration</span><span class="p">()</span>
-<span class="n">ret</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_files</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
+<span class="n">client</span><span class="o">.</span><span class="n">start_server</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">setup_logger</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Logger</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Sample logger setting</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ch</span> <span class="o">=</span> <span class="n">StreamHandler</span><span class="p">()</span>
-    <span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">%(name)s</span><span class="s1">][</span><span class="si">%(asctime)s</span><span class="s1">][</span><span class="si">%(levelname)s</span><span class="s1">]: </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
-    <span class="n">logger</span><span class="p">:</span> <span class="n">Logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;bbclient&quot;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">logger</span>
+<span class="c1"># You can do anything you want. See each use cases.</span>
+
+<span class="c1"># You have to stop_server when closing</span>
+<span class="n">client</span><span class="o">.</span><span class="n">stop_server</span><span class="p">()</span>
 </pre></div>
 </div>
 <section id="use-cases-for-whole-project">
@@ -121,7 +111,6 @@
 <section id="build-package">
 <h3>Build package<a class="headerlink" href="#build-package" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">build_targets</span><span class="p">([</span><span class="s2">&quot;busybox&quot;</span><span class="p">],</span> <span class="s2">&quot;compile&quot;</span><span class="p">)</span>
-<span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -203,7 +192,6 @@
 <div class="line">These files will be writtene at the root of the yocto porject.</div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">generate_dot_graph</span><span class="p">([</span><span class="s2">&quot;gcc&quot;</span><span class="p">],</span> <span class="s2">&quot;build&quot;</span><span class="p">)</span>
-<span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
 </pre></div>
 </div>
 <p>task-depends provides dependency info between recipes. See <a class="reference external" href="https://docs.yoctoproject.org/current/dev-manual/common-tasks.html?highlight=task+depends+dot#viewing-task-variable-dependencies">here</a></p>
@@ -223,9 +211,12 @@
 </section>
 <section id="get-all-variables-in-one-specific-recipe">
 <h3>Get all variables in one specific recipe<a class="headerlink" href="#get-all-variables-in-one-specific-recipe" title="Permalink to this headline"></a></h3>
-<div class="line-block">
-<div class="line">bitbake IPC Interface does not provide any means to get all the variables in one specific recipe.</div>
-<div class="line">Use can only get this info by bitbak -e command because this command outputs this info to stdo on the server process.</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_recipe_file</span><span class="p">(</span><span class="s2">&quot;/PATH/TO/RECIPE/psplash_git.bb&quot;</span><span class="p">)</span>
+<span class="n">keys</span><span class="p">:</span> <span class="n">KeysView</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="n">inx</span><span class="p">,</span> <span class="s2">&quot;keys&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+    <span class="n">var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="n">inx</span><span class="p">,</span> <span class="s2">&quot;getVar&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
 </section>
 <section id="get-all-appends-files-for-one-specific-recipe">
@@ -256,12 +247,23 @@
 <section id="run-a-task">
 <h3>Run a task<a class="headerlink" href="#run-a-task" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">build_targets</span><span class="p">([</span><span class="s2">&quot;busybox&quot;</span><span class="p">],</span> <span class="s2">&quot;fetch&quot;</span><span class="p">)</span>
-<span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
 <span class="n">client</span><span class="o">.</span><span class="n">build_targets</span><span class="p">([</span><span class="s2">&quot;busybox&quot;</span><span class="p">],</span> <span class="s2">&quot;patch&quot;</span><span class="p">)</span>
-<span class="n">client</span><span class="o">.</span><span class="n">wait_done_async</span><span class="p">()</span> <span class="c1"># please confirm there is no previous async command that you didn&#39;t do wait_done_async.</span>
 </pre></div>
 </div>
 </section>
+</section>
+<section id="monitor-callback-events">
+<h2>Monitor callback events<a class="headerlink" href="#monitor-callback-events" title="Permalink to this headline"></a></h2>
+<p>You can monitor various events from bitbake server.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">monitor_callback</span><span class="p">(</span><span class="n">bbclient_</span><span class="p">:</span><span class="n">BBClient</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">ProcessProgressEvent</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">processname</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">progress</span><span class="p">)</span>
+<span class="n">callback_index</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="n">ProcessProgressEvent</span><span class="p">,</span> <span class="n">monitor_callback</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">build_targets</span><span class="p">([</span><span class="s2">&quot;curl&quot;</span><span class="p">],</span> <span class="s2">&quot;compile&quot;</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">unregister_callback</span><span class="p">(</span><span class="n">callback_index</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 </section>
 

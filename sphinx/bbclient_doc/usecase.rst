@@ -6,26 +6,16 @@ This page introduce typical use cases for bbclient. Please do setup like below b
 .. code-block:: python
 
     import bbclient
-    logger: Logger = setup_logger()
+    project_path: str = "path/to/poky"
+    init_command: str = "any_init_script_like_oe_init_env"
     client: BBClient = BBClient(project_path, init_command)
     client.start_server()
-    ui_handler: int = client.get_uihandler_num()
-    client.set_event_mask(ui_handler, logging.DEBUG, {}, ["*"])
-    ret = client.parse_configuration()
-    ret = client.parse_files()
-    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
 
-    def setup_logger() -> Logger: 
-        """Sample logger setting
-        """
-        ch = StreamHandler()
-        ch.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('[%(name)s][%(asctime)s][%(levelname)s]: %(message)s')
-        ch.setFormatter(formatter)
-        logger: Logger = getLogger("bbclient")
-        logger.setLevel('DEBUG')
-        logger.addHandler(ch)
-        return logger
+    # You can do anything you want. See each use cases.
+
+    # You have to stop_server when closing
+    client.stop_server()
+
 
 Use cases for whole project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -36,7 +26,6 @@ Build package
 .. code-block:: python
 
     client.build_targets(["busybox"], "compile")
-    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
 
 | Please note that this command will kick all the tasks target depends, so it maybe taks so much time.
 
@@ -128,7 +117,6 @@ Generate dependency dot file
 .. code-block:: python
 
     client.generate_dot_graph(["gcc"], "build")
-    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
 
 task-depends provides dependency info between recipes. See `here <https://docs.yoctoproject.org/current/dev-manual/common-tasks.html?highlight=task+depends+dot#viewing-task-variable-dependencies>`_
 
@@ -151,8 +139,13 @@ Get one specific variable in one specific package
 Get all variables in one specific recipe
 -----------------------------------------
 
-| bitbake IPC Interface does not provide any means to get all the variables in one specific recipe.
-| Use can only get this info by bitbak -e command because this command outputs this info to stdo on the server process.
+.. code-block:: python
+
+    inx: int = client.parse_recipe_file("/PATH/TO/RECIPE/psplash_git.bb")
+    keys: KeysView = client.data_store_connector_cmd(inx, "keys")
+    for key in keys:
+        var: str = client.data_store_connector_cmd(inx, "getVar", key)
+        print(f"{key}: {var}")
 
 Get all appends files for one specific recipe
 ----------------------------------------------
@@ -189,6 +182,20 @@ Run a task
 .. code-block:: python
 
     client.build_targets(["busybox"], "fetch")
-    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
     client.build_targets(["busybox"], "patch")
-    client.wait_done_async() # please confirm there is no previous async command that you didn't do wait_done_async.
+
+
+Monitor callback events
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can monitor various events from bitbake server.  
+
+.. code-block:: python
+
+    def monitor_callback(bbclient_:BBClient, event: ProcessProgressEvent):
+        print(event.pid)
+        print(event.processname)
+        print(event.progress)
+    callback_index:int = client.register_callback(ProcessProgressEvent, monitor_callback)
+    client.build_targets(["curl"], "compile")
+    client.unregister_callback(callback_index)

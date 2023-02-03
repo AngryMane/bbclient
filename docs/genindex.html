@@ -99,9 +99,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.__is_server_running">__is_server_running (bbclient.bbclient.BBClient attribute)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.__logger">__logger (bbclient.bbclient.BBClient attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bbclient.html#bbclient.bbclient.BBClient.__logger">__logger (bbclient.bbclient.BBClient attribute)</a>
+      <li><a href="bbclient.html#bbclient.bbcommon.BBProjectNotFoundError.__project_path">__project_path (bbclient.bbcommon.BBProjectNotFoundError attribute)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.__server_connection">__server_connection (bbclient.bbclient.BBClient attribute)</a>
 </li>
@@ -150,8 +152,6 @@
         <li><a href="bbclient.html#module-bbclient.bbcommon">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     bbclient.bbevent
 
@@ -159,13 +159,23 @@
         <li><a href="bbclient.html#module-bbclient.bbevent">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bbclient.html#bbclient.bbevent.BBEventBase">BBEventBase (class in bbclient.bbevent)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbcommon.BBFeature">BBFeature (class in bbclient.bbcommon)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbcommon.BBProjectNotFoundError">BBProjectNotFoundError</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.build_file">build_file() (bbclient.bbclient.BBClient method)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.build_file_async">build_file_async() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.build_targets">build_targets() (bbclient.bbclient.BBClient method)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.build_targets_async">build_targets_async() (bbclient.bbclient.BBClient method)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbevent.BuildBaseEvent">BuildBaseEvent (class in bbclient.bbevent)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbevent.BuildInitEvent">BuildInitEvent (class in bbclient.bbevent)</a>
 </li>
@@ -183,17 +193,25 @@
 </li>
       <li><a href="bbclient.html#bbclient.bbevent.CacheLoadStartedEvent">CacheLoadStartedEvent (class in bbclient.bbevent)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.CallBack.callback">callback (bbclient.bbclient.CallBack attribute)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbclient.CallBack">CallBack (class in bbclient.bbclient)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.client_complete">client_complete() (bbclient.bbclient.BBClient method)</a>
 </li>
-      <li><a href="bbclient.html#bbclient.bbevent.CommandCompletedEvent">CommandCompletedEvent (class in bbclient.bbevent)</a>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.client_complete_async">client_complete_async() (bbclient.bbclient.BBClient method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="bbclient.html#bbclient.bbevent.CommandCompletedEvent">CommandCompletedEvent (class in bbclient.bbevent)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbevent.CommandExitEvent">CommandExitEvent (class in bbclient.bbevent)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbevent.CommandFailedEvent">CommandFailedEvent (class in bbclient.bbevent)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.compare_revisions">compare_revisions() (bbclient.bbclient.BBClient method)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.compare_revisions_async">compare_revisions_async() (bbclient.bbclient.BBClient method)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbevent.ConfigFilePathFoundEvent">ConfigFilePathFoundEvent (class in bbclient.bbevent)</a>
 </li>
@@ -245,9 +263,11 @@
 </li>
       <li><a href="bbclient.html#bbclient.bbevent.BBEventBase.event_name">event_name (bbclient.bbevent.BBEventBase attribute)</a>
 </li>
-      <li><a href="bbclient.html#bbclient.bbevent.BuildInitEvent.EVENT_NAME">EVENT_NAME (bbclient.bbevent.BuildInitEvent attribute)</a>
+      <li><a href="bbclient.html#bbclient.bbevent.BuildBaseEvent.EVENT_NAME">EVENT_NAME (bbclient.bbevent.BuildBaseEvent attribute)</a>
 
       <ul>
+        <li><a href="bbclient.html#bbclient.bbevent.BuildInitEvent.EVENT_NAME">(bbclient.bbevent.BuildInitEvent attribute)</a>
+</li>
         <li><a href="bbclient.html#bbclient.bbevent.BuildStartedEvent.EVENT_NAME">(bbclient.bbevent.BuildStartedEvent attribute)</a>
 </li>
         <li><a href="bbclient.html#bbclient.bbevent.CacheLoadCompletedEvent.EVENT_NAME">(bbclient.bbevent.CacheLoadCompletedEvent attribute)</a>
@@ -280,6 +300,12 @@
 </li>
         <li><a href="bbclient.html#bbclient.bbevent.NoProviderEvent.EVENT_NAME">(bbclient.bbevent.NoProviderEvent attribute)</a>
 </li>
+        <li><a href="bbclient.html#bbclient.bbevent.OperationCompletedEvent.EVENT_NAME">(bbclient.bbevent.OperationCompletedEvent attribute)</a>
+</li>
+        <li><a href="bbclient.html#bbclient.bbevent.OperationProgress.EVENT_NAME">(bbclient.bbevent.OperationProgress attribute)</a>
+</li>
+        <li><a href="bbclient.html#bbclient.bbevent.OperationStarted.EVENT_NAME">(bbclient.bbevent.OperationStarted attribute)</a>
+</li>
         <li><a href="bbclient.html#bbclient.bbevent.ProcessFinishedEvent.EVENT_NAME">(bbclient.bbevent.ProcessFinishedEvent attribute)</a>
 </li>
         <li><a href="bbclient.html#bbclient.bbevent.ProcessProgressEvent.EVENT_NAME">(bbclient.bbevent.ProcessProgressEvent attribute)</a>
@@ -288,6 +314,8 @@
 </li>
         <li><a href="bbclient.html#bbclient.bbevent.ReachableStampsEvent.EVENT_NAME">(bbclient.bbevent.ReachableStampsEvent attribute)</a>
 </li>
+        <li><a href="bbclient.html#bbclient.bbevent.RecipeEvent.EVENT_NAME">(bbclient.bbevent.RecipeEvent attribute)</a>
+</li>
         <li><a href="bbclient.html#bbclient.bbevent.RecipeParsedEvent.EVENT_NAME">(bbclient.bbevent.RecipeParsedEvent attribute)</a>
 </li>
         <li><a href="bbclient.html#bbclient.bbevent.RecipePostKeyExpansionEvent.EVENT_NAME">(bbclient.bbevent.RecipePostKeyExpansionEvent attribute)</a>
@@ -295,6 +323,8 @@
         <li><a href="bbclient.html#bbclient.bbevent.RecipePreFinaliseEvent.EVENT_NAME">(bbclient.bbevent.RecipePreFinaliseEvent attribute)</a>
 </li>
         <li><a href="bbclient.html#bbclient.bbevent.RecipeTaskPreProcessEvent.EVENT_NAME">(bbclient.bbevent.RecipeTaskPreProcessEvent attribute)</a>
+</li>
+        <li><a href="bbclient.html#bbclient.bbevent.runQueueEvent.EVENT_NAME">(bbclient.bbevent.runQueueEvent attribute)</a>
 </li>
         <li><a href="bbclient.html#bbclient.bbevent.runQueueTaskCompletedEvent.EVENT_NAME">(bbclient.bbevent.runQueueTaskCompletedEvent attribute)</a>
 </li>
@@ -306,7 +336,11 @@
 </li>
         <li><a href="bbclient.html#bbclient.bbevent.sceneQueueCompleteEvent.EVENT_NAME">(bbclient.bbevent.sceneQueueCompleteEvent attribute)</a>
 </li>
+        <li><a href="bbclient.html#bbclient.bbevent.sceneQueueEvent.EVENT_NAME">(bbclient.bbevent.sceneQueueEvent attribute)</a>
+</li>
         <li><a href="bbclient.html#bbclient.bbevent.TargetsTreeGeneratedEvent.EVENT_NAME">(bbclient.bbevent.TargetsTreeGeneratedEvent attribute)</a>
+</li>
+        <li><a href="bbclient.html#bbclient.bbevent.TaskBase.EVENT_NAME">(bbclient.bbevent.TaskBase attribute)</a>
 </li>
         <li><a href="bbclient.html#bbclient.bbevent.TaskFailedEvent.EVENT_NAME">(bbclient.bbevent.TaskFailedEvent attribute)</a>
 </li>
@@ -337,15 +371,23 @@
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.find_config_file_path">find_config_file_path() (bbclient.bbclient.BBClient method)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.find_config_file_path_async">find_config_file_path_async() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.find_config_files">find_config_files() (bbclient.bbclient.BBClient method)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.find_config_files_async">find_config_files_async() (bbclient.bbclient.BBClient method)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.find_files_matching_in_dir">find_files_matching_in_dir() (bbclient.bbclient.BBClient method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.find_files_matching_in_dir_async">find_files_matching_in_dir_async() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.find_providers">find_providers() (bbclient.bbclient.BBClient method)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.find_sigInfo">find_sigInfo() (bbclient.bbclient.BBClient method)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.find_sigInfo_async">find_sigInfo_async() (bbclient.bbclient.BBClient method)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbcommon.FindProvidersResult">FindProvidersResult (class in bbclient.bbcommon)</a>
 </li>
@@ -363,9 +405,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.generate_dep_tree_event">generate_dep_tree_event() (bbclient.bbclient.BBClient method)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.generate_dep_tree_event_async">generate_dep_tree_event_async() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.generate_dot_graph">generate_dot_graph() (bbclient.bbclient.BBClient method)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.generate_dot_graph_async">generate_dot_graph_async() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.generate_targets_tree">generate_targets_tree() (bbclient.bbclient.BBClient method)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.generate_targets_tree_async">generate_targets_tree_async() (bbclient.bbclient.BBClient method)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.get_all_appends">get_all_appends() (bbclient.bbclient.BBClient method)</a>
 </li>
@@ -374,8 +422,6 @@
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.get_bb_file_priority">get_bb_file_priority() (bbclient.bbclient.BBClient method)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.get_default_preference">get_default_preference() (bbclient.bbclient.BBClient method)</a>
-</li>
-      <li><a href="bbclient.html#bbclient.bbclient.BBClient.get_event">get_event() (bbclient.bbclient.BBClient method)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.get_file_appends">get_file_appends() (bbclient.bbclient.BBClient method)</a>
 </li>
@@ -401,10 +447,10 @@
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.get_runtime_depends">get_runtime_depends() (bbclient.bbclient.BBClient method)</a>
 </li>
-      <li><a href="bbclient.html#bbclient.bbclient.BBClient.get_runtime_providers">get_runtime_providers() (bbclient.bbclient.BBClient method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.get_runtime_providers">get_runtime_providers() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.get_runtime_recommends">get_runtime_recommends() (bbclient.bbclient.BBClient method)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.get_set_variable">get_set_variable() (bbclient.bbclient.BBClient method)</a>
@@ -552,6 +598,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bbclient.html#bbclient.bbcommon.VariableHistory.op">op (bbclient.bbcommon.VariableHistory attribute)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbevent.OperationCompletedEvent">OperationCompletedEvent (class in bbclient.bbevent)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="bbclient.html#bbclient.bbevent.OperationProgress">OperationProgress (class in bbclient.bbevent)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbevent.OperationStarted">OperationStarted (class in bbclient.bbevent)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -578,6 +632,8 @@
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.parse_files">parse_files() (bbclient.bbclient.BBClient method)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.parse_files_async">parse_files_async() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.parse_recipe_file">parse_recipe_file() (bbclient.bbclient.BBClient method)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbcommon.VariableHistory.parsing">parsing (bbclient.bbcommon.VariableHistory attribute)</a>
@@ -586,10 +642,10 @@
 </li>
       <li><a href="bbclient.html#bbclient.bbcommon.GetLayerPrioritiesResult.path2">path2 (bbclient.bbcommon.GetLayerPrioritiesResult attribute)</a>
 </li>
-      <li><a href="bbclient.html#bbclient.bbcommon.GetRecipeVersionsResult.pe">pe (bbclient.bbcommon.GetRecipeVersionsResult attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="bbclient.html#bbclient.bbcommon.GetRecipeVersionsResult.pe">pe (bbclient.bbcommon.GetRecipeVersionsResult attribute)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbcommon.GetSkippedRecipesResult.pn">pn (bbclient.bbcommon.GetSkippedRecipesResult attribute)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbcommon.GetRecipeVersionsResult.pr">pr (bbclient.bbcommon.GetRecipeVersionsResult attribute)</a>
@@ -654,10 +710,12 @@
         <li><a href="bbclient.html#bbclient.bbcommon.GetRProvidersResult.recipe_file_paths">(bbclient.bbcommon.GetRProvidersResult attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bbclient.html#bbclient.bbcommon.GetRecipesResult.recipe_files">recipe_files (bbclient.bbcommon.GetRecipesResult attribute)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbevent.RecipeEvent">RecipeEvent (class in bbclient.bbevent)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bbclient.html#bbclient.bbevent.RecipeParsedEvent">RecipeParsedEvent (class in bbclient.bbevent)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbevent.RecipePostKeyExpansionEvent">RecipePostKeyExpansionEvent (class in bbclient.bbevent)</a>
@@ -668,11 +726,17 @@
 </li>
       <li><a href="bbclient.html#bbclient.bbevent.RecipeTaskPreProcessEvent">RecipeTaskPreProcessEvent (class in bbclient.bbevent)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.register_callback">register_callback() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbcommon.FindProvidersResult.required_version">required_version (bbclient.bbcommon.FindProvidersResult attribute)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.reset_cooker">reset_cooker() (bbclient.bbclient.BBClient method)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.reset_cooker_async">reset_cooker_async() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbcommon.GetSkippedRecipesResult.rprovides">rprovides (bbclient.bbcommon.GetSkippedRecipesResult attribute)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbevent.runQueueEvent">runQueueEvent (class in bbclient.bbevent)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbevent.runQueueTaskCompletedEvent">runQueueTaskCompletedEvent (class in bbclient.bbevent)</a>
 </li>
@@ -690,6 +754,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bbclient.html#bbclient.bbevent.sceneQueueCompleteEvent">sceneQueueCompleteEvent (class in bbclient.bbevent)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbevent.sceneQueueEvent">sceneQueueEvent (class in bbclient.bbevent)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbcommon.BBFeature.SEND_SANITYEVENTS">SEND_SANITYEVENTS (bbclient.bbcommon.BBFeature attribute)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.set_config">set_config() (bbclient.bbclient.BBClient method)</a>
@@ -702,13 +768,19 @@
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.set_variable">set_variable() (bbclient.bbclient.BBClient method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.show_environment">show_environment() (bbclient.bbclient.BBClient method)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.show_environment_async">show_environment_async() (bbclient.bbclient.BBClient method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.show_environment_target">show_environment_target() (bbclient.bbclient.BBClient method)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.show_environment_target_async">show_environment_target_async() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.show_versions">show_versions() (bbclient.bbclient.BBClient method)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.show_versions_async">show_versions_async() (bbclient.bbclient.BBClient method)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbcommon.GetSkippedRecipesResult.skipreason">skipreason (bbclient.bbcommon.GetSkippedRecipesResult attribute)</a>
 </li>
@@ -720,15 +792,21 @@
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.stop_server">stop_server() (bbclient.bbclient.BBClient method)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.syncronize_decorator">syncronize_decorator() (bbclient.bbclient.BBClient method)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="bbclient.html#bbclient.bbclient.CallBack.target_event_type">target_event_type (bbclient.bbclient.CallBack attribute)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbcommon.GetAllAppendsResult.target_recipe_name">target_recipe_name (bbclient.bbcommon.GetAllAppendsResult attribute)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbevent.TargetsTreeGeneratedEvent">TargetsTreeGeneratedEvent (class in bbclient.bbevent)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbevent.TaskBase">TaskBase (class in bbclient.bbevent)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbevent.TaskFailedEvent">TaskFailedEvent (class in bbclient.bbevent)</a>
 </li>
@@ -742,6 +820,8 @@
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.test_cooker_command_event">test_cooker_command_event() (bbclient.bbclient.BBClient method)</a>
 </li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.test_cooker_command_event_async">test_cooker_command_event_async() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbevent.TreeDataPreparationCompletedEvent">TreeDataPreparationCompletedEvent (class in bbclient.bbevent)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbevent.TreeDataPreparationProgressEvent">TreeDataPreparationProgressEvent (class in bbclient.bbevent)</a>
@@ -749,6 +829,8 @@
       <li><a href="bbclient.html#bbclient.bbevent.TreeDataPreparationStartedEvent">TreeDataPreparationStartedEvent (class in bbclient.bbevent)</a>
 </li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.trigger_event">trigger_event() (bbclient.bbclient.BBClient method)</a>
+</li>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.trigger_event_async">trigger_event_async() (bbclient.bbclient.BBClient method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -760,6 +842,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="bbclient.html#bbclient.bbclient.BBClient.unregister_callback">unregister_callback() (bbclient.bbclient.BBClient method)</a>
+</li>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.update_config">update_config() (bbclient.bbclient.BBClient method)</a>
 </li>
   </ul></td>
@@ -783,10 +867,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bbclient.html#bbclient.bbclient.BBClient.wait_done_async">wait_done_async() (bbclient.bbclient.BBClient method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bbclient.html#bbclient.bbclient.BBClient.wait_event">wait_event() (bbclient.bbclient.BBClient method)</a>
 </li>
   </ul></td>
 </tr></table>

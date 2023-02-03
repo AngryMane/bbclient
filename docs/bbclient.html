@@ -87,9 +87,9 @@
 <p>This file provides client class for bitbake server.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbclient.</span></span><span class="sig-name descname"><span class="pre">BBClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_abs_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_script_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">':'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">logging.Logger</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbclient.</span></span><span class="sig-name descname"><span class="pre">BBClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_abs_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_script_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">':'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logging_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Client for bitbake RPC Server</p>
+<p>Client for bitbake Server</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.project_path">
 <span class="sig-name descname"><span class="pre">project_path</span></span><a class="headerlink" href="#bbclient.bbclient.BBClient.project_path" title="Permalink to this definition"></a></dt>
@@ -170,7 +170,19 @@
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.build_file">
 <span class="sig-name descname"><span class="pre">build_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">internal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.build_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.build_file" title="Permalink to this definition"></a></dt>
 <dd><p>Build recipe file</p>
-<p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to build_file_async is complete.
+For more details, see build_file_async.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.build_file_async">
+<span class="sig-name descname"><span class="pre">build_file_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">internal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.build_file_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.build_file_async" title="Permalink to this definition"></a></dt>
+<dd><p>Build recipe file</p>
+<p>This command doen’t resolve any dependencies. If you also want to buid dependencies, please use build_targets command.
+This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
 <li><p>bb.event.BuildInit</p></li>
 <li><p>bb.event.RecipePreFinalise</p></li>
@@ -201,7 +213,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">If you want to monitor BuildStarted and BuildCompleted event, use get_event.</div>
+<div class="line">If you want to monitor BuildStarted and BuildCompleted event, use register_callback.</div>
 </div>
 </div>
 </dd></dl>
@@ -209,6 +221,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.build_targets">
 <span class="sig-name descname"><span class="pre">build_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.build_targets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.build_targets" title="Permalink to this definition"></a></dt>
+<dd><p>Build package</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to build_targets_async is complete.
+For more details, see build_targets_async.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.build_targets_async">
+<span class="sig-name descname"><span class="pre">build_targets_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.build_targets_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.build_targets_async" title="Permalink to this definition"></a></dt>
 <dd><p>Build package</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -252,6 +275,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.client_complete">
 <span class="sig-name descname"><span class="pre">client_complete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.client_complete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.client_complete" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.client_complete_async">
+<span class="sig-name descname"><span class="pre">client_complete_async</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.client_complete_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.client_complete_async" title="Permalink to this definition"></a></dt>
 <dd><p>Notify client will be close</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -269,6 +303,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.compare_revisions">
 <span class="sig-name descname"><span class="pre">compare_revisions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.compare_revisions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.compare_revisions" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.compare_revisions_async">
+<span class="sig-name descname"><span class="pre">compare_revisions_async</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.compare_revisions_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.compare_revisions_async" title="Permalink to this definition"></a></dt>
 <dd><p>Exit async command</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -534,6 +579,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.find_config_file_path">
 <span class="sig-name descname"><span class="pre">find_config_file_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.find_config_file_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.find_config_file_path" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.find_config_file_path_async">
+<span class="sig-name descname"><span class="pre">find_config_file_path_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.find_config_file_path_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.find_config_file_path_async" title="Permalink to this definition"></a></dt>
 <dd><p>Find config file path</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -561,6 +617,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.find_config_files">
 <span class="sig-name descname"><span class="pre">find_config_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.find_config_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.find_config_files" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.find_config_files_async">
+<span class="sig-name descname"><span class="pre">find_config_files_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.find_config_files_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.find_config_files_async" title="Permalink to this definition"></a></dt>
 <dd><p>Find Config files that define specified variable.</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -588,6 +655,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.find_files_matching_in_dir">
 <span class="sig-name descname"><span class="pre">find_files_matching_in_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_file_name_substring</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.find_files_matching_in_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.find_files_matching_in_dir" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.find_files_matching_in_dir_async">
+<span class="sig-name descname"><span class="pre">find_files_matching_in_dir_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_file_name_substring</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.find_files_matching_in_dir_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.find_files_matching_in_dir_async" title="Permalink to this definition"></a></dt>
 <dd><p>Find files that matches the regex_pattern from the directory.</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -637,6 +715,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.find_sigInfo">
 <span class="sig-name descname"><span class="pre">find_sigInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name_with_multi_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.find_sigInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.find_sigInfo" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.find_sigInfo_async">
+<span class="sig-name descname"><span class="pre">find_sigInfo_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name_with_multi_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.find_sigInfo_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.find_sigInfo_async" title="Permalink to this definition"></a></dt>
 <dd><p>Find signature info files via the signature generator(?)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -659,6 +748,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.generate_dep_tree_event">
 <span class="sig-name descname"><span class="pre">generate_dep_tree_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.generate_dep_tree_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.generate_dep_tree_event" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.generate_dep_tree_event_async">
+<span class="sig-name descname"><span class="pre">generate_dep_tree_event_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.generate_dep_tree_event_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.generate_dep_tree_event_async" title="Permalink to this definition"></a></dt>
 <dd><p>Request dependency tree information</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -699,6 +799,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.generate_dot_graph">
 <span class="sig-name descname"><span class="pre">generate_dot_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.generate_dot_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.generate_dot_graph" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.generate_dot_graph_async">
+<span class="sig-name descname"><span class="pre">generate_dot_graph_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.generate_dot_graph_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.generate_dot_graph_async" title="Permalink to this definition"></a></dt>
 <dd><p>Generate task dependency graph(task-depends.dot)</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -738,6 +849,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.generate_targets_tree">
 <span class="sig-name descname"><span class="pre">generate_targets_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bb_klass_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.generate_targets_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.generate_targets_tree" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.generate_targets_tree_async">
+<span class="sig-name descname"><span class="pre">generate_targets_tree_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bb_klass_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.generate_targets_tree_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.generate_targets_tree_async" title="Permalink to this definition"></a></dt>
 <dd><p>Generate target tree</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -855,26 +977,6 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.get_event">
-<span class="sig-name descname"><span class="pre">get_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><span class="pre">bbclient.bbevent.BBEventBase</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.get_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.get_event" title="Permalink to this definition"></a></dt>
-<dd><p>Get oldest event</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>timeout</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – timeout. if timeout, return None</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>event notification objects. See bbcommon.py</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Optional[<a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase">BBEventBase</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.get_file_appends">
 <span class="sig-name descname"><span class="pre">get_file_appends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.get_file_appends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.get_file_appends" title="Permalink to this definition"></a></dt>
 <dd><p>Get append files</p>
@@ -941,12 +1043,6 @@
 <dd class="field-odd"><p>List[<a class="reference internal" href="#bbclient.bbcommon.GetRProvidersResult" title="bbclient.bbcommon.GetRProvidersResult">GetRProvidersResult</a>]</p>
 </dd>
 </dl>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<div class="line-block">
-<div class="line">This command doesn’t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can’t support this type.</div>
-</div>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
@@ -1016,12 +1112,6 @@
 <dd class="field-odd"><p>List[<a class="reference internal" href="#bbclient.bbcommon.GetRecipePackagesResult" title="bbclient.bbcommon.GetRecipePackagesResult">GetRecipePackagesResult</a>]</p>
 </dd>
 </dl>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<div class="line-block">
-<div class="line">This command doesn’t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can’t support this type.</div>
-</div>
-</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1043,12 +1133,6 @@
 <dd class="field-odd"><p>List[<a class="reference internal" href="#bbclient.bbcommon.GetRecipePackagesDynamicResult" title="bbclient.bbcommon.GetRecipePackagesDynamicResult">GetRecipePackagesDynamicResult</a>]</p>
 </dd>
 </dl>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<div class="line-block">
-<div class="line">This command doesn’t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can’t support this type.</div>
-</div>
-</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1252,7 +1336,7 @@
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is just for debuggging.</p>
+<p>This is just for logging.</p>
 </div>
 </dd></dl>
 
@@ -1300,6 +1384,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.parse_files">
 <span class="sig-name descname"><span class="pre">parse_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.parse_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.parse_files" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.parse_files_async">
+<span class="sig-name descname"><span class="pre">parse_files_async</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.parse_files_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.parse_files_async" title="Permalink to this definition"></a></dt>
 <dd><p>Parse all bb files.</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -1345,8 +1440,40 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.register_callback">
+<span class="sig-name descname"><span class="pre">register_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><span class="pre">bbclient.bbevent.BBEventBase</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><span class="pre">bbclient.bbevent.BBEventBase</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uuid.UUID</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.register_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.register_callback" title="Permalink to this definition"></a></dt>
+<dd><p>Register callback functions for events</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
+<li><p><strong>target</strong> (<em>Type</em><em>[</em><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><em>BBEventBase</em></a><em>]</em>) – trigger event type for callback function</p></li>
+<li><p><strong>callback</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a><em>, </em><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><em>BBEventBase</em></a><em>]</em><em>, </em><em>None</em><em>]</em>) – callback function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Callback id. The user can use this to unregister.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>uuid.UUID</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.reset_cooker">
 <span class="sig-name descname"><span class="pre">reset_cooker</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.reset_cooker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.reset_cooker" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.reset_cooker_async">
+<span class="sig-name descname"><span class="pre">reset_cooker_async</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.reset_cooker_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.reset_cooker_async" title="Permalink to this definition"></a></dt>
 <dd><p>Reset cooker state and caches.</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -1481,6 +1608,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.show_environment">
 <span class="sig-name descname"><span class="pre">show_environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bb_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.show_environment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.show_environment" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.show_environment_async">
+<span class="sig-name descname"><span class="pre">show_environment_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bb_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.show_environment_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.show_environment_async" title="Permalink to this definition"></a></dt>
 <dd><p>Show variables for specified recipe</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -1516,6 +1654,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.show_environment_target">
 <span class="sig-name descname"><span class="pre">show_environment_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.show_environment_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.show_environment_target" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.show_environment_target_async">
+<span class="sig-name descname"><span class="pre">show_environment_target_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.show_environment_target_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.show_environment_target_async" title="Permalink to this definition"></a></dt>
 <dd><p>Show variables for specified package</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -1543,6 +1692,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.show_versions">
 <span class="sig-name descname"><span class="pre">show_versions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.show_versions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.show_versions" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.show_versions_async">
+<span class="sig-name descname"><span class="pre">show_versions_async</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.show_versions_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.show_versions_async" title="Permalink to this definition"></a></dt>
 <dd><p>Show all packages versions</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -1565,11 +1725,17 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.start_server">
-<span class="sig-name descname"><span class="pre">start_server</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.start_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.start_server" title="Permalink to this definition"></a></dt>
-<dd><p>Start bitbake XML RPC server</p>
+<span class="sig-name descname"><span class="pre">start_server</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.start_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.start_server" title="Permalink to this definition"></a></dt>
+<dd><p>Start bitbake server</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>start_server result</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1611,7 +1777,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.stop_server">
 <span class="sig-name descname"><span class="pre">stop_server</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.stop_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.stop_server" title="Permalink to this definition"></a></dt>
-<dd><p>Stop bitbake XML RPC server</p>
+<dd><p>Stop bitbake server</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p>
@@ -1620,8 +1786,34 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.syncronize_decorator">
+<span class="sig-name descname"><span class="pre">syncronize_decorator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.syncronize_decorator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.syncronize_decorator" title="Permalink to this definition"></a></dt>
+<dd><p>Decorator for syncronize</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>Callable</em>) – target function</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This decorator automatically waits for async</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.test_cooker_command_event">
 <span class="sig-name descname"><span class="pre">test_cooker_command_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.test_cooker_command_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.test_cooker_command_event" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.test_cooker_command_event_async">
+<span class="sig-name descname"><span class="pre">test_cooker_command_event_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.test_cooker_command_event_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.test_cooker_command_event_async" title="Permalink to this definition"></a></dt>
 <dd><p>Dummy command</p>
 <p>This command will send following events. If you want to wait done, please use wait_done_async.</p>
 <ul class="simple">
@@ -1643,6 +1835,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.trigger_event">
 <span class="sig-name descname"><span class="pre">trigger_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evene_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.trigger_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.trigger_event" title="Permalink to this definition"></a></dt>
+<dd><p>xxxxx</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will block until complete to xxxxx is complete.
+For more details, see xxxxx.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.trigger_event_async">
+<span class="sig-name descname"><span class="pre">trigger_event_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evene_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.trigger_event_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.trigger_event_async" title="Permalink to this definition"></a></dt>
 <dd><p>Send event</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1655,9 +1858,23 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">Send evene_name event. User can receive this event by get_event.</div>
+<div class="line">Send evene_name event. User can receive this event by register_callback.</div>
 </div>
 </div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.unregister_callback">
+<span class="sig-name descname"><span class="pre">unregister_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unique_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid.UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.unregister_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.unregister_callback" title="Permalink to this definition"></a></dt>
+<dd><p>Unregister callback functions for events</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
+<li><p><strong>unique_id</strong> (<em>uuid.UUID</em>) – Callback id. The user can get this when registering.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1705,32 +1922,33 @@
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.wait_event">
-<span class="sig-name descname"><span class="pre">wait_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><span class="pre">bbclient.bbevent.BBEventBase</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><span class="pre">bbclient.bbevent.BBEventBase</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.wait_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.wait_event" title="Permalink to this definition"></a></dt>
-<dd><p>Wait specific event</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbclient.CallBack">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbclient.</span></span><span class="sig-name descname"><span class="pre">CallBack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_event_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><span class="pre">bbclient.bbevent.BBEventBase</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><span class="pre">bbclient.bbevent.BBEventBase</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbclient.html#CallBack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.CallBack" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>CallBack for bitbake events</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbclient.CallBack.target_event_type">
+<span class="sig-name descname"><span class="pre">target_event_type</span></span><a class="headerlink" href="#bbclient.bbclient.CallBack.target_event_type" title="Permalink to this definition"></a></dt>
+<dd><p>trigger event type for callback function</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
-<li><p><strong>event_types</strong> (<em>List</em><em>[</em><em>Type</em><em>[</em><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><em>BBEventBase</em></a><em>]</em><em>]</em>) – event types you wait for. BBEventBase and its inherits types is defined in bbcommon.py.</p></li>
-<li><p><strong>timeout</strong> (<em>float</em>) – timeout. (seconds)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The event you wait for or None</p>
-</dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>Optional[<a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase">BBEventBase</a>]</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<div class="line-block">
-<div class="line">This function will pop events from event queue. This event queue is reused between many commands, so this queue may have events from previous commands.</div>
-<div class="line">When you wait bb.command.CommandCompleted event, please confirm there is no left bb.command.CommandCompleted event from previous command.</div>
-</div>
-</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbclient.CallBack.callback">
+<span class="sig-name descname"><span class="pre">callback</span></span><a class="headerlink" href="#bbclient.bbclient.CallBack.callback" title="Permalink to this definition"></a></dt>
+<dd><p>callback function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Callable[[“BBClient”, <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase">BBEventBase</a>], None]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -1787,6 +2005,23 @@
 <dt class="sig sig-object py" id="bbclient.bbcommon.BBFeature.SEND_SANITYEVENTS">
 <span class="sig-name descname"><span class="pre">SEND_SANITYEVENTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#bbclient.bbcommon.BBFeature.SEND_SANITYEVENTS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="bbclient.bbcommon.BBProjectNotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbcommon.</span></span><span class="sig-name descname"><span class="pre">BBProjectNotFoundError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbcommon.html#BBProjectNotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbcommon.BBProjectNotFoundError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.BBProjectNotFoundError.__project_path">
+<span class="sig-name descname"><span class="pre">__project_path</span></span><a class="headerlink" href="#bbclient.bbcommon.BBProjectNotFoundError.__project_path" title="Permalink to this definition"></a></dt>
+<dd><p>project path provided by user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -2533,7 +2768,7 @@ implement default like this:</p>
 <p>This file provides definition for events from bitbake server</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.BBEventBase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">BBEventBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#BBEventBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.BBEventBase" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">BBEventBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#BBEventBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.BBEventBase" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class for all the events</p>
 <dl class="py attribute">
@@ -2572,9 +2807,20 @@ implement default like this:</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbevent.BuildBaseEvent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">BuildBaseEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#BuildBaseEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.BuildBaseEvent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbevent.BuildBaseEvent.EVENT_NAME">
+<span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.BuildBase'</span></em><a class="headerlink" href="#bbclient.bbevent.BuildBaseEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.BuildInitEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">BuildInitEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#BuildInitEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.BuildInitEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BuildBaseEvent" title="bbclient.bbevent.BuildBaseEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BuildBaseEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.BuildInitEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.BuildInit'</span></em><a class="headerlink" href="#bbclient.bbevent.BuildInitEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2585,7 +2831,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.BuildStartedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">BuildStartedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#BuildStartedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.BuildStartedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BuildBaseEvent" title="bbclient.bbevent.BuildBaseEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BuildBaseEvent</span></code></a>, <a class="reference internal" href="#bbclient.bbevent.OperationStarted" title="bbclient.bbevent.OperationStarted"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.OperationStarted</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.BuildStartedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.BuildStarted'</span></em><a class="headerlink" href="#bbclient.bbevent.BuildStartedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2596,7 +2842,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.CacheLoadCompletedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">CacheLoadCompletedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#CacheLoadCompletedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.CacheLoadCompletedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.OperationCompletedEvent" title="bbclient.bbevent.OperationCompletedEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.OperationCompletedEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.CacheLoadCompletedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.CacheLoadCompleted'</span></em><a class="headerlink" href="#bbclient.bbevent.CacheLoadCompletedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2607,7 +2853,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.CacheLoadProgressEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">CacheLoadProgressEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#CacheLoadProgressEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.CacheLoadProgressEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.OperationProgress" title="bbclient.bbevent.OperationProgress"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.OperationProgress</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.CacheLoadProgressEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.CacheLoadProgress'</span></em><a class="headerlink" href="#bbclient.bbevent.CacheLoadProgressEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2618,7 +2864,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.CacheLoadStartedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">CacheLoadStartedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#CacheLoadStartedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.CacheLoadStartedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.OperationStarted" title="bbclient.bbevent.OperationStarted"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.OperationStarted</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.CacheLoadStartedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.CacheLoadStarted'</span></em><a class="headerlink" href="#bbclient.bbevent.CacheLoadStartedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2639,7 +2885,7 @@ implement default like this:</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.CommandExitEvent">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">CommandExitEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#CommandExitEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.CommandExitEvent" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">CommandExitEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'bb.command.CommandExit'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#CommandExitEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.CommandExitEvent" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.CommandExitEvent.EVENT_NAME">
@@ -2651,7 +2897,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.CommandFailedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">CommandFailedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#CommandFailedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.CommandFailedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.CommandExitEvent" title="bbclient.bbevent.CommandExitEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.CommandExitEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.CommandFailedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.command.CommandFailed'</span></em><a class="headerlink" href="#bbclient.bbevent.CommandFailedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2759,6 +3005,39 @@ implement default like this:</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbevent.OperationCompletedEvent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">OperationCompletedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#OperationCompletedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.OperationCompletedEvent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbevent.OperationCompletedEvent.EVENT_NAME">
+<span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.OperationCompletedEvent'</span></em><a class="headerlink" href="#bbclient.bbevent.OperationCompletedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbevent.OperationProgress">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">OperationProgress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#OperationProgress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.OperationProgress" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbevent.OperationProgress.EVENT_NAME">
+<span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.OperationProgress'</span></em><a class="headerlink" href="#bbclient.bbevent.OperationProgress.EVENT_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbevent.OperationStarted">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">OperationStarted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#OperationStarted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.OperationStarted" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbevent.OperationStarted.EVENT_NAME">
+<span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.OperationStarted'</span></em><a class="headerlink" href="#bbclient.bbevent.OperationStarted.EVENT_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.ProcessFinishedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">ProcessFinishedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#ProcessFinishedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.ProcessFinishedEvent" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
@@ -2803,9 +3082,20 @@ implement default like this:</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbevent.RecipeEvent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">RecipeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#RecipeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.RecipeEvent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbevent.RecipeEvent.EVENT_NAME">
+<span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.RecipeEvent'</span></em><a class="headerlink" href="#bbclient.bbevent.RecipeEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.RecipeParsedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">RecipeParsedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#RecipeParsedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.RecipeParsedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.RecipeEvent" title="bbclient.bbevent.RecipeEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.RecipeEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.RecipeParsedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.RecipeParsed'</span></em><a class="headerlink" href="#bbclient.bbevent.RecipeParsedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2816,7 +3106,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.RecipePostKeyExpansionEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">RecipePostKeyExpansionEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#RecipePostKeyExpansionEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.RecipePostKeyExpansionEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.RecipeEvent" title="bbclient.bbevent.RecipeEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.RecipeEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.RecipePostKeyExpansionEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.RecipePostKeyExpansion'</span></em><a class="headerlink" href="#bbclient.bbevent.RecipePostKeyExpansionEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2827,7 +3117,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.RecipePreFinaliseEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">RecipePreFinaliseEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#RecipePreFinaliseEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.RecipePreFinaliseEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.RecipeEvent" title="bbclient.bbevent.RecipeEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.RecipeEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.RecipePreFinaliseEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.RecipePreFinalise'</span></em><a class="headerlink" href="#bbclient.bbevent.RecipePreFinaliseEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2838,7 +3128,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.RecipeTaskPreProcessEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">RecipeTaskPreProcessEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#RecipeTaskPreProcessEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.RecipeTaskPreProcessEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.RecipeEvent" title="bbclient.bbevent.RecipeEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.RecipeEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.RecipeTaskPreProcessEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.RecipeTaskPreProcess'</span></em><a class="headerlink" href="#bbclient.bbevent.RecipeTaskPreProcessEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2858,9 +3148,20 @@ implement default like this:</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbevent.TaskBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">TaskBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#TaskBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.TaskBase" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbevent.TaskBase.EVENT_NAME">
+<span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.build.TaskBase'</span></em><a class="headerlink" href="#bbclient.bbevent.TaskBase.EVENT_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.TaskFailedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">TaskFailedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#TaskFailedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.TaskFailedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.TaskBase" title="bbclient.bbevent.TaskBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.TaskBase</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.TaskFailedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.build.TaskFailed'</span></em><a class="headerlink" href="#bbclient.bbevent.TaskFailedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2882,7 +3183,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.TaskStartedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">TaskStartedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#TaskStartedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.TaskStartedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.TaskBase" title="bbclient.bbevent.TaskBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.TaskBase</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.TaskStartedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.build.TaskStarted'</span></em><a class="headerlink" href="#bbclient.bbevent.TaskStartedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2893,7 +3194,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.TaskSucceededEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">TaskSucceededEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#TaskSucceededEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.TaskSucceededEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.TaskBase" title="bbclient.bbevent.TaskBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.TaskBase</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.TaskSucceededEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.build.TaskSucceeded'</span></em><a class="headerlink" href="#bbclient.bbevent.TaskSucceededEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2904,7 +3205,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.TreeDataPreparationCompletedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">TreeDataPreparationCompletedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#TreeDataPreparationCompletedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.TreeDataPreparationCompletedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.OperationCompletedEvent" title="bbclient.bbevent.OperationCompletedEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.OperationCompletedEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.TreeDataPreparationCompletedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.TreeDataPreparationCompleted'</span></em><a class="headerlink" href="#bbclient.bbevent.TreeDataPreparationCompletedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2915,7 +3216,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.TreeDataPreparationProgressEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">TreeDataPreparationProgressEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#TreeDataPreparationProgressEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.TreeDataPreparationProgressEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.OperationProgress" title="bbclient.bbevent.OperationProgress"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.OperationProgress</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.TreeDataPreparationProgressEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.TreeDataPreparationProgress'</span></em><a class="headerlink" href="#bbclient.bbevent.TreeDataPreparationProgressEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2926,7 +3227,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.TreeDataPreparationStartedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">TreeDataPreparationStartedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#TreeDataPreparationStartedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.TreeDataPreparationStartedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.OperationStarted" title="bbclient.bbevent.OperationStarted"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.OperationStarted</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.TreeDataPreparationStartedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.event.TreeDataPreparationStarted'</span></em><a class="headerlink" href="#bbclient.bbevent.TreeDataPreparationStartedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2941,9 +3242,20 @@ implement default like this:</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbevent.runQueueEvent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">runQueueEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#runQueueEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.runQueueEvent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbevent.runQueueEvent.EVENT_NAME">
+<span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.runqueue.runQueueEvent'</span></em><a class="headerlink" href="#bbclient.bbevent.runQueueEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.runQueueTaskCompletedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">runQueueTaskCompletedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#runQueueTaskCompletedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.runQueueTaskCompletedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.runQueueEvent" title="bbclient.bbevent.runQueueEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.runQueueEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.runQueueTaskCompletedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.runqueue.runQueueTaskCompleted'</span></em><a class="headerlink" href="#bbclient.bbevent.runQueueTaskCompletedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2954,7 +3266,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.runQueueTaskFailedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">runQueueTaskFailedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#runQueueTaskFailedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.runQueueTaskFailedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.runQueueEvent" title="bbclient.bbevent.runQueueEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.runQueueEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.runQueueTaskFailedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.runqueue.runQueueTaskFailed'</span></em><a class="headerlink" href="#bbclient.bbevent.runQueueTaskFailedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2965,7 +3277,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.runQueueTaskSkippedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">runQueueTaskSkippedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#runQueueTaskSkippedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.runQueueTaskSkippedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.runQueueEvent" title="bbclient.bbevent.runQueueEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.runQueueEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.runQueueTaskSkippedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.runqueue.runQueueTaskSkipped'</span></em><a class="headerlink" href="#bbclient.bbevent.runQueueTaskSkippedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2976,7 +3288,7 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.runQueueTaskStartedEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">runQueueTaskStartedEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#runQueueTaskStartedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.runQueueTaskStartedEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.runQueueEvent" title="bbclient.bbevent.runQueueEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.runQueueEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.runQueueTaskStartedEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.runqueue.runQueueTaskStarted'</span></em><a class="headerlink" href="#bbclient.bbevent.runQueueTaskStartedEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
@@ -2987,10 +3299,21 @@ implement default like this:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="bbclient.bbevent.sceneQueueCompleteEvent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">sceneQueueCompleteEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#sceneQueueCompleteEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.sceneQueueCompleteEvent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.BBEventBase</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.sceneQueueEvent" title="bbclient.bbevent.sceneQueueEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.sceneQueueEvent</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.sceneQueueCompleteEvent.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.runqueue.sceneQueueComplete'</span></em><a class="headerlink" href="#bbclient.bbevent.sceneQueueCompleteEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbevent.sceneQueueEvent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbevent.</span></span><span class="sig-name descname"><span class="pre">sceneQueueEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbevent.html#sceneQueueEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbevent.sceneQueueEvent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bbclient.bbevent.runQueueEvent" title="bbclient.bbevent.runQueueEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">bbclient.bbevent.runQueueEvent</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbevent.sceneQueueEvent.EVENT_NAME">
+<span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.runqueue.sceneQueueEvent'</span></em><a class="headerlink" href="#bbclient.bbevent.sceneQueueEvent.EVENT_NAME" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

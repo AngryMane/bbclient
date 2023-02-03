@@ -68,9 +68,6 @@ npm install my-crazy-module --save
 * [specification](https://angrymane.github.io/bbclient/bbclient.html)  
 * [use case](https://angrymane.github.io/bbclient/usecase.html)  
 
-## Development setup
-
-TODO
 
 <!--
 Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
