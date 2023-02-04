@@ -20,9 +20,15 @@ def test_find_config_files_dunfell(dunfell_client: BBClient, file_regex: str, di
     __test_impl(dunfell_client, file_regex, directory, expect_event_types, expect_command_result)
 
 def __test_impl(client: BBClient, file_regex: str, directory: str, expect_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
-    client.find_files_matching_in_dir(file_regex, directory)
+    callback_monitors: List[CallbackMonitor] = []
+    callback_ids: List[int] = []
     for expect_event_type in expect_event_types:
-        ret: Optional[BBEventBase] = client.wait_event([expect_event_type])
-        assert isinstance(ret, FilesMatchingFoundEvent)
-    ret: Optional[BBEventBase] = client.wait_done_async()
-    assert isinstance(ret, expect_command_result)
+        callback_monitor: CallbackMonitor = CallbackMonitor()
+        callback_monitors.append(callback_monitor)
+        callback_id: int = client.register_callback(expect_event_type, callback_monitor.callback)
+        callback_ids.append(callback_id)
+    client.find_files_matching_in_dir(file_regex, directory)
+    for monitor in callback_monitors:
+        assert monitor.is_callback
+    for id in callback_ids:
+        client.unregister_callback(id)

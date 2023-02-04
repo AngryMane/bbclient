@@ -5,9 +5,8 @@ This file provides cli interface of bbclient
 
 from .bbclient import *
 
-import logging, json
+import json
 from argparse import ArgumentParser, Namespace, _SubParsersAction 
-from logging import Logger, StreamHandler, getLogger
 from typing import List, Union
 
 from collections import namedtuple

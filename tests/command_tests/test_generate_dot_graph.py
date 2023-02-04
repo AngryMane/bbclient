@@ -19,12 +19,15 @@ def test_generate_dot_graph_dunfell(dunfell_client: BBClient, targets: List[str]
     __test_impl(dunfell_client, targets, task)
 
 def __test_impl(client: BBClient, targets: List[str], task: str) -> None:
+    callback_monitors: List[CallbackMonitor] = []
+    callback_ids: List[int] = []
+    for expect_event_type in [TreeDataPreparationStartedEvent, TreeDataPreparationProgressEvent, TreeDataPreparationCompletedEvent]:
+        callback_monitor: CallbackMonitor = CallbackMonitor()
+        callback_monitors.append(callback_monitor)
+        callback_id: int = client.register_callback(expect_event_type, callback_monitor.callback)
+        callback_ids.append(callback_id)
     client.generate_dot_graph(targets, task)
-    ret: Optional[BBEventBase] = client.wait_event([TreeDataPreparationStartedEvent])
-    assert isinstance(ret, TreeDataPreparationStartedEvent)
-    ret: Optional[BBEventBase] = client.wait_event([TreeDataPreparationProgressEvent])
-    assert isinstance(ret, TreeDataPreparationProgressEvent)
-    ret: Optional[BBEventBase] = client.wait_event([TreeDataPreparationCompletedEvent])
-    assert isinstance(ret, TreeDataPreparationCompletedEvent)
-    ret: Optional[BBEventBase] = client.wait_done_async()
-    assert isinstance(ret, CommandCompletedEvent)
+    for monitor in callback_monitors:
+        assert monitor.is_callback
+    for id in callback_ids:
+        client.unregister_callback(id)

@@ -162,7 +162,7 @@ class ConfigFilesFoundEvent(BBEventBase):
     EVENT_NAME: str = "bb.event.ConfigFilesFound"
 
     def __init__(self: "ConfigFilesFoundEvent", data: Mapping[str, Any]) -> None:
-        super().__init__(self.EVENT_NAME)
+        super().__init__(self.EVENT_NAME, data)
         self.variable: str = data["_variable"]
         self.values: List[str] = data["_values"]
 
