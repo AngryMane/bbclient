@@ -19,14 +19,15 @@ def test_generate_targets_tree_dunfell(dunfell_client: BBClient, klass_file_path
     __test_impl(dunfell_client, klass_file_path, targets)
 
 def __test_impl(client: BBClient, klass_file_path: str, targets: List[str]) -> None:
+    callback_monitors: List[CallbackMonitor] = []
+    callback_ids: List[int] = []
+    for expect_event_type in [TreeDataPreparationStartedEvent, TreeDataPreparationProgressEvent, TreeDataPreparationCompletedEvent, TargetsTreeGeneratedEvent]:
+        callback_monitor: CallbackMonitor = CallbackMonitor()
+        callback_monitors.append(callback_monitor)
+        callback_id: int = client.register_callback(expect_event_type, callback_monitor.callback)
+        callback_ids.append(callback_id)
     client.generate_targets_tree(klass_file_path, targets)
-    ret: Optional[BBEventBase] = client.wait_event([TreeDataPreparationStartedEvent])
-    assert isinstance(ret, TreeDataPreparationStartedEvent)
-    ret: Optional[BBEventBase] = client.wait_event([TreeDataPreparationProgressEvent])
-    assert isinstance(ret, TreeDataPreparationProgressEvent)
-    ret: Optional[BBEventBase] = client.wait_event([TreeDataPreparationCompletedEvent])
-    assert isinstance(ret, TreeDataPreparationCompletedEvent)
-    ret: Optional[BBEventBase] = client.wait_event([TargetsTreeGeneratedEvent])
-    assert isinstance(ret, TargetsTreeGeneratedEvent)
-    ret: Optional[BBEventBase] = client.wait_done_async()
-    assert isinstance(ret, CommandCompletedEvent)
+    for monitor in callback_monitors:
+        assert monitor.is_callback
+    for id in callback_ids:
+        client.unregister_callback(id)

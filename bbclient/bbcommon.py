@@ -13,6 +13,18 @@ VariableHistory = namedtuple(
     ["parsing", "variable", "file", "line", "op", "detail", "flag", "func"],
 )
 
+class BBProjectNotFoundError(Exception):
+    """BBProjectNotFoundError
+
+    Attributes:
+        __project_path (str): project path provided by user
+    """
+
+    def __init__(self, project_path: str):
+        self.__project_path: str = project_path
+
+    def __str__(self):
+        return f"bbclient failed to find bitbake library in {self.__project_path}."
 
 class getAllKeysWithFlagsResult:
     """getAllKeysWithFlagsResult

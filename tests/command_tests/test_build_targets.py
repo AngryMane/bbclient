@@ -21,6 +21,8 @@ def test_build_targets_dunfell(dunfell_client: BBClient, targets: List[str], tas
     __test_impl(dunfell_client, targets, task, expect)
 
 def __test_impl(client: BBClient, targets: List[str], task: str, expect: Type[BBEventBase]) -> None:
+    callback_monitor: CallbackMonitor = CallbackMonitor()
+    callback_id: int = client.register_callback(expect, callback_monitor.callback)
     client.build_targets(targets, task)
-    result: Optional[BBEventBase] = client.wait_done_async()
-    assert isinstance(result, expect)
+    client.unregister_callback(callback_id)
+    assert(callback_monitor.is_callback == True)

@@ -84,22 +84,42 @@
 <span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;MIT&quot;</span>
 <span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;AngryMane&quot;</span>
 <span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;in progress&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0.0&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">Logger</span>
+
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">Logger</span><span class="p">,</span> <span class="n">StreamHandler</span><span class="p">,</span> <span class="n">getLogger</span><span class="p">,</span> <span class="n">DEBUG</span><span class="p">,</span> <span class="n">CRITICAL</span><span class="p">,</span> <span class="n">Formatter</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Type</span>
 
 <span class="kn">from</span> <span class="nn">.bbcommon</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.bbevent</span> <span class="kn">import</span> <span class="o">*</span>
 
+<div class="viewcode-block" id="CallBack"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.CallBack">[docs]</a><span class="k">class</span> <span class="nc">CallBack</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;CallBack for bitbake events</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        target_event_type (Optional[BBEventBase]): trigger event type for callback function</span>
+<span class="sd">        callback (Callable[[&quot;BBClient&quot;, BBEventBase], None]): callback function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;CallBack&quot;</span><span class="p">,</span> <span class="n">target_event_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">],</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">BBEventBase</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialze</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (CallBack): CallBack instance</span>
+<span class="sd">            target_event_type (Optional[BBEventBase]): trigger event type for callback function</span>
+<span class="sd">            callback (Callable[[&quot;BBClient&quot;, BBEventBase], None]): callback function</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_event_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_event_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">BBEventBase</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">callback</span></div>
 
 <div class="viewcode-block" id="BBClient"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient">[docs]</a><span class="k">class</span> <span class="nc">BBClient</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Client for bitbake RPC Server</span>
+    <span class="sd">&quot;&quot;&quot;Client for bitbake Server</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        project_path (str): poky directory path</span>
@@ -115,7 +135,7 @@
 <span class="sd">            func (Callable): target function</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            This is just for debuggging.</span>
+<span class="sd">            This is just for logging.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">inner_function</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -127,9 +147,34 @@
             <span class="k">return</span> <span class="n">ret</span>
         <span class="k">return</span> <span class="n">inner_function</span></div>
 
+<div class="viewcode-block" id="BBClient.syncronize_decorator"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.syncronize_decorator">[docs]</a>    <span class="k">def</span> <span class="nf">syncronize_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Decorator for syncronize</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            func (Callable): target function</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This decorator automatically waits for async</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">inner_function</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">event_monitor</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+            <span class="k">def</span> <span class="nf">event_watcher</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BBClient</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">BBEventBase</span><span class="p">):</span>
+                <span class="n">event_monitor</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+            <span class="n">unique_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">unique_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="n">CommandCompletedEvent</span><span class="p">,</span> <span class="n">event_watcher</span><span class="p">))</span>
+            <span class="n">unique_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="n">CommandExitEvent</span><span class="p">,</span> <span class="n">event_watcher</span><span class="p">))</span>
+            <span class="n">unique_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="n">CommandFailedEvent</span><span class="p">,</span> <span class="n">event_watcher</span><span class="p">))</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">event_monitor</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">unique_id</span> <span class="ow">in</span> <span class="n">unique_ids</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">unregister_callback</span><span class="p">(</span><span class="n">unique_id</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">return</span> <span class="n">inner_function</span></div>
+
     <span class="c1"># --- setup functions ---</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">project_abs_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">init_script_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">project_abs_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">init_script_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">logging_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">CRITICAL</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Initialize BBClient instance</span>
 
@@ -137,11 +182,19 @@
 <span class="sd">            self (BBClient): none</span>
 <span class="sd">            project_abs_path (str): abslute path to bitbake project, basically poky dir.</span>
 <span class="sd">            init_script_path (str): initialize bitbake proejct command running at project_abs_path. This is maybe &quot;. oe-init-build-env&quot;. if you already executed initialize command, you don&#39;t need to input this.</span>
-<span class="sd">            logger (Logger): logger instance for debuggind. Default is None.</span>
+<span class="sd">            logging_level (int): logging level. please select from the following items. default value is logging.CRITICAL.</span>
+<span class="sd">                * CRITICAL = 50</span>
+<span class="sd">                * FATAL = CRITICAL</span>
+<span class="sd">                * ERROR = 40</span>
+<span class="sd">                * WARNING = 30</span>
+<span class="sd">                * WARN = WARNING</span>
+<span class="sd">                * INFO = 20</span>
+<span class="sd">                * DEBUG = 10</span>
+<span class="sd">                * NOTSET = 0</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">project_abs_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="n">logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">:</span> <span class="n">Logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_default_logger</span><span class="p">(</span><span class="n">logging_level</span><span class="p">)</span>
         <span class="n">pipe</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">init_script_path</span><span class="si">}</span><span class="s2"> &gt; /dev/null; env&quot;</span><span class="p">,</span>
             <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
@@ -153,6 +206,10 @@
         <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
         <span class="n">env</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()))</span>
         <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__event_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__monitor_event_loop</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks_lock</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">,</span> <span class="n">CallBack</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__initialize_callback</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Finalize BBClient instance</span>
@@ -163,24 +220,37 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">stop_server</span><span class="p">()</span>
 
 <div class="viewcode-block" id="BBClient.start_server"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.start_server">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">start_server</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Start bitbake XML RPC server</span>
+    <span class="k">def</span> <span class="nf">start_server</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Start bitbake server</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
 
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: start_server result</span>
+
 <span class="sd">        Note:</span>
 <span class="sd">            Remote server support deprecated becuase bitbake has some minor software bug when using remote server.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">connection</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connect_server</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">project_path</span>
-        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">connection</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connect_server</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">project_path</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">BBProjectNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;bbclient needs bitbake library in your project path.Please check your project path.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span> <span class="o">=</span> <span class="n">connection</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span> <span class="o">=</span> <span class="kc">True</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">connection</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__event_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="n">ui_handler</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_uihandler_num</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_event_mask</span><span class="p">(</span><span class="n">ui_handler</span><span class="p">,</span> <span class="n">DEBUG</span><span class="p">,</span> <span class="p">{},</span> <span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_files</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span></div>
 
 <div class="viewcode-block" id="BBClient.stop_server"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.stop_server">[docs]</a>    <span class="nd">@logger_decorator</span>
     <span class="k">def</span> <span class="nf">stop_server</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Stop bitbake XML RPC server</span>
+        <span class="sd">&quot;&quot;&quot;Stop bitbake server</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
@@ -193,9 +263,41 @@
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">terminateServer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span> <span class="o">=</span> <span class="kc">False</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__event_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div>
 
     <span class="c1"># --- utility functions ---</span>
+<div class="viewcode-block" id="BBClient.register_callback"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.register_callback">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">register_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;BBEventBase&quot;</span><span class="p">],</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="s2">&quot;BBEventBase&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Register callback functions for events</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            target (Type[BBEventBase]): trigger event type for callback function</span>
+<span class="sd">            callback (Callable[[BBClient, BBEventBase], None]): callback function</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            uuid.UUID: Callback id. The user can use this to unregister.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">unique_id</span><span class="p">:</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span>
+        <span class="n">cur_callback</span><span class="p">:</span> <span class="n">CallBack</span> <span class="o">=</span> <span class="n">CallBack</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks</span><span class="p">[</span><span class="n">unique_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">unique_id</span></div>
+
+<div class="viewcode-block" id="BBClient.unregister_callback"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.unregister_callback">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">unregister_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">unique_id</span><span class="p">:</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Unregister callback functions for events</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            unique_id (uuid.UUID): Callback id. The user can get this when registering.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks</span><span class="p">[</span><span class="n">unique_id</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="BBClient.wait_done_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.wait_done_async">[docs]</a>    <span class="nd">@logger_decorator</span>
     <span class="k">def</span> <span class="nf">wait_done_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Wait CommandCompletedEvent, CommandExitEvent, CommandFailedEvent event</span>
@@ -207,64 +309,8 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            Optional[BBEventBase]: target event or None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wait_event</span><span class="p">([</span><span class="n">CommandCompletedEvent</span><span class="p">,</span> <span class="n">CommandExitEvent</span><span class="p">,</span> <span class="n">CommandFailedEvent</span><span class="p">],</span> <span class="n">timeout</span><span class="p">)</span> <span class="c1"># type: ignore</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wait_event</span><span class="p">([</span><span class="n">CommandCompletedEvent</span><span class="p">,</span> <span class="n">CommandExitEvent</span><span class="p">,</span> <span class="n">CommandFailedEvent</span><span class="p">],</span> <span class="n">timeout</span><span class="p">)</span> <span class="c1"># type: ignore</span></div>
 
-<div class="viewcode-block" id="BBClient.wait_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.wait_event">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">wait_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">event_types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]],</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Wait specific event</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            self (BBClient): none</span>
-<span class="sd">            event_types (List[Type[BBEventBase]]): event types you wait for. BBEventBase and its inherits types is defined in bbcommon.py.</span>
-<span class="sd">            timeout (float): timeout. (seconds)</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Optional[BBEventBase]: The event you wait for or None</span>
-<span class="sd">        </span>
-<span class="sd">        Note:</span>
-<span class="sd">            | This function will pop events from event queue. This event queue is reused between many commands, so this queue may have events from previous commands.</span>
-<span class="sd">            | When you wait bb.command.CommandCompleted event, please confirm there is no left bb.command.CommandCompleted event from previous command.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># f&quot;&lt;class &#39;{event_name}&#39;&gt;&quot; -&gt; event_name</span>
-        <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-        <span class="n">ret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">cur_event</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_event</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
-            <span class="n">find_matched_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cur_event</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">event_types</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span> <span class="c1"># type: ignore</span>
-            <span class="n">is_instance_of_target</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">find_matched_type</span> <span class="k">else</span> <span class="kc">False</span>
-            <span class="k">if</span> <span class="n">is_instance_of_target</span><span class="p">:</span>
-                <span class="n">ret</span> <span class="o">=</span> <span class="n">cur_event</span>
-                <span class="k">break</span>
-            <span class="n">execution_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
-            <span class="k">if</span> <span class="n">timeout</span> <span class="ow">and</span> <span class="n">timeout</span> <span class="o">&lt;</span> <span class="n">execution_time</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Timeout occurred because </span><span class="si">{</span><span class="n">execution_time</span><span class="si">}</span><span class="s2"> second has elapsed&quot;</span><span class="p">)</span>
-                <span class="k">break</span>
-        <span class="k">return</span> <span class="n">ret</span></div>
-
-<div class="viewcode-block" id="BBClient.get_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.get_event">[docs]</a>    <span class="k">def</span> <span class="nf">get_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Get oldest event</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            self (BBClient): none</span>
-<span class="sd">            timeout (Optional[float]): timeout. if timeout, return None</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Optional[BBEventBase]: event notification objects. See bbcommon.py</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">cur_event</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">waitEvent</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">cur_event</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="n">cur_event_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">cur_event</span><span class="p">))[</span><span class="mi">8</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">itr</span><span class="p">:</span> <span class="n">Iterable</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">is_target</span><span class="p">(</span><span class="n">cur_event_name</span><span class="p">),</span> <span class="n">ALL_BB_EVENTS</span><span class="p">)</span>
-        <span class="n">event_class</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">itr</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="c1"># type: ignore</span>
-        <span class="n">ret</span><span class="p">:</span> <span class="n">BBEventBase</span> <span class="o">=</span> <span class="n">event_class</span><span class="p">(</span><span class="n">cur_event</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span> <span class="k">if</span> <span class="n">event_class</span> <span class="k">else</span> <span class="n">UnknownEvent</span><span class="p">(</span><span class="n">cur_event_name</span><span class="p">,</span> <span class="n">cur_event</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">UnknownEvent</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;get </span><span class="si">{</span><span class="n">cur_event_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ret</span><span class="o">.</span><span class="vm">__dict__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">UnknownEvent</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;get Unknow event </span><span class="si">{</span><span class="n">cur_event_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ret</span><span class="o">.</span><span class="vm">__dict__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ret</span></div>
-        
 
     <span class="c1"># --- bitbake server sync functions  ---</span>
 <div class="viewcode-block" id="BBClient.state_shutdown"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.state_shutdown">[docs]</a>    <span class="nd">@logger_decorator</span>
@@ -641,9 +687,6 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRecipePackagesResult]: See GetRecipePackagesResult.</span>
-
-<span class="sd">        WARNING:</span>
-<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRecipePackages&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
@@ -662,9 +705,6 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRecipePackagesDynamicResult]: See GetRecipePackagesDynamicResult</span>
-
-<span class="sd">        WARNING:</span>
-<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ret</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;getRecipePackagesDynamic&quot;</span><span class="p">,</span> <span class="n">multi_config</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
@@ -685,9 +725,6 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[GetRProvidersResult]: See GetRProvidersResult</span>
-
-<span class="sd">        WARNING:</span>
-<span class="sd">            | This command doesn&#39;t work beacuase of bitbake bug. bitbake XML RPC server try to return collections.defaultdict type, but XMLRPC server can&#39;t support this type.</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            | If you want to know the detail of alias of PN, See `here &lt;https://docs.yoctoproject.org/ref-manual/variables.html?highlight=rprovide#term-RPROVIDES&gt;`_</span>
@@ -1161,15 +1198,233 @@
 
         <span class="k">return</span> <span class="n">ret</span><span class="o">.</span><span class="n">dsindex</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="s2">&quot;dsindex&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;dsindex&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">ret</span> <span class="k">else</span> <span class="kc">None</span></div>
 
-    <span class="c1"># --- bitbake server async functions  ---</span>
+    <span class="c1"># --- sync commands for async commands  ---</span>
 <div class="viewcode-block" id="BBClient.build_file"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.build_file">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
     <span class="k">def</span> <span class="nf">build_file</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">internal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Build recipe file</span>
 
-<span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to build_file_async is complete. </span>
+<span class="sd">            For more details, see build_file_async.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">build_file_async</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">task_name</span><span class="p">,</span> <span class="n">internal</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="BBClient.build_targets"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.build_targets">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">build_targets</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span>
+        <span class="n">targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Build package</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to build_targets_async is complete. </span>
+<span class="sd">            For more details, see build_targets_async.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">build_targets_async</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">task_name</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="BBClient.generate_dep_tree_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_dep_tree_event">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">generate_dep_tree_event</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_dep_tree_event_async</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">task_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.generate_dot_graph"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_dot_graph">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">generate_dot_graph</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_dot_graph_async</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">task_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.generate_targets_tree"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_targets_tree">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">generate_targets_tree</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">bb_klass_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">package_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_targets_tree_async</span><span class="p">(</span><span class="n">bb_klass_file_path</span><span class="p">,</span> <span class="n">package_names</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.find_config_files"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_config_files">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">find_config_files</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">variable_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">find_config_files_async</span><span class="p">(</span><span class="n">variable_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.find_files_matching_in_dir"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_files_matching_in_dir">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">find_files_matching_in_dir</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">target_file_name_substring</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">find_files_matching_in_dir_async</span><span class="p">(</span><span class="n">target_file_name_substring</span><span class="p">,</span> <span class="n">directory</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.test_cooker_command_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.test_cooker_command_event">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">test_cooker_command_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_cooker_command_event_async</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.find_config_file_path"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_config_file_path">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">find_config_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">config_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">find_config_file_path_async</span><span class="p">(</span><span class="n">config_file_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.show_versions"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_versions">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">show_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_versions_async</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BBClient.show_environment_target"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_environment_target">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">show_environment_target</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_environment_target_async</span><span class="p">(</span><span class="n">package_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.show_environment"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_environment">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">show_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">bb_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_environment_async</span><span class="p">(</span><span class="n">bb_file_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.parse_files"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.parse_files">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">parse_files</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_files_async</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BBClient.compare_revisions"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.compare_revisions">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">compare_revisions</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compare_revisions_async</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BBClient.trigger_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.trigger_event">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">trigger_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">evene_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trigger_event_async</span><span class="p">(</span><span class="n">evene_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBClient.reset_cooker"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.reset_cooker">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">reset_cooker</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_cooker_async</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BBClient.client_complete"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.client_complete">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">client_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client_complete_async</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BBClient.find_sigInfo"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_sigInfo">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="nd">@syncronize_decorator</span>
+    <span class="k">def</span> <span class="nf">find_sigInfo</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span>
+        <span class="n">package_name_with_multi_config</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">sigs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;xxxxx</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function will block until complete to xxxxx is complete. </span>
+<span class="sd">            For more details, see xxxxx.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">find_sigInfo_async</span><span class="p">(</span><span class="n">package_name_with_multi_config</span><span class="p">,</span> <span class="n">task_name</span><span class="p">,</span> <span class="n">sigs</span><span class="p">)</span></div>
+
+    <span class="c1"># --- bitbake server async functions  ---</span>
+<div class="viewcode-block" id="BBClient.build_file_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.build_file_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">build_file_async</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">internal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Build recipe file</span>
+
+<span class="sd">        This command doen&#39;t resolve any dependencies. If you also want to buid dependencies, please use build_targets command.</span>
+<span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
 
 <span class="sd">        * bb.event.BuildInit</span>
 <span class="sd">        * bb.event.RecipePreFinalise</span>
@@ -1194,14 +1449,14 @@
 <span class="sd">            internal (bool, optional): If True, bitbake will fire events that notify BuildStarted and BuildCompleted. Defaults to False.</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | If you want to monitor BuildStarted and BuildCompleted event, use get_event.</span>
+<span class="sd">            | If you want to monitor BuildStarted and BuildCompleted event, use register_callback.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;buildFile&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">task_name</span><span class="p">,</span> <span class="n">internal</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.build_targets"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.build_targets">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">build_targets</span><span class="p">(</span>
+<div class="viewcode-block" id="BBClient.build_targets_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.build_targets_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">build_targets_async</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span>
         <span class="n">targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1239,8 +1494,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;buildTargets&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">task_name</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.generate_dep_tree_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_dep_tree_event">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">generate_dep_tree_event</span><span class="p">(</span>
+<div class="viewcode-block" id="BBClient.generate_dep_tree_event_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_dep_tree_event_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">generate_dep_tree_event_async</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Request dependency tree information</span>
@@ -1278,8 +1533,8 @@
             <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.generate_dot_graph"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_dot_graph">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">generate_dot_graph</span><span class="p">(</span>
+<div class="viewcode-block" id="BBClient.generate_dot_graph_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_dot_graph_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">generate_dot_graph_async</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generate task dependency graph(task-depends.dot)</span>
@@ -1316,8 +1571,8 @@
             <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.generate_targets_tree"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_targets_tree">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">generate_targets_tree</span><span class="p">(</span>
+<div class="viewcode-block" id="BBClient.generate_targets_tree_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.generate_targets_tree_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">generate_targets_tree_async</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">bb_klass_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">package_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generate target tree</span>
@@ -1349,8 +1604,8 @@
             <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.find_config_files"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_config_files">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">find_config_files</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">variable_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BBClient.find_config_files_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_config_files_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">find_config_files_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">variable_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Find Config files that define specified variable.</span>
 
 <span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
@@ -1369,8 +1624,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;findConfigFiles&quot;</span><span class="p">,</span> <span class="n">variable_name</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.find_files_matching_in_dir"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_files_matching_in_dir">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">find_files_matching_in_dir</span><span class="p">(</span>
+<div class="viewcode-block" id="BBClient.find_files_matching_in_dir_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_files_matching_in_dir_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">find_files_matching_in_dir_async</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">target_file_name_substring</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Find files that matches the regex_pattern from the directory.</span>
@@ -1398,8 +1653,8 @@
             <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.test_cooker_command_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.test_cooker_command_event">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">test_cooker_command_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BBClient.test_cooker_command_event_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.test_cooker_command_event_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">test_cooker_command_event_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Dummy command</span>
 
 <span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
@@ -1415,8 +1670,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;testCookerCommandEvent&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.find_config_file_path"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_config_file_path">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">find_config_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">config_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BBClient.find_config_file_path_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_config_file_path_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">find_config_file_path_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">config_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Find config file path</span>
 
 <span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
@@ -1437,8 +1692,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;findConfigFilePath&quot;</span><span class="p">,</span> <span class="n">config_file_name</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.show_versions"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_versions">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">show_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BBClient.show_versions_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_versions_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">show_versions_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Show all packages versions</span>
 
 <span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
@@ -1455,8 +1710,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;showVersions&quot;</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.show_environment_target"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_environment_target">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">show_environment_target</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BBClient.show_environment_target_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_environment_target_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">show_environment_target_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Show variables for specified package</span>
 
 <span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
@@ -1477,8 +1732,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;showEnvironmentTarget&quot;</span><span class="p">,</span> <span class="n">package_name</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.show_environment"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_environment">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">show_environment</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">bb_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BBClient.show_environment_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.show_environment_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">show_environment_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">bb_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Show variables for specified recipe</span>
 
 <span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
@@ -1505,8 +1760,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;showEnvironment&quot;</span><span class="p">,</span> <span class="n">bb_file_path</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.parse_files"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.parse_files">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">parse_files</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BBClient.parse_files_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.parse_files_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">parse_files_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Parse all bb files.</span>
 
 <span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
@@ -1521,8 +1776,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;parseFiles&quot;</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.compare_revisions"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.compare_revisions">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">compare_revisions</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BBClient.compare_revisions_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.compare_revisions_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">compare_revisions_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Exit async command</span>
 
 <span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
@@ -1540,8 +1795,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;compareRevisions&quot;</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.trigger_event"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.trigger_event">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">trigger_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">evene_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BBClient.trigger_event_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.trigger_event_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">trigger_event_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">evene_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Send event</span>
 
 <span class="sd">        Args:</span>
@@ -1549,12 +1804,12 @@
 <span class="sd">            evene_name (str): event class name.</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            | Send evene_name event. User can receive this event by get_event.</span>
+<span class="sd">            | Send evene_name event. User can receive this event by register_callback.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;triggerEvent&quot;</span><span class="p">,</span> <span class="n">evene_name</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.reset_cooker"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.reset_cooker">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">reset_cooker</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BBClient.reset_cooker_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.reset_cooker_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">reset_cooker_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Reset cooker state and caches.</span>
 
 <span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
@@ -1572,8 +1827,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;resetCooker&quot;</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.client_complete"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.client_complete">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">client_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BBClient.client_complete_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.client_complete_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">client_complete_async</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Notify client will be close</span>
 
 <span class="sd">        This command will send following events. If you want to wait done, please use wait_done_async.</span>
@@ -1587,8 +1842,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__run_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span> <span class="s2">&quot;clientComplete&quot;</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BBClient.find_sigInfo"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_sigInfo">[docs]</a>    <span class="nd">@logger_decorator</span>
-    <span class="k">def</span> <span class="nf">find_sigInfo</span><span class="p">(</span>
+<div class="viewcode-block" id="BBClient.find_sigInfo_async"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.find_sigInfo_async">[docs]</a>    <span class="nd">@logger_decorator</span>
+    <span class="k">def</span> <span class="nf">find_sigInfo_async</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span>
         <span class="n">package_name_with_multi_config</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1615,18 +1870,91 @@
         <span class="p">)</span></div>
 
     <span class="c1"># --- private functions ---</span>
+    <span class="k">def</span> <span class="nf">__get_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get oldest event</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            timeout (Optional[float]): timeout. if timeout, return None</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[BBEventBase]: event notification objects. See bbcommon.py</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cur_event</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">waitEvent</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cur_event</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="c1"># f&quot;&lt;class &#39;{event_name}&#39;&gt;&quot; -&gt; event_name</span>
+        <span class="n">cur_event_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">cur_event</span><span class="p">))[</span><span class="mi">8</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">itr</span><span class="p">:</span> <span class="n">Iterable</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">is_target</span><span class="p">(</span><span class="n">cur_event_name</span><span class="p">),</span> <span class="n">ALL_BB_EVENTS</span><span class="p">)</span>
+        <span class="n">event_class</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">itr</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="c1"># type: ignore</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">BBEventBase</span> <span class="o">=</span> <span class="n">event_class</span><span class="p">(</span><span class="n">cur_event</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span> <span class="k">if</span> <span class="n">event_class</span> <span class="k">else</span> <span class="n">UnknownEvent</span><span class="p">(</span><span class="n">cur_event_name</span><span class="p">,</span> <span class="n">cur_event</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">UnknownEvent</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;get Unknow event </span><span class="si">{</span><span class="n">cur_event_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ret</span><span class="o">.</span><span class="vm">__dict__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span>
+        
+
+    <span class="k">def</span> <span class="nf">__wait_event</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">event_types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]],</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Wait specific event</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+<span class="sd">            event_types (List[Type[BBEventBase]]): event types you wait for. BBEventBase and its inherits types is defined in bbcommon.py.</span>
+<span class="sd">            timeout (float): timeout. (seconds)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[BBEventBase]: The event you wait for or None</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            | This function will pop events from event queue. This event queue is reused between many commands, so this queue may have events from previous commands.</span>
+<span class="sd">            | When you wait bb.command.CommandCompleted event, please confirm there is no left bb.command.CommandCompleted event from previous command.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">cur_event</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_event</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+            <span class="n">find_matched_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cur_event</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">event_types</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span> <span class="c1"># type: ignore</span>
+            <span class="k">if</span> <span class="n">find_matched_type</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="n">cur_event</span>
+                <span class="k">break</span>
+            <span class="n">execution_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+            <span class="k">if</span> <span class="n">timeout</span> <span class="ow">and</span> <span class="n">timeout</span> <span class="o">&lt;</span> <span class="n">execution_time</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Timeout occurred because </span><span class="si">{</span><span class="n">execution_time</span><span class="si">}</span><span class="s2"> second has elapsed&quot;</span><span class="p">)</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">ret</span>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__get_default_logger</span><span class="p">(</span><span class="n">logging_level</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Logger</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get default logger</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Logger: default logger</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="n">StreamHandler</span><span class="p">()</span>
+        <span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">%(name)s</span><span class="s1">][</span><span class="si">%(asctime)s</span><span class="s1">][</span><span class="si">%(levelname)s</span><span class="s1">]: </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="n">logger</span><span class="p">:</span> <span class="n">Logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;bbclient&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging_level</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logger</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">__connect_server</span><span class="p">(</span>
         <span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="s2">&quot;bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection&quot;</span><span class="p">,</span> <span class="s2">&quot;module&quot;</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection&quot;</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
         <span class="sd">&quot;&quot;&quot;Connect to server</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            project_path (str): abslute path to bitbake project, basically poky dir.</span>
+
 <span class="sd">        Returns:</span>
-<span class="sd">            _type_: (&quot;bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection&quot;, &quot;module&quot;)</span>
+<span class="sd">            Optional[&quot;bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection&quot;]: Connection instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># TODO: use shell not to be depends on bb modules</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">project_path</span><span class="si">}</span><span class="s2">/bitbake/lib&quot;</span><span class="p">)</span>
+        <span class="n">bb_lib_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">project_path</span><span class="si">}</span><span class="s2">/bitbake/lib&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">bb_lib_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">BBProjectNotFoundError</span><span class="p">(</span><span class="n">bb_lib_path</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bb_lib_path</span><span class="p">)</span>
         <span class="kn">from</span> <span class="nn">bb.main</span> <span class="kn">import</span> <span class="n">setup_bitbake</span><span class="p">,</span> <span class="n">BitBakeConfigParameters</span>  <span class="c1"># type: ignore</span>
         <span class="kn">from</span> <span class="nn">bb.tinfoil</span> <span class="kn">import</span> <span class="n">TinfoilConfigParameters</span>  <span class="c1"># type: ignore</span>
         <span class="kn">from</span> <span class="nn">bb.cookerdata</span> <span class="kn">import</span> <span class="n">CookerConfiguration</span>  <span class="c1"># type: ignore</span>
@@ -1645,7 +1973,7 @@
         <span class="n">ui_module</span><span class="o">.</span><span class="n">main</span><span class="p">(</span>
             <span class="n">server_connection</span><span class="o">.</span><span class="n">connection</span><span class="p">,</span> <span class="n">server_connection</span><span class="o">.</span><span class="n">events</span><span class="p">,</span> <span class="n">config_params</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">server_connection</span><span class="p">,</span> <span class="n">ui_module</span>
+        <span class="k">return</span> <span class="n">server_connection</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">__run_command</span><span class="p">(</span><span class="n">server_connection</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Logger</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
@@ -1668,7 +1996,41 @@
             <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2"> failed beacuse </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__monitor_event_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Monitor event loop</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBClient): none</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This function monitors events from bbclient, and do callback.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span><span class="p">:</span>
+            <span class="n">ret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_event</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+            <span class="nb">iter</span><span class="p">:</span> <span class="n">Iterable</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">target_event_type</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">ret</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">cur_callback</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">:</span>
+                <span class="n">cur_callback</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ret</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__initialize_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">event_type</span> <span class="ow">in</span> <span class="n">ALL_BB_EVENTS</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">LogRecord</span> <span class="o">==</span> <span class="n">event_type</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">unique_id</span><span class="p">:</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span>
+            <span class="n">cur_callback</span><span class="p">:</span> <span class="n">CallBack</span> <span class="o">=</span> <span class="n">CallBack</span><span class="p">(</span><span class="n">event_type</span><span class="p">,</span> <span class="n">BBClient</span><span class="o">.</span><span class="n">__default_event_callback</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks</span><span class="p">[</span><span class="n">unique_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__default_event_callback</span><span class="p">(</span><span class="n">bbclient</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bbclient</span><span class="o">.</span><span class="n">__logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+
+
+
 </pre></div>
 
            </div>

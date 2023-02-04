@@ -18,10 +18,15 @@ def test_find_config_file_path_dunfell(dunfell_client: BBClient, config_file_nam
     __test_impl(dunfell_client, config_file_name)
 
 def __test_impl(client: BBClient, config_file_name: str) -> None:
+    complete_monitor: CallbackMonitor = CallbackMonitor()
+    file_path_monitor: CallbackMonitor = CallbackMonitor()
+    complete_id: int = client.register_callback(CommandCompletedEvent, complete_monitor.callback)
+    file_path_id: int = client.register_callback(ConfigFilePathFoundEvent, file_path_monitor.callback)
     client.find_config_file_path(config_file_name)
-    ret: Optional[BBEventBase] = client.wait_event([ConfigFilePathFoundEvent], 3)
-    assert isinstance(ret, ConfigFilePathFoundEvent)
-    ret: ConfigFilePathFoundEvent
+    client.unregister_callback(complete_id)
+    client.unregister_callback(file_path_id)
+    ret: ConfigFilePathFoundEvent = file_path_monitor.event
+
+    assert file_path_monitor.is_callback
+    assert complete_monitor.is_callback
     assert os.path.isfile(ret.path)
-    ret: Optional[BBEventBase] = client.wait_done_async()
-    assert isinstance(ret, CommandCompletedEvent)

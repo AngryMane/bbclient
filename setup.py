@@ -8,7 +8,7 @@ def read(fname):
 
 setup(
     name="bbclient",
-    version="0.7.1",
+    version="0.8.0",
     description="bbclient provides utility commands for bitbake.",
     long_description_content_type="text/markdown",
     long_description=read("README.md"),

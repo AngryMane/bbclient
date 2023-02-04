@@ -83,6 +83,18 @@
     <span class="p">[</span><span class="s2">&quot;parsing&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="s2">&quot;line&quot;</span><span class="p">,</span> <span class="s2">&quot;op&quot;</span><span class="p">,</span> <span class="s2">&quot;detail&quot;</span><span class="p">,</span> <span class="s2">&quot;flag&quot;</span><span class="p">,</span> <span class="s2">&quot;func&quot;</span><span class="p">],</span>
 <span class="p">)</span>
 
+<div class="viewcode-block" id="BBProjectNotFoundError"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbcommon.BBProjectNotFoundError">[docs]</a><span class="k">class</span> <span class="nc">BBProjectNotFoundError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;BBProjectNotFoundError</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        __project_path (str): project path provided by user</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__project_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">project_path</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;bbclient failed to find bitbake library in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__project_path</span><span class="si">}</span><span class="s2">.&quot;</span></div>
 
 <div class="viewcode-block" id="getAllKeysWithFlagsResult"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbcommon.getAllKeysWithFlagsResult">[docs]</a><span class="k">class</span> <span class="nc">getAllKeysWithFlagsResult</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;getAllKeysWithFlagsResult</span>

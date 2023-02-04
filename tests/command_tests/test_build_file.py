@@ -21,6 +21,7 @@ def test_build_file_dunfell(dunfell_client: BBClient, package: str, task: str, e
 def __test_imple(client: BBClient, package: str, task: str, expect: Type[BBEventBase]) -> None:
     best_provider: List[str] = client.find_best_provider(package)
     recipe_file_path: str = best_provider[3]
+    callback_monitor: CallbackMonitor = CallbackMonitor()
+    callback_id: int = client.register_callback(expect, callback_monitor.callback)
     client.build_file(recipe_file_path, task)
-    result: Optional[BBEventBase] = client.wait_done_async()
-    assert isinstance(result, expect)
+    client.unregister_callback(callback_id)
