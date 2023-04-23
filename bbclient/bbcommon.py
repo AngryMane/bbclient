@@ -4,7 +4,7 @@ This file provides common definition for ease of understanding in/out of command
 """
 
 import json
-from typing import Mapping, Any, List, Optional, Union
+from typing import Mapping, Any, List, Optional, Union, Type
 from collections import namedtuple
 from enum import Enum
 

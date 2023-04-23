@@ -241,7 +241,6 @@ class BBClient:
         """
         return self.__wait_event([CommandCompletedEvent, CommandExitEvent, CommandFailedEvent], timeout) # type: ignore
 
-
     # --- bitbake server sync functions  ---
     @logger_decorator
     def state_shutdown(self: "BBClient") -> None:
