@@ -3,8 +3,10 @@
 This file provides common definition for ease of understanding in/out of commands
 """
 
+import functools
 from collections.abc import KeysView
 from typing import Mapping, Any, List, Optional, Union, Type, Tuple, Iterator
+import networkx 
 from .bbclient import *
 
 class BBProject:
@@ -41,16 +43,18 @@ class BBPackage:
         self.package_epoch: str = ""
         self.package_version: str = ""
         self.package_revision: str = ""
-        self.depends: List[str] = []
-        self.runtime_depends: List[str] = []
+        self.package_depends: List[str] = []
+        self.package_runtime_depends: List[str] = []
         self.install_files: List[str] = []
         self.conf_files: List[str] = []
         self.bbclass_files: List[str] = []
         self.recipe_files: List[str] = []
         self.all_variable_names: List[str] = []
         self.tasks: List[str] = []
-        self.depends.tree: Node
-        self.runtime_depends.tree: Node
+        self.package_depends_graph: networkx.DiGraph = None
+        self.package_runtime_depends_graph: networkx.DiGraph = None
+        self.task_depends_graph: networkx.DiGraph = None
+
         raise NotImplementedError('To create BBPackage instance, please use from_name method.')
 
     @classmethod
@@ -66,8 +70,8 @@ class BBPackage:
         instance.package_epoch: str = instance.get_var("PE")
         instance.package_version: str = instance.get_var("PV")
         instance.package_revision: str = instance.get_var("PR")
-        instance.depends: List[str] = instance.get_var("DEPENDS").split()
-        instance.runtime_depends: List[str] = instance.get_var("RDEPENDS").split()
+        instance.package_depends: List[str] = instance.get_var("DEPENDS").split()
+        instance.package_runtime_depends: List[str] = instance.get_var("RDEPENDS").split()
         instance.install_files: List[str] = instance.get_var("FILES").split()
 
         various_files: List[str] = instance.get_var("BBINCLUDED").split()
@@ -78,10 +82,10 @@ class BBPackage:
         instance.all_variable_names: List[str] = list(instance.client.data_store_connector_cmd(instance.datastore_index, "keys"))
         instance.tasks: List[str] = [var for var in instance.all_variable_names if instance.get_var_flag(var, "task")]
         
-        #instance.depends.tree
-        #instance.runtime_depends.tree = 
-
-        instance.__generate_dep_tree()
+        depends_graph, runtime_depends_graph, task_depends_graph = instance.__generate_depends_graph()
+        instance.package_depends_graph = depends_graph
+        instance.package_runtime_depends_graph = runtime_depends_graph
+        instance.task_depends_graph = task_depends_graph  
 
         return instance
 
@@ -108,18 +112,37 @@ class BBPackage:
         self.client.data_store_connector_cmd(global_datastore_index, "setVar", "OVERRIDES", global_overrides + ":" + name) # TODO: if dunfell or older, use "_" instead of ":"
         return local_datastore_index
 
-    def __generate_dep_tree(self: "BBPackage") -> Tuple[Mapping, Mapping]:
+    def __generate_depends_graph(self: "BBPackage") -> Tuple[networkx.DiGraph, networkx.DiGraph, networkx.DiGraph]:
         depends_tree: Mapping[str, Any] = {}
         runtime_depends_tree: Mapping[str, Any] = {}
+        task_depends_tree: Mapping[str, Any] = {}
         def monitor(bbclient_:BBClient, event: DepTreeGeneratedEvent):
             nonlocal depends_tree 
             nonlocal runtime_depends_tree 
-            depends_tree = event.depgraph["depends"]
-            runtime_depends_tree = event.depgraph["rdepends-pn"]
+            nonlocal task_depends_tree
+            depends_tree = event.depgraph["depends"]                # This is corresponding to DEPENDS 
+            runtime_depends_tree = event.depgraph["rdepends-pn"]    # This is maybe corresponding to RDEPENDS, but I'm not sure.
+            task_depends_tree = event.depgraph["tdepends"]          # This is task depends.
         callback_index: int = self.client.register_callback(DepTreeGeneratedEvent, monitor)
         self.client.generate_dep_tree_event([self.package_name], "build")
         self.client.unregister_callback(callback_index)
-        for i in depends_tree:
-            print(i) 
 
-        return depends_tree, runtime_depends_tree
+        def __create_node(graph: networkx.DiGraph, depends_tree: Mapping[str, List[str]], package_name: str, cache: List[str]):
+            if package_name in graph or package_name not in depends_tree:
+                return 
+            child_package_names: List[str] = depends_tree[package_name]
+            for child_package_name in child_package_names:
+                if child_package_name not in cache:
+                    cache.append(child_package_name)
+                    __create_node(graph, depends_tree, child_package_name, cache)
+                    cache.remove(child_package_name)
+                graph.add_edge(package_name, child_package_name)
+
+        depends_tree_graph: networkx.DiGraph = networkx.DiGraph()
+        __create_node(depends_tree_graph, depends_tree, self.package_name, [])
+        runtime_depends_tree_root: networkx.DiGraph = networkx.DiGraph()
+        __create_node(runtime_depends_tree_root, runtime_depends_tree, self.package_name, [])
+        task_depends_tree_root: networkx.DiGraph = networkx.DiGraph()
+        __create_node(task_depends_tree_root, task_depends_tree, self.package_name + ".do_build", [])
+        
+        return depends_tree_graph,  runtime_depends_tree_root, task_depends_tree_root

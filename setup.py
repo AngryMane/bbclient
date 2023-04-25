@@ -18,7 +18,7 @@ setup(
     author_email="regulationdango@gmail.com",
     license="MIT",
     python_requires=">=3.7",
-    install_requires=["bbclient"],
+    install_requires=["bbclient", "networkx"],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Plugins",

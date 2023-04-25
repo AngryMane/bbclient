@@ -50,6 +50,10 @@ def main() -> None:
     #print(project.image_packages)
     #print(project.toolchain_packages)
 
+    networkx.nx_agraph.to_agraph(package.package_depends_graph).draw('package_depends.pdf',prog='circo')
+    networkx.nx_agraph.to_agraph(package.package_runtime_depends_graph).draw('runtime_package_depends.pdf',prog='circo')
+    networkx.nx_agraph.to_agraph(package.task_depends_graph).draw('task_depends.pdf',prog='circo')
+    
     client.stop_server()
 
 if __name__ == "__main__":
