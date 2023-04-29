@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bbclient.bbhelper &mdash; bbclient_doc v0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> bbclient_doc
+          </a>
+              <div class="version">
+                v0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../bbclient.html">bbclient package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usecase.html">Use case</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">bbclient_doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">bbclient.bbhelper</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for bbclient.bbhelper</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">This file provides common definition for ease of using bitbake</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Type</span>
+<span class="kn">import</span> <span class="nn">networkx</span> 
+<span class="kn">from</span> <span class="nn">.bbclient</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.bbcommon</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">class</span> <span class="nc">_FileParams</span><span class="p">:</span>
+    <span class="n">CONF_SUFFIX</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.conf&quot;</span>
+    <span class="n">BBCLASS_SUFFIX</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.bbclass&quot;</span>
+    <span class="n">BBCLASS_IMAGE_BASE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span>  <span class="s2">&quot;core-image.bbclas&quot;</span>
+    <span class="n">BBCLASS_POPULATE_SDK</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;populate_sdk.bbclass&quot;</span>
+
+<span class="k">class</span> <span class="nc">_FrequentlyUsedVarNames</span><span class="p">:</span>
+    <span class="n">FILES</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;FILES&quot;</span>
+    <span class="n">LICENSE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;LICENSE&quot;</span>
+    <span class="n">SRC_URI</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;SRC_URI&quot;</span>
+    <span class="n">SUMMARY</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;SUMMARY&quot;</span>
+    <span class="n">DEPENDS</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;DEPENDS&quot;</span>
+    <span class="n">RDEPENDS</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;RDEPENDS&quot;</span>
+    <span class="n">OVERRIDES</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;OVERRIDES&quot;</span>
+    <span class="n">BBINCLUDED</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;BBINCLUDED&quot;</span>
+    <span class="n">DESCRIPTION</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;DESCRIPTION&quot;</span>
+    <span class="n">PACKAGE_NAME</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PN&quot;</span>
+    <span class="n">PACKAGE_EPOCH</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PE&quot;</span>
+    <span class="n">PACKAGE_VERSION</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PV&quot;</span>
+    <span class="n">PACKAGE_REVISION</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PR&quot;</span>
+    <span class="n">FLAG_TASK</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;task&quot;</span>
+    <span class="n">FLAG_DEPENDS</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;depends&quot;</span>
+    <span class="n">FLAG_RDEPENDS_PN</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;rdepends-pn&quot;</span>
+    <span class="n">FLAG_TASK_DEPENDS</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tdepends&quot;</span>
+
+
+<div class="viewcode-block" id="BBProject"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbhelper.BBProject">[docs]</a><span class="k">class</span> <span class="nc">BBProject</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Helper class to use bitbake project&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBProject&quot;</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialze</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBProject): BBProject instance</span>
+<span class="sd">            client (BBClient): bbclient instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span> <span class="o">=</span> <span class="n">client</span>
+        <span class="sd">&quot;&quot;&quot;client (str): bbclient instance&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">packages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">package</span><span class="o">.</span><span class="n">package_name</span> <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_recipe_packages</span><span class="p">()]</span>
+        <span class="sd">&quot;&quot;&quot;packages (List[str]): all package names in the project&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">layer</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_layer_priorities</span><span class="p">()]</span>
+        <span class="sd">&quot;&quot;&quot;layers (List[str]): all layer names in the project&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">parse_files</span><span class="p">()</span> <span class="c1"># get_layer_priorities clears caches. So this is work around.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_packages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">BBProject</span><span class="o">.</span><span class="n">__get_inherit_package_names</span><span class="p">(</span><span class="n">_FileParams</span><span class="o">.</span><span class="n">BBCLASS_IMAGE_BASE</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;image_packages (List[str]): all image package names in the project&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolchain_packages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_inherit_package_names</span><span class="p">(</span><span class="n">_FileParams</span><span class="o">.</span><span class="n">BBCLASS_POPULATE_SDK</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;toolchain_packages (List[str]): all toolchain package names in the project&quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__get_inherit_package_names</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span><span class="p">,</span> <span class="n">inherit_class_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get all package names that inherits specific bbclass</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBProject): BBProject instance</span>
+<span class="sd">            client (BBClient): bbclient instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">recipe_info</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeInheritsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_inherits</span><span class="p">()</span>
+        <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="n">recipe_info</span><span class="p">:</span>
+            <span class="nb">iter</span><span class="p">:</span> <span class="n">Iterator</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">path</span><span class="p">:</span> <span class="n">inherit_class_name</span> <span class="ow">in</span> <span class="n">path</span><span class="p">,</span> <span class="n">package</span><span class="o">.</span><span class="n">inherit_file_paths</span><span class="p">)</span>
+            <span class="n">inherite_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">inherite_path</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">datastore_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_recipe_file</span><span class="p">(</span><span class="n">package</span><span class="o">.</span><span class="n">recipe_file_path</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="n">datastore_index</span><span class="p">,</span> <span class="n">DataStoreFunctions</span><span class="o">.</span><span class="n">GET_VAR</span><span class="p">,</span> <span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">PACKAGE_NAME</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="BBPackage"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbhelper.BBPackage">[docs]</a><span class="k">class</span> <span class="nc">BBPackage</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Helper class to manage packages in bitbake project&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;DO NOT USE. </span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: To create BBPackage instance, please use from_name method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># This is for code snippet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;client (str): bbclient instance&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;package_name (str): package name&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;summary (str): summary fot the package&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;description (str): description of the package&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">license</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;license (str): license of the package&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_uris</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;source_uris (List[str]): source uri of the package&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">package_epoch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;package_epoch (str): package epoch&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">package_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;package_version (str): package version&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">package_revision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;package_revision (str): package revision&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">package_depends</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;package_depends (List[str]): package depends&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">package_runtime_depends</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;package_runtime_depends (List[str]): package runtime depends&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">install_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;install_files (List[str]): package install files&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conf_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;conf_files (List[str]): config files related to the package&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bbclass_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;bbclass_files (List[str]): bbclass files related to the package&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recipe_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;recipe_files (List[str]): recipe files for the package&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_variable_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;all_variable_names (List[str]): all variable names of the package&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;tasks (List[str]): all task names of the package&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">package_depends_graph</span><span class="p">:</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;package_depends_graph (networkx.DiGraph):  package dependency graph&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">package_runtime_depends_graph</span><span class="p">:</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;package_runtime_depends_graph (networkx.DiGraph): package runtime dependency graph&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_depends_graph</span><span class="p">:</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;task_depends_graph (networkx.DiGraph): task dependency graph. the root node is do_build of the pacakge.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datastore_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="sd">&quot;&quot;&quot;__datastore_index (int): data index for the package. &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;To create BBPackage instance, please use from_name method.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BBPackage.from_name"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbhelper.BBPackage.from_name">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_name</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BBPackage&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create BBPackage instance</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client (BBClient): BBClient instance</span>
+<span class="sd">            name (str): the package name</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            BBPackage: BBPackage instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">instance</span><span class="p">:</span> <span class="n">BBPackage</span> <span class="o">=</span> <span class="n">BBPackage</span><span class="o">.</span><span class="n">__internal_new__</span><span class="p">()</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span> <span class="o">=</span> <span class="n">client</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">__datastore_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">BBPackage</span><span class="o">.</span><span class="n">__get_datastore_index</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="n">instance</span><span class="o">.</span><span class="n">package_name</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">SUMMARY</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">DESCRIPTION</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">license</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">LICENSE</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">source_uris</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">SRC_URI</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">package_epoch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">PACKAGE_EPOCH</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">package_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">PACKAGE_VERSION</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">package_revision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">PACKAGE_REVISION</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">package_depends</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">DEPENDS</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">package_runtime_depends</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">RDEPENDS</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">install_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">FILES</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+        <span class="n">various_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">BBINCLUDED</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">conf_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">various_files</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">_FileParams</span><span class="o">.</span><span class="n">CONF_SUFFIX</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;/conf/&quot;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">]</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">bbclass_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">various_files</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">_FileParams</span><span class="o">.</span><span class="n">BBCLASS_SUFFIX</span><span class="p">)]</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">recipe_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">various_files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="n">_FileParams</span><span class="o">.</span><span class="n">CONF_SUFFIX</span><span class="p">,</span> <span class="n">_FileParams</span><span class="o">.</span><span class="n">BBCLASS_SUFFIX</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s2">&quot;/conf/&quot;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">]</span>
+
+        <span class="n">instance</span><span class="o">.</span><span class="n">all_variable_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">__datastore_index</span><span class="p">,</span> <span class="n">DataStoreFunctions</span><span class="o">.</span><span class="n">KEYS</span><span class="p">))</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">var</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">all_variable_names</span> <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_var_flag</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">FLAG_TASK</span><span class="p">)]</span>
+        
+        <span class="n">depends_graph</span><span class="p">,</span> <span class="n">runtime_depends_graph</span><span class="p">,</span> <span class="n">task_depends_graph</span> <span class="o">=</span> <span class="n">BBPackage</span><span class="o">.</span><span class="n">__generate_depends_graph</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">package_name</span><span class="p">,</span> <span class="n">instance</span><span class="o">.</span><span class="n">client</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">package_depends_graph</span> <span class="o">=</span> <span class="n">depends_graph</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">package_runtime_depends_graph</span> <span class="o">=</span> <span class="n">runtime_depends_graph</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">task_depends_graph</span> <span class="o">=</span> <span class="n">task_depends_graph</span>  
+
+        <span class="k">return</span> <span class="n">instance</span></div>
+
+<div class="viewcode-block" id="BBPackage.get_var"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbhelper.BBPackage.get_var">[docs]</a>    <span class="k">def</span> <span class="nf">get_var</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBPackage&quot;</span><span class="p">,</span> <span class="n">var_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get the value of the variable</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBPackage): BBClient instance</span>
+<span class="sd">            var_name (str): the target variable name</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Any: the target variable value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__datastore_index</span><span class="p">,</span> <span class="n">DataStoreFunctions</span><span class="o">.</span><span class="n">GET_VAR</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBPackage.get_var_flag"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbhelper.BBPackage.get_var_flag">[docs]</a>    <span class="k">def</span> <span class="nf">get_var_flag</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBPackage&quot;</span><span class="p">,</span> <span class="n">var_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">flag</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get the value of the variable flag</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBPackage): BBClient instance</span>
+<span class="sd">            var_name (str): the target variable name</span>
+<span class="sd">            flag (str): the target flag name</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Any: the target variable flag value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__datastore_index</span><span class="p">,</span> <span class="n">DataStoreFunctions</span><span class="o">.</span><span class="n">GET_VAR_FLAG</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BBPackage.run_task"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbhelper.BBPackage.run_task">[docs]</a>    <span class="k">def</span> <span class="nf">run_task</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBPackage&quot;</span><span class="p">,</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;build&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Run a task</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self (BBPackage): BBClient instance</span>
+<span class="sd">            task_name (str, optional): the target task name. The default value is &#39;build&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">build_targets</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="p">],</span> <span class="n">task_name</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__internal_new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BBPackage&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create uninitialized BBPackage instance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cls (Type): BBPackage</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            BBPackage: uninitialized BBPackage instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__get_datastore_index</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get datastore index fot the package</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client (BBClient): BBClient instance</span>
+<span class="sd">            name (str): the package name</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Any: datastore index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">find_best_provider</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">target_recipe_file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">provider</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">global_datastore_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">parse_recipe_file</span><span class="p">(</span><span class="n">target_recipe_file_path</span><span class="p">)</span>
+        <span class="n">global_overrides</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="n">global_datastore_index</span><span class="p">,</span> <span class="n">DataStoreFunctions</span><span class="o">.</span><span class="n">GET_VAR</span><span class="p">,</span> <span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">OVERRIDES</span><span class="p">)</span>
+
+        <span class="n">local_datastore_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="n">global_datastore_index</span><span class="p">,</span> <span class="n">DataStoreFunctions</span><span class="o">.</span><span class="n">CREATE_COPY</span><span class="p">)</span><span class="o">.</span><span class="n">dsindex</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">data_store_connector_cmd</span><span class="p">(</span><span class="n">global_datastore_index</span><span class="p">,</span> <span class="n">DataStoreFunctions</span><span class="o">.</span><span class="n">SET_VAR</span><span class="p">,</span> <span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">OVERRIDES</span><span class="p">,</span> <span class="n">global_overrides</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span> <span class="c1"># TODO: if dunfell or older, use &quot;_&quot; instead of &quot;:&quot;</span>
+        <span class="k">return</span> <span class="n">local_datastore_index</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__generate_depends_graph</span><span class="p">(</span><span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Generate dependency graph</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            package_name (str): the package name</span>
+<span class="sd">            client (BBClient): BBClient instance</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[networkx.DiGraph, networkx.DiGraph, networkx.DiGraph]: package dependency, package runtime dependency, task dependency</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">depends_tree</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">runtime_depends_tree</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">task_depends_tree</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">def</span> <span class="nf">monitor</span><span class="p">(</span><span class="n">bbclient_</span><span class="p">:</span><span class="n">BBClient</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">DepTreeGeneratedEvent</span><span class="p">):</span>
+            <span class="k">nonlocal</span> <span class="n">depends_tree</span> 
+            <span class="k">nonlocal</span> <span class="n">runtime_depends_tree</span> 
+            <span class="k">nonlocal</span> <span class="n">task_depends_tree</span>
+            <span class="n">depends_tree</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">depgraph</span><span class="p">[</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">FLAG_DEPENDS</span><span class="p">]</span>                <span class="c1"># This is corresponding to DEPENDS </span>
+            <span class="n">runtime_depends_tree</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">depgraph</span><span class="p">[</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">FLAG_RDEPENDS_PN</span><span class="p">]</span>    <span class="c1"># This is maybe corresponding to RDEPENDS, but I&#39;m not sure.</span>
+            <span class="n">task_depends_tree</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">depgraph</span><span class="p">[</span><span class="n">_FrequentlyUsedVarNames</span><span class="o">.</span><span class="n">FLAG_TASK_DEPENDS</span><span class="p">]</span>          <span class="c1"># This is task depends.</span>
+        <span class="n">callback_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="n">DepTreeGeneratedEvent</span><span class="p">,</span> <span class="n">monitor</span><span class="p">)</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">generate_dep_tree_event</span><span class="p">([</span><span class="n">package_name</span><span class="p">],</span> <span class="s2">&quot;build&quot;</span><span class="p">)</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">unregister_callback</span><span class="p">(</span><span class="n">callback_index</span><span class="p">)</span>
+
+        <span class="n">depends_tree_graph</span><span class="p">:</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span> <span class="o">=</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="n">BBPackage</span><span class="o">.</span><span class="n">__create_node</span><span class="p">(</span><span class="n">depends_tree_graph</span><span class="p">,</span> <span class="n">depends_tree</span><span class="p">,</span> <span class="n">package_name</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">runtime_depends_tree_root</span><span class="p">:</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span> <span class="o">=</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="n">BBPackage</span><span class="o">.</span><span class="n">__create_node</span><span class="p">(</span><span class="n">runtime_depends_tree_root</span><span class="p">,</span> <span class="n">runtime_depends_tree</span><span class="p">,</span> <span class="n">package_name</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">task_depends_tree_root</span><span class="p">:</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span> <span class="o">=</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="n">BBPackage</span><span class="o">.</span><span class="n">__create_node</span><span class="p">(</span><span class="n">task_depends_tree_root</span><span class="p">,</span> <span class="n">task_depends_tree</span><span class="p">,</span> <span class="n">package_name</span> <span class="o">+</span> <span class="s2">&quot;.do_build&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        
+        <span class="k">return</span> <span class="n">depends_tree_graph</span><span class="p">,</span>  <span class="n">runtime_depends_tree_root</span><span class="p">,</span> <span class="n">task_depends_tree_root</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__create_node</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">networkx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">depends_tree</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;Create graphc recursively</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            graph (networkx.DiGraph): dependency graph</span>
+<span class="sd">            depends_tree (Mapping[str, List[str]]): depends info from bitbake</span>
+<span class="sd">            package_name (str): the package name</span>
+<span class="sd">            cache (List[str]): cache to avoid cyclic references</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">package_name</span> <span class="ow">in</span> <span class="n">graph</span> <span class="ow">or</span> <span class="n">package_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">depends_tree</span><span class="p">:</span>
+            <span class="k">return</span> 
+        <span class="n">child_package_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">depends_tree</span><span class="p">[</span><span class="n">package_name</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">child_package_name</span> <span class="ow">in</span> <span class="n">child_package_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">child_package_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+                <span class="n">cache</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child_package_name</span><span class="p">)</span>
+                <span class="n">BBPackage</span><span class="o">.</span><span class="n">__create_node</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">depends_tree</span><span class="p">,</span> <span class="n">child_package_name</span><span class="p">,</span> <span class="n">cache</span><span class="p">)</span>
+                <span class="n">cache</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">child_package_name</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">package_name</span><span class="p">,</span> <span class="n">child_package_name</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

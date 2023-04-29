@@ -5,11 +5,7 @@ This file provides definition for events from bitbake server
 from typing import Mapping, Any, List, Type, Callable, Optional, Iterable
 
 class BBEventBase:
-    """Base class for all the events
-
-    Attributes:
-        event_name (str): event name like "bb.build.TaskProgress"
-    """
+    """Base class for all the events"""
     EVENT_NAME: str = "bb.build.TaskFailed"
 
     def __init__(self: "BBEventBase", event_name: str, data: Mapping[str, Any]) -> None:
@@ -20,6 +16,7 @@ class BBEventBase:
             event_name (str): event name like "bb.build.TaskProgress"
         """
         self.event_name: str = event_name
+        """event_name (str): event name like "bb.build.TaskProgress"""
         self.pid: int = data.get("pid", "")
 
     def __str__(self: "BBEventBase") -> str:

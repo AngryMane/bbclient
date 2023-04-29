@@ -52,7 +52,7 @@ def main() -> None:
 
     networkx.nx_agraph.to_agraph(package.package_depends_graph).draw('package_depends.pdf',prog='circo')
     networkx.nx_agraph.to_agraph(package.package_runtime_depends_graph).draw('runtime_package_depends.pdf',prog='circo')
-    networkx.nx_agraph.to_agraph(package.task_depends_graph).draw('task_depends.pdf',prog='circo')
+    #networkx.nx_agraph.to_agraph(package.task_depends_graph).draw('task_depends.pdf',prog='circo')
     
     client.stop_server()
 

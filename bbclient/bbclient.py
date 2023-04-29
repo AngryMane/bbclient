@@ -30,13 +30,9 @@ from typing import Any, List, Optional, Mapping, Callable, Iterable, Type
 from .bbcommon import *
 from .bbevent import *
 
-class CallBack:
-    """CallBack for bitbake events
 
-    Attributes:
-        target_event_type (Optional[BBEventBase]): trigger event type for callback function
-        callback (Callable[["BBClient", BBEventBase], None]): callback function
-    """
+class CallBack:
+    """CallBack for bitbake events"""
     def __init__(self: "CallBack", target_event_type: Optional[BBEventBase], callback: Callable[["BBClient", BBEventBase], None]) -> None:
         """Initialze
 
@@ -46,17 +42,12 @@ class CallBack:
             callback (Callable[["BBClient", BBEventBase], None]): callback function
         """        
         self.target_event_type: Optional[BBEventBase] = target_event_type
+        """target_event_type (Optional[BBEventBase]): trigger event type for callback function"""
         self.callback: Callable[["BBClient", BBEventBase], None] = callback
+        """callback (Callable[["BBClient", BBEventBase], None]): callback function"""
 
 class BBClient:
-    """Client for bitbake Server
-
-    Attributes:
-        project_path (str): poky directory path
-        __is_server_running (bool): server is running or not
-        __server_connection (bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection): touch point to server
-        __logger (Optional[Logger]): Logger instance for debugging. Default is None.
-    """
+    """Client for bitbake Server"""
 
     def logger_decorator(func: Callable): # type: ignore
         """Decorator for logging
@@ -123,8 +114,13 @@ class BBClient:
                 * NOTSET = 0
         """
         self.project_path: str = project_abs_path
+        """project_path (str): poky directory path"""
         self.__is_server_running: bool = False
+        """__is_server_running (bool): server is running or not"""
         self.__logger: Logger = self.__get_default_logger(logging_level)
+        """__logger (Optional[Logger]): Logger instance for debugging. Default is None."""
+
+        # initialize env as same as the bitbake server
         pipe: subprocess.Popen = subprocess.Popen(
             f"{init_script_path} > /dev/null; env",
             stdout=subprocess.PIPE,
@@ -136,10 +132,17 @@ class BBClient:
         output, _ = pipe.communicate()
         env = dict((line.split("=", 1) for line in output.splitlines()))
         os.environ.update(env)
-        self.__event_thread = threading.Thread(target=self.__monitor_event_loop)
+
+        self.__event_thread: threading.Thread = threading.Thread(target=self.__monitor_event_loop)
+        """__event_thread (threading.Thread): a thead for monitoring events from bitbake server"""
         self.__callbacks_lock: threading.Lock = threading.Lock()
+        """__callbacks_lock (threading.Lock): lock instance for callbacks"""
         self.__callbacks: Mapping[uuid.UUID, CallBack] = {}
+        """__callbacks (Mapping[uuid.UUID, CallBack]): callback functions for events from bitbake server"""
         self.__initialize_callback()
+
+        self.__server_connection = None
+        """__server_connection (bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection): touch point to server"""
 
     def __del__(self: "BBClient") -> None:
         """Finalize BBClient instance
@@ -899,14 +902,14 @@ class BBClient:
 
     @logger_decorator
     def data_store_connector_cmd(
-        self: "BBClient", datastore_index: int, command: str, *args, **kwargs
+        self: "BBClient", datastore_index: int, command: DataStoreFunctions, *args, **kwargs
     ) -> Any:
         """Data store management function
 
         Args:
             self (BBClient): none
             datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.
-            command (str): the method name of bb.data_smart.DataSmart
+            command (DataStoreFunctions): the method name of bb.data_smart.DataSmart
             args (Any): depends on command
             kwargs (Any): depends on command
 
@@ -955,7 +958,7 @@ class BBClient:
             self.__server_connection,
             "dataStoreConnectorCmd",
             datastore_index,
-            command,
+            command.value,
             args,
             kwargs,
             logger=self.__logger

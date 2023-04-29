@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bbclient.console &mdash; bbclient_doc v0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> bbclient_doc
+          </a>
+              <div class="version">
+                v0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../bbclient.html">bbclient package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usecase.html">Use case</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">bbclient_doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">bbclient.console</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for bbclient.console</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">This file provides cli interface of bbclient</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">.bbclient</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">ArgumentParser</span><span class="p">,</span> <span class="n">Namespace</span><span class="p">,</span> <span class="n">_SubParsersAction</span> 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+<span class="n">Config</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s2">&quot;Config&quot;</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;project_path&quot;</span><span class="p">,</span> <span class="s2">&quot;subcommand&quot;</span><span class="p">,</span> <span class="s2">&quot;command_args&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">Config</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">subcommand</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bbclient command needs subcommand. See bbclient --help.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> 
+    <span class="n">client</span><span class="p">:</span> <span class="n">BBClient</span> <span class="o">=</span> <span class="n">BBClient</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">project_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">client</span><span class="o">.</span><span class="n">start_server</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bbclient command uses current path as your project path. If the parent dir of current dir isn&#39;t your project path, please use --project_path option.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">subcommand</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">command_args</span><span class="p">)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">stop_server</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="get_config"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_config">[docs]</a><span class="k">def</span> <span class="nf">get_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+    <span class="n">parser</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="s2">&quot;--project_path&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;../&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to bitbake project, basically poky dir&quot;</span><span class="p">)</span>
+
+    <span class="c1"># sub commands</span>
+    <span class="n">sub_parsers</span><span class="p">:</span> <span class="n">_SubParsersAction</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;get_all_keys_with_flags&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;valid subcommands&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;additional help&#39;</span><span class="p">)</span>
+    <span class="n">get_all_keys_with_flags_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_all_keys_with_flags&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get value, history and specified flags of all global variables.&quot;</span><span class="p">)</span>
+    <span class="n">get_all_keys_with_flags_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="s2">&quot;--flags&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Target flags. The default is [].&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">)</span>
+    <span class="n">get_all_keys_with_flags_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_all_keys_with_flags_command</span><span class="p">)</span>
+
+    <span class="n">get_variable_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_variable&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get variable value.&quot;</span><span class="p">)</span>
+    <span class="n">get_variable_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;variable name&quot;</span><span class="p">)</span>
+    <span class="n">get_variable_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-e&quot;</span><span class="p">,</span> <span class="s2">&quot;--expand&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Whether to expand references to other variables. Defaults to True.&quot;</span><span class="p">)</span>
+    <span class="n">get_variable_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_variable</span><span class="p">)</span>
+
+    <span class="n">match_file_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;match_file&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Search file by regex.&quot;</span><span class="p">)</span>
+    <span class="n">match_file_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;file_path_regex&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;search regex pattern&quot;</span><span class="p">)</span>
+    <span class="n">match_file_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">match_file_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">match_file</span><span class="p">)</span>
+
+    <span class="n">get_layer_priorities_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_layer_priorities&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get name, path, priority of all layers.&quot;</span><span class="p">)</span>
+    <span class="n">get_layer_priorities_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_layer_priorities</span><span class="p">)</span>
+
+    <span class="n">get_recipes_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_recipes&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get all package name from cache.&quot;</span><span class="p">)</span>
+    <span class="n">get_recipes_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_recipes_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_recipes</span><span class="p">)</span>
+
+    <span class="n">get_recipe_depends_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_recipe_depends&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get recipe depends.&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_depends_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_depends_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_recipe_depends</span><span class="p">)</span>
+
+    <span class="n">get_recipe_versions_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_recipe_versions&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get all recipe versions.&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_versions_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_versions_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_recipe_versions</span><span class="p">)</span>
+
+    <span class="n">get_recipe_provides_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_recipe_provides&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get all recipe files and its packages.&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_provides_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_provides_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_recipe_provides</span><span class="p">)</span>
+
+    <span class="n">get_recipe_packages_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_recipe_packages&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get all recipe files and its recipe files.&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_packages_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_packages_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_recipe_packages</span><span class="p">)</span>
+
+    <span class="n">get_recipe_packages_dynamic_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_recipe_packages_dynamic&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get all recipe files that provides PACKAGE_DYNAMIC and its PACKAGE_DYNAMIC.&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_packages_dynamic_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_packages_dynamic_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_recipe_packages_dynamic</span><span class="p">)</span>
+
+    <span class="n">get_r_providers_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_r_providers&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get alias of PN and its recipe files.&quot;</span><span class="p">)</span>
+    <span class="n">get_r_providers_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_r_providers_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_r_providers</span><span class="p">)</span>
+
+    <span class="n">get_runtime_depends_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_runtime_depends&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get all runtime dependency by all recipe files.&quot;</span><span class="p">)</span>
+    <span class="n">get_runtime_depends_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_runtime_depends_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_runtime_depends</span><span class="p">)</span>
+
+    <span class="n">get_runtime_recommends_subcommand</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_runtime_recommends&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get all runtime recoomends(=weak depends) by all recipe files.&quot;</span><span class="p">)</span>
+    <span class="n">get_runtime_recommends_subcommand</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_runtime_recommends_subcommand</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_runtime_recommends</span><span class="p">)</span>
+
+    <span class="n">get_recipe_inherits_subcommands</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_recipe_inherits&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get recipes and its inherit recipes.&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_inherits_subcommands</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_recipe_inherits_subcommands</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_recipe_inherits</span><span class="p">)</span>
+    
+    <span class="n">get_bb_file_priority_subcommands</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_bb_file_priority&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get recipe files and its priority.&quot;</span><span class="p">)</span>
+    <span class="n">get_bb_file_priority_subcommands</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_bb_file_priority_subcommands</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_bb_file_priority</span><span class="p">)</span>
+
+    <span class="n">get_default_preference_subcommands</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_default_preference&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get recipes and default preference.&quot;</span><span class="p">)</span>
+    <span class="n">get_default_preference_subcommands</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_default_preference_subcommands</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_default_preference</span><span class="p">)</span>
+
+    <span class="n">get_skipped_recipes_subcommands</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_skipped_recipes&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get skipped recipes and its reasons, provides, alias.&quot;</span><span class="p">)</span>
+    <span class="n">get_skipped_recipes_subcommands</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_skipped_recipes</span><span class="p">)</span>
+
+    <span class="n">get_file_appends_subcommands</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_file_appends&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get append files.&quot;</span><span class="p">)</span>
+    <span class="n">get_file_appends_subcommands</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;file_path&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;recipe file path&quot;</span><span class="p">)</span>
+    <span class="n">get_file_appends_subcommands</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_file_appends_subcommands</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_file_appends</span><span class="p">)</span>
+
+    <span class="n">get_all_appends_subcommands</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;get_all_appends&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get all append recipes.&quot;</span><span class="p">)</span>
+    <span class="n">get_all_appends_subcommands</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">get_all_appends_subcommands</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">get_all_appends</span><span class="p">)</span>
+
+    <span class="n">find_providers_subcommands</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;find_providers&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get latest packages versions, prefered package versions, and whether there is an REQUIRED_VERSION.&quot;</span><span class="p">)</span>
+    <span class="n">find_providers_subcommands</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">find_providers_subcommands</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">find_providers</span><span class="p">)</span>
+
+    <span class="n">find_best_provider_subcommands</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;find_best_provider&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get best provider infos.&quot;</span><span class="p">)</span>
+    <span class="n">find_best_provider_subcommands</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;package_name&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;a package name you want to know the detail of best provider&quot;</span><span class="p">)</span>
+    <span class="n">find_best_provider_subcommands</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">find_best_provider_subcommands</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">find_best_provider</span><span class="p">)</span>
+
+    <span class="n">all_providers_subcommands</span><span class="p">:</span> <span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">sub_parsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;all_providers&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get all providers versions and recipe file path.&quot;</span><span class="p">)</span>
+    <span class="n">all_providers_subcommands</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mutli_conf_name&quot;</span><span class="p">,</span>  <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target multi-config. Defaults to &#39;&#39;&quot;</span><span class="p">)</span>
+    <span class="n">all_providers_subcommands</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">subcommand</span><span class="o">=</span><span class="n">all_providers</span><span class="p">)</span>
+
+
+    <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c1"># TODO: support remote server</span>
+    <span class="k">return</span> <span class="n">Config</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">project_path</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s2">&quot;subcommand&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_all_keys_with_flags_command"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_all_keys_with_flags_command">[docs]</a><span class="k">def</span> <span class="nf">get_all_keys_with_flags_command</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">getAllKeysWithFlagsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_all_keys_with_flags</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_variable"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_variable">[docs]</a><span class="k">def</span> <span class="nf">get_variable</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">expand</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="match_file"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.match_file">[docs]</a><span class="k">def</span> <span class="nf">match_file</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NOTE: This command can&#39;t run normaly because of bitbake bug. See https://angrymane.github.io/bbclient/bbclient.html#bbclient.bbclient.BBClient.match_file.&quot;</span><span class="p">)</span></div>
+    <span class="c1">#ret: str = client.match_file(args.file_path_regex, args.mutli_conf_name)</span>
+    <span class="c1">#print(ret)</span>
+
+<div class="viewcode-block" id="get_layer_priorities"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_layer_priorities">[docs]</a><span class="k">def</span> <span class="nf">get_layer_priorities</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetLayerPrioritiesResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_layer_priorities</span><span class="p">()</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_recipes"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_recipes">[docs]</a><span class="k">def</span> <span class="nf">get_recipes</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipesResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipes</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_recipe_depends"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_recipe_depends">[docs]</a><span class="k">def</span> <span class="nf">get_recipe_depends</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeDependsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_depends</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_recipe_versions"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_recipe_versions">[docs]</a><span class="k">def</span> <span class="nf">get_recipe_versions</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeVersionsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_versions</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_recipe_provides"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_recipe_provides">[docs]</a><span class="k">def</span> <span class="nf">get_recipe_provides</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeProvidesResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_provides</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_recipe_packages"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_recipe_packages">[docs]</a><span class="k">def</span> <span class="nf">get_recipe_packages</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipePackagesResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_packages</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_recipe_packages_dynamic"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_recipe_packages_dynamic">[docs]</a><span class="k">def</span> <span class="nf">get_recipe_packages_dynamic</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipePackagesDynamicResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_packages_dynamic</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_r_providers"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_r_providers">[docs]</a><span class="k">def</span> <span class="nf">get_r_providers</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRProvidersResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_r_providers</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_runtime_depends"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_runtime_depends">[docs]</a><span class="k">def</span> <span class="nf">get_runtime_depends</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRuntimeDependsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_runtime_depends</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_runtime_recommends"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_runtime_recommends">[docs]</a><span class="k">def</span> <span class="nf">get_runtime_recommends</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRuntimeRecommendsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_runtime_recommends</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_recipe_inherits"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_recipe_inherits">[docs]</a><span class="k">def</span> <span class="nf">get_recipe_inherits</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetRecipeInheritsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_recipe_inherits</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_bb_file_priority"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_bb_file_priority">[docs]</a><span class="k">def</span> <span class="nf">get_bb_file_priority</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetBbFilePriorityResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_bb_file_priority</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_default_preference"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_default_preference">[docs]</a><span class="k">def</span> <span class="nf">get_default_preference</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetDefaultPreferenceResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_default_preference</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_skipped_recipes"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_skipped_recipes">[docs]</a><span class="k">def</span> <span class="nf">get_skipped_recipes</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetSkippedRecipesResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_skipped_recipes</span><span class="p">()</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_file_appends"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_file_appends">[docs]</a><span class="k">def</span> <span class="nf">get_file_appends</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_file_appends</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">file_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_all_appends"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_all_appends">[docs]</a><span class="k">def</span> <span class="nf">get_all_appends</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GetAllAppendsResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_all_appends</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="find_providers"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.find_providers">[docs]</a><span class="k">def</span> <span class="nf">find_providers</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FindProvidersResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">find_providers</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="find_best_provider"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.find_best_provider">[docs]</a><span class="k">def</span> <span class="nf">find_best_provider</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">find_best_provider</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">package_name</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="all_providers"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.all_providers">[docs]</a><span class="k">def</span> <span class="nf">all_providers</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AllProvidersResult</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">all_providers</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mutli_conf_name</span><span class="p">)</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">JsonEncoder</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_runtime_providers"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.get_runtime_providers">[docs]</a><span class="k">def</span> <span class="nf">get_runtime_providers</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># TODO</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="data_store_connector_cmd"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.data_store_connector_cmd">[docs]</a><span class="k">def</span> <span class="nf">data_store_connector_cmd</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># TODO</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="data_store_connector_varhist_cmd"><a class="viewcode-back" href="../../bbclient.html#bbclient.console.data_store_connector_varhist_cmd">[docs]</a><span class="k">def</span> <span class="nf">data_store_connector_varhist_cmd</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># TODO</span>
+    <span class="k">pass</span></div>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">def data_store_connector_inc_hist_cmd(</span>
+<span class="sd">    self: &quot;BBClient&quot;, datastore_index: int, command: str, *args, **kwargs</span>
+<span class="sd">) -&gt; Any:</span>
+<span class="sd">def data_store_connector_release(self: &quot;BBClient&quot;, datastore_index: int) -&gt; None:</span>
+<span class="sd">def parse_recipe_file(</span>
+<span class="sd">    self: &quot;BBClient&quot;,</span>
+<span class="sd">    file_path: str,</span>
+<span class="sd">    append: bool = True,</span>
+<span class="sd">    append_list: Optional[str] = None,</span>
+<span class="sd">    datastore_index: Optional[int] = None,</span>
+<span class="sd">) -&gt; Optional[int]:</span>
+<span class="sd">def build_file(</span>
+<span class="sd">    self: &quot;BBClient&quot;, file_path: str, task_name: str, internal: bool = False</span>
+<span class="sd">) -&gt; None:</span>
+<span class="sd">def build_targets(</span>
+<span class="sd">    self: &quot;BBClient&quot;,</span>
+<span class="sd">    targets: List[str],</span>
+<span class="sd">    task_name: str,</span>
+<span class="sd">) -&gt; None:</span>
+<span class="sd">def generate_dep_tree_event(</span>
+<span class="sd">    self: &quot;BBClient&quot;, targets: List[str], task_name: str</span>
+<span class="sd">) -&gt; None:</span>
+<span class="sd">def generate_dot_graph(</span>
+<span class="sd">    self: &quot;BBClient&quot;, targets: List[str], task_name: str</span>
+<span class="sd">) -&gt; None:</span>
+<span class="sd">def generate_targets_tree(</span>
+<span class="sd">    self: &quot;BBClient&quot;, bb_klass_file_path: str, package_names: List[str]</span>
+<span class="sd">) -&gt; None:</span>
+<span class="sd">def find_config_files(self: &quot;BBClient&quot;, variable_name: str) -&gt; None:</span>
+<span class="sd">def find_files_matching_in_dir(</span>
+<span class="sd">    self: &quot;BBClient&quot;, target_file_name_substring: str, directory: str</span>
+<span class="sd">) -&gt; None:</span>
+<span class="sd">def find_config_file_path(self: &quot;BBClient&quot;, config_file_name: str) -&gt; None:</span>
+<span class="sd">def show_versions(self: &quot;BBClient&quot;) -&gt; None:</span>
+<span class="sd">def show_environment_target(self: &quot;BBClient&quot;, package_name: str = &quot;&quot;) -&gt; None:</span>
+<span class="sd">def show_environment(self: &quot;BBClient&quot;, bb_file_path: str) -&gt; None:</span>
+<span class="sd">def parse_files(self: &quot;BBClient&quot;) -&gt; None:</span>
+
+<span class="sd">def compare_revisions(self: &quot;BBClient&quot;) -&gt; None:</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -101,12 +101,7 @@
 <span class="kn">from</span> <span class="nn">.bbevent</span> <span class="kn">import</span> <span class="o">*</span>
 
 <div class="viewcode-block" id="CallBack"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.CallBack">[docs]</a><span class="k">class</span> <span class="nc">CallBack</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;CallBack for bitbake events</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        target_event_type (Optional[BBEventBase]): trigger event type for callback function</span>
-<span class="sd">        callback (Callable[[&quot;BBClient&quot;, BBEventBase], None]): callback function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;CallBack for bitbake events&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;CallBack&quot;</span><span class="p">,</span> <span class="n">target_event_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">],</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">BBEventBase</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Initialze</span>
 
@@ -116,17 +111,12 @@
 <span class="sd">            callback (Callable[[&quot;BBClient&quot;, BBEventBase], None]): callback function</span>
 <span class="sd">        &quot;&quot;&quot;</span>        
         <span class="bp">self</span><span class="o">.</span><span class="n">target_event_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BBEventBase</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_event_type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">BBEventBase</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">callback</span></div>
+        <span class="sd">&quot;&quot;&quot;target_event_type (Optional[BBEventBase]): trigger event type for callback function&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">BBEventBase</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">callback</span>
+        <span class="sd">&quot;&quot;&quot;callback (Callable[[&quot;BBClient&quot;, BBEventBase], None]): callback function&quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="BBClient"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient">[docs]</a><span class="k">class</span> <span class="nc">BBClient</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Client for bitbake Server</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        project_path (str): poky directory path</span>
-<span class="sd">        __is_server_running (bool): server is running or not</span>
-<span class="sd">        __server_connection (bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection): touch point to server</span>
-<span class="sd">        __logger (Optional[Logger]): Logger instance for debugging. Default is None.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Client for bitbake Server&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="BBClient.logger_decorator"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.logger_decorator">[docs]</a>    <span class="k">def</span> <span class="nf">logger_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span> <span class="c1"># type: ignore</span>
         <span class="sd">&quot;&quot;&quot;Decorator for logging</span>
@@ -193,8 +183,13 @@
 <span class="sd">                * NOTSET = 0</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">project_abs_path</span>
+        <span class="sd">&quot;&quot;&quot;project_path (str): poky directory path&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__is_server_running</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="sd">&quot;&quot;&quot;__is_server_running (bool): server is running or not&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__logger</span><span class="p">:</span> <span class="n">Logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_default_logger</span><span class="p">(</span><span class="n">logging_level</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;__logger (Optional[Logger]): Logger instance for debugging. Default is None.&quot;&quot;&quot;</span>
+
+        <span class="c1"># initialize env as same as the bitbake server</span>
         <span class="n">pipe</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">init_script_path</span><span class="si">}</span><span class="s2"> &gt; /dev/null; env&quot;</span><span class="p">,</span>
             <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
@@ -206,10 +201,17 @@
         <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
         <span class="n">env</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()))</span>
         <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__event_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__monitor_event_loop</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__event_thread</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__monitor_event_loop</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;__event_thread (threading.Thread): a thead for monitoring events from bitbake server&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks_lock</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;__callbacks_lock (threading.Lock): lock instance for callbacks&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">,</span> <span class="n">CallBack</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="sd">&quot;&quot;&quot;__callbacks (Mapping[uuid.UUID, CallBack]): callback functions for events from bitbake server&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__initialize_callback</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;__server_connection (bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection): touch point to server&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Finalize BBClient instance</span>
@@ -310,7 +312,6 @@
 <span class="sd">            Optional[BBEventBase]: target event or None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wait_event</span><span class="p">([</span><span class="n">CommandCompletedEvent</span><span class="p">,</span> <span class="n">CommandExitEvent</span><span class="p">,</span> <span class="n">CommandFailedEvent</span><span class="p">],</span> <span class="n">timeout</span><span class="p">)</span> <span class="c1"># type: ignore</span></div>
-
 
     <span class="c1"># --- bitbake server sync functions  ---</span>
 <div class="viewcode-block" id="BBClient.state_shutdown"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.state_shutdown">[docs]</a>    <span class="nd">@logger_decorator</span>
@@ -970,14 +971,14 @@
 
 <div class="viewcode-block" id="BBClient.data_store_connector_cmd"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbclient.BBClient.data_store_connector_cmd">[docs]</a>    <span class="nd">@logger_decorator</span>
     <span class="k">def</span> <span class="nf">data_store_connector_cmd</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">datastore_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBClient&quot;</span><span class="p">,</span> <span class="n">datastore_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">DataStoreFunctions</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Data store management function</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            self (BBClient): none</span>
 <span class="sd">            datastore_index (int): specify datastore_index. user can get this value by parse_recipe_file command.</span>
-<span class="sd">            command (str): the method name of bb.data_smart.DataSmart</span>
+<span class="sd">            command (DataStoreFunctions): the method name of bb.data_smart.DataSmart</span>
 <span class="sd">            args (Any): depends on command</span>
 <span class="sd">            kwargs (Any): depends on command</span>
 
@@ -1026,7 +1027,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__server_connection</span><span class="p">,</span>
             <span class="s2">&quot;dataStoreConnectorCmd&quot;</span><span class="p">,</span>
             <span class="n">datastore_index</span><span class="p">,</span>
-            <span class="n">command</span><span class="p">,</span>
+            <span class="n">command</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
             <span class="n">args</span><span class="p">,</span>
             <span class="n">kwargs</span><span class="p">,</span>
             <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__logger</span>

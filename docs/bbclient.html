@@ -46,7 +46,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-bbclient.bbclient">bbclient.bbclient module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-bbclient.bbcommon">bbclient.bbcommon module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-bbclient.bbhelper">bbclient.bbhelper module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-bbclient.bbevent">bbclient.bbevent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-bbclient.console">bbclient.console module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-bbclient">Module contents</a></li>
 </ul>
 </li>
@@ -90,50 +92,6 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbclient.</span></span><span class="sig-name descname"><span class="pre">BBClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_abs_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_script_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">':'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logging_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Client for bitbake Server</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.project_path">
-<span class="sig-name descname"><span class="pre">project_path</span></span><a class="headerlink" href="#bbclient.bbclient.BBClient.project_path" title="Permalink to this definition"></a></dt>
-<dd><p>poky directory path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.__is_server_running">
-<span class="sig-name descname"><span class="pre">__is_server_running</span></span><a class="headerlink" href="#bbclient.bbclient.BBClient.__is_server_running" title="Permalink to this definition"></a></dt>
-<dd><p>server is running or not</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.__server_connection">
-<span class="sig-name descname"><span class="pre">__server_connection</span></span><a class="headerlink" href="#bbclient.bbclient.BBClient.__server_connection" title="Permalink to this definition"></a></dt>
-<dd><p>touch point to server</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.__logger">
-<span class="sig-name descname"><span class="pre">__logger</span></span><a class="headerlink" href="#bbclient.bbclient.BBClient.__logger" title="Permalink to this definition"></a></dt>
-<dd><p>Logger instance for debugging. Default is None.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>Optional[Logger]</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.all_providers">
 <span class="sig-name descname"><span class="pre">all_providers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbcommon.AllProvidersResult" title="bbclient.bbcommon.AllProvidersResult"><span class="pre">bbclient.bbcommon.AllProvidersResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.all_providers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.all_providers" title="Permalink to this definition"></a></dt>
@@ -337,14 +295,14 @@ For more details, see xxxxx.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.data_store_connector_cmd">
-<span class="sig-name descname"><span class="pre">data_store_connector_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datastore_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.data_store_connector_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.data_store_connector_cmd" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">data_store_connector_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datastore_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbcommon.DataStoreFunctions" title="bbclient.bbcommon.DataStoreFunctions"><span class="pre">bbclient.bbcommon.DataStoreFunctions</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.data_store_connector_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.data_store_connector_cmd" title="Permalink to this definition"></a></dt>
 <dd><p>Data store management function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – none</p></li>
 <li><p><strong>datastore_index</strong> (<em>int</em>) – specify datastore_index. user can get this value by parse_recipe_file command.</p></li>
-<li><p><strong>command</strong> (<em>str</em>) – the method name of bb.data_smart.DataSmart</p></li>
+<li><p><strong>command</strong> (<a class="reference internal" href="#bbclient.bbcommon.DataStoreFunctions" title="bbclient.bbcommon.DataStoreFunctions"><em>DataStoreFunctions</em></a>) – the method name of bb.data_smart.DataSmart</p></li>
 <li><p><strong>args</strong> (<em>Any</em>) – depends on command</p></li>
 <li><p><strong>kwargs</strong> (<em>Any</em>) – depends on command</p></li>
 </ul>
@@ -1439,6 +1397,17 @@ For more details, see xxxxx.</p>
 </div>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbclient.BBClient.project_path">
+<span class="sig-name descname"><span class="pre">project_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbclient.BBClient.project_path" title="Permalink to this definition"></a></dt>
+<dd><p>poky directory path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>project_path (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbclient.BBClient.register_callback">
 <span class="sig-name descname"><span class="pre">register_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><span class="pre">bbclient.bbevent.BBEventBase</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><span class="pre">bbclient.bbevent.BBEventBase</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uuid.UUID</span></span></span><a class="reference internal" href="_modules/bbclient/bbclient.html#BBClient.register_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbclient.BBClient.register_callback" title="Permalink to this definition"></a></dt>
@@ -1930,23 +1899,23 @@ For more details, see xxxxx.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>CallBack for bitbake events</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbclient.CallBack.target_event_type">
-<span class="sig-name descname"><span class="pre">target_event_type</span></span><a class="headerlink" href="#bbclient.bbclient.CallBack.target_event_type" title="Permalink to this definition"></a></dt>
-<dd><p>trigger event type for callback function</p>
+<dt class="sig sig-object py" id="bbclient.bbclient.CallBack.callback">
+<span class="sig-name descname"><span class="pre">callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><span class="pre">bbclient.bbevent.BBEventBase</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbclient.CallBack.callback" title="Permalink to this definition"></a></dt>
+<dd><p>callback function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>Optional[<a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase">BBEventBase</a>]</p>
+<dd class="field-odd"><p>callback (Callable[[“BBClient”, <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase">BBEventBase</a>], None])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbclient.CallBack.callback">
-<span class="sig-name descname"><span class="pre">callback</span></span><a class="headerlink" href="#bbclient.bbclient.CallBack.callback" title="Permalink to this definition"></a></dt>
-<dd><p>callback function</p>
+<dt class="sig sig-object py" id="bbclient.bbclient.CallBack.target_event_type">
+<span class="sig-name descname"><span class="pre">target_event_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase"><span class="pre">bbclient.bbevent.BBEventBase</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbclient.CallBack.target_event_type" title="Permalink to this definition"></a></dt>
+<dd><p>trigger event type for callback function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>Callable[[“BBClient”, <a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase">BBEventBase</a>], None]</p>
+<dd class="field-odd"><p>target_event_type (Optional[<a class="reference internal" href="#bbclient.bbevent.BBEventBase" title="bbclient.bbevent.BBEventBase">BBEventBase</a>])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1964,22 +1933,22 @@ For more details, see xxxxx.</p>
 <p>allProviders result</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.AllProvidersResult.package_name">
-<span class="sig-name descname"><span class="pre">package_name</span></span><a class="headerlink" href="#bbclient.bbcommon.AllProvidersResult.package_name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">package_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.AllProvidersResult.package_name" title="Permalink to this definition"></a></dt>
 <dd><p>package name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>package_name (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.AllProvidersResult.recipes">
-<span class="sig-name descname"><span class="pre">recipes</span></span><a class="headerlink" href="#bbclient.bbcommon.AllProvidersResult.recipes" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">recipes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbcommon.GetRecipeVersionsResult" title="bbclient.bbcommon.GetRecipeVersionsResult"><span class="pre">bbclient.bbcommon.GetRecipeVersionsResult</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.AllProvidersResult.recipes" title="Permalink to this definition"></a></dt>
 <dd><p>recipe file path and its pe, pv, pr</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[<a class="reference internal" href="#bbclient.bbcommon.GetRecipeVersionsResult" title="bbclient.bbcommon.GetRecipeVersionsResult">GetRecipeVersionsResult</a>]</p>
+<dd class="field-odd"><p>recipes (List[<a class="reference internal" href="#bbclient.bbcommon.GetRecipeVersionsResult" title="bbclient.bbcommon.GetRecipeVersionsResult">GetRecipeVersionsResult</a>])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2012,16 +1981,177 @@ For more details, see xxxxx.</p>
 <dt class="sig sig-object py" id="bbclient.bbcommon.BBProjectNotFoundError">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbcommon.</span></span><span class="sig-name descname"><span class="pre">BBProjectNotFoundError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbcommon.html#BBProjectNotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbcommon.BBProjectNotFoundError" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.BBProjectNotFoundError.__project_path">
-<span class="sig-name descname"><span class="pre">__project_path</span></span><a class="headerlink" href="#bbclient.bbcommon.BBProjectNotFoundError.__project_path" title="Permalink to this definition"></a></dt>
-<dd><p>project path provided by user</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
 </dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbcommon.</span></span><span class="sig-name descname"><span class="pre">DataStoreFunctions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbcommon.html#DataStoreFunctions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.CREATE_COPY">
+<span class="sig-name descname"><span class="pre">CREATE_COPY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'createCopy'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.CREATE_COPY" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.DEL_VAR">
+<span class="sig-name descname"><span class="pre">DEL_VAR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'delVar'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.DEL_VAR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.DEL_VAR_FLAG">
+<span class="sig-name descname"><span class="pre">DEL_VAR_FLAG</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'delVarFlag'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.DEL_VAR_FLAG" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.DEL_VAR_FLAGS">
+<span class="sig-name descname"><span class="pre">DEL_VAR_FLAGS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'delVarFlags'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.DEL_VAR_FLAGS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.DISABLE_TRACKING">
+<span class="sig-name descname"><span class="pre">DISABLE_TRACKING</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'disableTracking'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.DISABLE_TRACKING" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.ENABLE_TRACKING">
+<span class="sig-name descname"><span class="pre">ENABLE_TRACKING</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'enableTracking'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.ENABLE_TRACKING" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.EXPAND">
+<span class="sig-name descname"><span class="pre">EXPAND</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'expand'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.EXPAND" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.EXPAND_VARREF">
+<span class="sig-name descname"><span class="pre">EXPAND_VARREF</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'expandVarref'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.EXPAND_VARREF" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.EXPAND_WITH_REFS">
+<span class="sig-name descname"><span class="pre">EXPAND_WITH_REFS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'expandWithRefs'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.EXPAND_WITH_REFS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.FINALIZE">
+<span class="sig-name descname"><span class="pre">FINALIZE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'finalize'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.FINALIZE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.GET">
+<span class="sig-name descname"><span class="pre">GET</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'get'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.GET" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.GET_HASH">
+<span class="sig-name descname"><span class="pre">GET_HASH</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'get_hash'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.GET_HASH" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.GET_VAR">
+<span class="sig-name descname"><span class="pre">GET_VAR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'getVar'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.GET_VAR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.GET_VAR_FLAG">
+<span class="sig-name descname"><span class="pre">GET_VAR_FLAG</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'getVarFlag'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.GET_VAR_FLAG" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.GET_VAR_FLAGS">
+<span class="sig-name descname"><span class="pre">GET_VAR_FLAGS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'getVarFlags'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.GET_VAR_FLAGS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.HAS_OVERRIDES">
+<span class="sig-name descname"><span class="pre">HAS_OVERRIDES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hasOverrides'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.HAS_OVERRIDES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.INITVAR">
+<span class="sig-name descname"><span class="pre">INITVAR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'initVar'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.INITVAR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.INTERNAL_FINALIZE">
+<span class="sig-name descname"><span class="pre">INTERNAL_FINALIZE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'internal_finalize'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.INTERNAL_FINALIZE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.ITEMS">
+<span class="sig-name descname"><span class="pre">ITEMS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'items'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.ITEMS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.KEYS">
+<span class="sig-name descname"><span class="pre">KEYS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'keys'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.KEYS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.LOCAL_KEYS">
+<span class="sig-name descname"><span class="pre">LOCAL_KEYS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'localkeys'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.LOCAL_KEYS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.NEED_OVERRIDES">
+<span class="sig-name descname"><span class="pre">NEED_OVERRIDES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'need_overrides'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.NEED_OVERRIDES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.POP">
+<span class="sig-name descname"><span class="pre">POP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pop'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.POP" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.POP_ITEM">
+<span class="sig-name descname"><span class="pre">POP_ITEM</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'popitem'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.POP_ITEM" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.PREPEND_VAR">
+<span class="sig-name descname"><span class="pre">PREPEND_VAR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'prependVar'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.PREPEND_VAR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.PREPEND_VAR_FLAG">
+<span class="sig-name descname"><span class="pre">PREPEND_VAR_FLAG</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'prependVarFlag'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.PREPEND_VAR_FLAG" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.RENAME_VAR">
+<span class="sig-name descname"><span class="pre">RENAME_VAR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'renameVar'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.RENAME_VAR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.SET_DEFAULT">
+<span class="sig-name descname"><span class="pre">SET_DEFAULT</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'setdefault'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.SET_DEFAULT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.SET_VAR">
+<span class="sig-name descname"><span class="pre">SET_VAR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'setVar'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.SET_VAR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.SET_VAR_FLAG">
+<span class="sig-name descname"><span class="pre">SET_VAR_FLAG</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'setVarFlag'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.SET_VAR_FLAG" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.SET_VAR_FLAGS">
+<span class="sig-name descname"><span class="pre">SET_VAR_FLAGS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'setVarFlags'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.SET_VAR_FLAGS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.UPDATE">
+<span class="sig-name descname"><span class="pre">UPDATE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'update'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.UPDATE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.DataStoreFunctions.VALUES">
+<span class="sig-name descname"><span class="pre">VALUES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'values'</span></em><a class="headerlink" href="#bbclient.bbcommon.DataStoreFunctions.VALUES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -2031,111 +2161,111 @@ For more details, see xxxxx.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>findProviders result</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.package_name">
-<span class="sig-name descname"><span class="pre">package_name</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.package_name" title="Permalink to this definition"></a></dt>
-<dd><p>recipe file name</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.latest_pe">
-<span class="sig-name descname"><span class="pre">latest_pe</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.latest_pe" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">latest_pe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.latest_pe" title="Permalink to this definition"></a></dt>
 <dd><p>latest package epoch</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[Any]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.latest_pv">
-<span class="sig-name descname"><span class="pre">latest_pv</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.latest_pv" title="Permalink to this definition"></a></dt>
-<dd><p>latest package version</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[Any]</p>
+<dd class="field-odd"><p>latest_pe (List[Any])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.latest_pr">
-<span class="sig-name descname"><span class="pre">latest_pr</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.latest_pr" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">latest_pr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.latest_pr" title="Permalink to this definition"></a></dt>
 <dd><p>latest package revision</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[Any]</p>
+<dd class="field-odd"><p>latest_pr (List[Any])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.latest_pv">
+<span class="sig-name descname"><span class="pre">latest_pv</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.latest_pv" title="Permalink to this definition"></a></dt>
+<dd><p>latest package version</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>latest_pv (List[Any])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.latest_recipe_file_path">
-<span class="sig-name descname"><span class="pre">latest_recipe_file_path</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.latest_recipe_file_path" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">latest_recipe_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.latest_recipe_file_path" title="Permalink to this definition"></a></dt>
 <dd><p>latest package recipe file path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[Any]</p>
+<dd class="field-odd"><p>latest_recipe_file_path (List[Any])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.package_name">
+<span class="sig-name descname"><span class="pre">package_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.package_name" title="Permalink to this definition"></a></dt>
+<dd><p>recipe file name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>package_name (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.preffered_pe">
-<span class="sig-name descname"><span class="pre">preffered_pe</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.preffered_pe" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">preffered_pe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.preffered_pe" title="Permalink to this definition"></a></dt>
 <dd><p>preffered package epoch</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[Any]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.preffered_pv">
-<span class="sig-name descname"><span class="pre">preffered_pv</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.preffered_pv" title="Permalink to this definition"></a></dt>
-<dd><p>preffered package version</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[Any]</p>
+<dd class="field-odd"><p>preffered_pe (List[Any])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.preffered_pr">
-<span class="sig-name descname"><span class="pre">preffered_pr</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.preffered_pr" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">preffered_pr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.preffered_pr" title="Permalink to this definition"></a></dt>
 <dd><p>preffered package revision</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[Any]</p>
+<dd class="field-odd"><p>preffered_pr (List[Any])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.preffered_pv">
+<span class="sig-name descname"><span class="pre">preffered_pv</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.preffered_pv" title="Permalink to this definition"></a></dt>
+<dd><p>preffered package version</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>preffered_pv (List[Any])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.preffered_recipe_file_path">
-<span class="sig-name descname"><span class="pre">preffered_recipe_file_path</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.preffered_recipe_file_path" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">preffered_recipe_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.preffered_recipe_file_path" title="Permalink to this definition"></a></dt>
 <dd><p>preffered package recipe file path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[Any]</p>
+<dd class="field-odd"><p>preffered_recipe_file_path (List[Any])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.FindProvidersResult.required_version">
-<span class="sig-name descname"><span class="pre">required_version</span></span><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.required_version" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">required_version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.FindProvidersResult.required_version" title="Permalink to this definition"></a></dt>
 <dd><p>whether required version exists or not. If the yocto version is old, it does not support this and will be None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>Optional[bool]</p>
+<dd class="field-odd"><p>required_version (Optional[bool])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2148,23 +2278,23 @@ For more details, see xxxxx.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>getAllAppends result</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetAllAppendsResult.target_recipe_name">
-<span class="sig-name descname"><span class="pre">target_recipe_name</span></span><a class="headerlink" href="#bbclient.bbcommon.GetAllAppendsResult.target_recipe_name" title="Permalink to this definition"></a></dt>
-<dd><p>recipe file name</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetAllAppendsResult.append_file_path">
 <span class="sig-name descname"><span class="pre">append_file_path</span></span><a class="headerlink" href="#bbclient.bbcommon.GetAllAppendsResult.append_file_path" title="Permalink to this definition"></a></dt>
 <dd><p>append recipe file path for the recipe file name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>append_file_path (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetAllAppendsResult.target_recipe_name">
+<span class="sig-name descname"><span class="pre">target_recipe_name</span></span><a class="headerlink" href="#bbclient.bbcommon.GetAllAppendsResult.target_recipe_name" title="Permalink to this definition"></a></dt>
+<dd><p>recipe file name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>target_recipe_name (str)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2177,23 +2307,23 @@ For more details, see xxxxx.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>getBbFilePriority result</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetBbFilePriorityResult.recipe_file_path">
-<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><a class="headerlink" href="#bbclient.bbcommon.GetBbFilePriorityResult.recipe_file_path" title="Permalink to this definition"></a></dt>
-<dd><p>recipe file path</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetBbFilePriorityResult.priority">
+<span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#bbclient.bbcommon.GetBbFilePriorityResult.priority" title="Permalink to this definition"></a></dt>
+<dd><p>priority of the recipe file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>priority (int)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetBbFilePriorityResult.priority">
-<span class="sig-name descname"><span class="pre">priority</span></span><a class="headerlink" href="#bbclient.bbcommon.GetBbFilePriorityResult.priority" title="Permalink to this definition"></a></dt>
-<dd><p>priority of the recipe file</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetBbFilePriorityResult.recipe_file_path">
+<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetBbFilePriorityResult.recipe_file_path" title="Permalink to this definition"></a></dt>
+<dd><p>recipe file path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
+<dd class="field-odd"><p>recipe_file_path (str)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2206,23 +2336,23 @@ For more details, see xxxxx.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>getDefaultPreference result</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetDefaultPreferenceResult.recipe_file_path">
-<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><a class="headerlink" href="#bbclient.bbcommon.GetDefaultPreferenceResult.recipe_file_path" title="Permalink to this definition"></a></dt>
-<dd><p>recipe file path</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetDefaultPreferenceResult.default_preference_version">
+<span class="sig-name descname"><span class="pre">default_preference_version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#bbclient.bbcommon.GetDefaultPreferenceResult.default_preference_version" title="Permalink to this definition"></a></dt>
+<dd><p>DEFAULT_PRERENCE for the recipe file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>default_preference_version (int)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetDefaultPreferenceResult.default_preference_version">
-<span class="sig-name descname"><span class="pre">default_preference_version</span></span><a class="headerlink" href="#bbclient.bbcommon.GetDefaultPreferenceResult.default_preference_version" title="Permalink to this definition"></a></dt>
-<dd><p>DEFAULT_PRERENCE for the recipe file.</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetDefaultPreferenceResult.recipe_file_path">
+<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetDefaultPreferenceResult.recipe_file_path" title="Permalink to this definition"></a></dt>
+<dd><p>recipe file path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
+<dd class="field-odd"><p>recipe_file_path (str)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2236,44 +2366,44 @@ For more details, see xxxxx.</p>
 <p>getLayerPriorities Result</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetLayerPrioritiesResult.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#bbclient.bbcommon.GetLayerPrioritiesResult.name" title="Permalink to this definition"></a></dt>
-<dd><p>variable name</p>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetLayerPrioritiesResult.name" title="Permalink to this definition"></a></dt>
+<dd><p>layer name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>name (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetLayerPrioritiesResult.path">
-<span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#bbclient.bbcommon.GetLayerPrioritiesResult.path" title="Permalink to this definition"></a></dt>
-<dd><p>variable value</p>
+<span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetLayerPrioritiesResult.path" title="Permalink to this definition"></a></dt>
+<dd><p>layer path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>path (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetLayerPrioritiesResult.path2">
-<span class="sig-name descname"><span class="pre">path2</span></span><a class="headerlink" href="#bbclient.bbcommon.GetLayerPrioritiesResult.path2" title="Permalink to this definition"></a></dt>
-<dd><p>variable value</p>
+<span class="sig-name descname"><span class="pre">path2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetLayerPrioritiesResult.path2" title="Permalink to this definition"></a></dt>
+<dd><p>layer path2</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>path2 (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetLayerPrioritiesResult.priority">
-<span class="sig-name descname"><span class="pre">priority</span></span><a class="headerlink" href="#bbclient.bbcommon.GetLayerPrioritiesResult.priority" title="Permalink to this definition"></a></dt>
-<dd><p>see VariableHistory.</p>
+<span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#bbclient.bbcommon.GetLayerPrioritiesResult.priority" title="Permalink to this definition"></a></dt>
+<dd><p>layer priority</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
+<dd class="field-odd"><p>priority (int)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2287,22 +2417,22 @@ For more details, see xxxxx.</p>
 <p>getRProviders result</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetRProvidersResult.package_alias_name">
-<span class="sig-name descname"><span class="pre">package_alias_name</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRProvidersResult.package_alias_name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">package_alias_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRProvidersResult.package_alias_name" title="Permalink to this definition"></a></dt>
 <dd><p>package alias name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>package_alias_name (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetRProvidersResult.recipe_file_paths">
-<span class="sig-name descname"><span class="pre">recipe_file_paths</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRProvidersResult.recipe_file_paths" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">recipe_file_paths</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.GetRProvidersResult.recipe_file_paths" title="Permalink to this definition"></a></dt>
 <dd><p>recipe file paths that provides the alias package</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[str]</p>
+<dd class="field-odd"><p>recipe_file_paths (List[str])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2315,23 +2445,23 @@ For more details, see xxxxx.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>getRecipeDepends result</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeDependsResult.recipe_file_path">
-<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipeDependsResult.recipe_file_path" title="Permalink to this definition"></a></dt>
-<dd><p>recipe file path</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeDependsResult.depend_package_names">
+<span class="sig-name descname"><span class="pre">depend_package_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipeDependsResult.depend_package_names" title="Permalink to this definition"></a></dt>
+<dd><p>package names that the recipe file depends on</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>depend_package_names (List[str])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeDependsResult.depend_package_names">
-<span class="sig-name descname"><span class="pre">depend_package_names</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipeDependsResult.depend_package_names" title="Permalink to this definition"></a></dt>
-<dd><p>package names that the recipe file depends on</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeDependsResult.recipe_file_path">
+<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipeDependsResult.recipe_file_path" title="Permalink to this definition"></a></dt>
+<dd><p>recipe file path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[str]</p>
+<dd class="field-odd"><p>recipe_file_path (str)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2344,23 +2474,23 @@ For more details, see xxxxx.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>getRecipeInherits result</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeInheritsResult.recipe_file_path">
-<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipeInheritsResult.recipe_file_path" title="Permalink to this definition"></a></dt>
-<dd><p>recipe file path</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeInheritsResult.inherit_file_paths">
+<span class="sig-name descname"><span class="pre">inherit_file_paths</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipeInheritsResult.inherit_file_paths" title="Permalink to this definition"></a></dt>
+<dd><p>inherit recipe file paths that the recipe file inherits</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>inherit_file_paths (List[str])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeInheritsResult.inherit_file_paths">
-<span class="sig-name descname"><span class="pre">inherit_file_paths</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipeInheritsResult.inherit_file_paths" title="Permalink to this definition"></a></dt>
-<dd><p>inherit recipe file paths that the recipe file inherits</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeInheritsResult.recipe_file_path">
+<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipeInheritsResult.recipe_file_path" title="Permalink to this definition"></a></dt>
+<dd><p>recipe file path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[str]</p>
+<dd class="field-odd"><p>recipe_file_path (str)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2374,22 +2504,22 @@ For more details, see xxxxx.</p>
 <p>getRecipePackagesDynamic result</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipePackagesDynamicResult.dynamic_package_name">
-<span class="sig-name descname"><span class="pre">dynamic_package_name</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipePackagesDynamicResult.dynamic_package_name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dynamic_package_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipePackagesDynamicResult.dynamic_package_name" title="Permalink to this definition"></a></dt>
 <dd><p>dynamic package name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>dynamic_package_name (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipePackagesDynamicResult.recipe_file_paths">
-<span class="sig-name descname"><span class="pre">recipe_file_paths</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipePackagesDynamicResult.recipe_file_paths" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">recipe_file_paths</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipePackagesDynamicResult.recipe_file_paths" title="Permalink to this definition"></a></dt>
 <dd><p>recipe file paths that provides the dynamic package</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[str]</p>
+<dd class="field-odd"><p>recipe_file_paths (List[str])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2403,22 +2533,22 @@ For more details, see xxxxx.</p>
 <p>getRecipePackages result</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipePackagesResult.package_name">
-<span class="sig-name descname"><span class="pre">package_name</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipePackagesResult.package_name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">package_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipePackagesResult.package_name" title="Permalink to this definition"></a></dt>
 <dd><p>package name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>package_name (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipePackagesResult.recipe_file_paths">
-<span class="sig-name descname"><span class="pre">recipe_file_paths</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipePackagesResult.recipe_file_paths" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">recipe_file_paths</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipePackagesResult.recipe_file_paths" title="Permalink to this definition"></a></dt>
 <dd><p>recipe file paths that provides the package</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[str]</p>
+<dd class="field-odd"><p>recipe_file_paths (List[str])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2431,23 +2561,23 @@ For more details, see xxxxx.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>getRecipeProvides result</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeProvidesResult.recipe_file_path">
-<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipeProvidesResult.recipe_file_path" title="Permalink to this definition"></a></dt>
-<dd><p>recipe file path</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeProvidesResult.packages">
+<span class="sig-name descname"><span class="pre">packages</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipeProvidesResult.packages" title="Permalink to this definition"></a></dt>
+<dd><p>package names that the recipe file provides</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>packages (List[str])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeProvidesResult.packages">
-<span class="sig-name descname"><span class="pre">packages</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipeProvidesResult.packages" title="Permalink to this definition"></a></dt>
-<dd><p>package names that the recipe file provides</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeProvidesResult.recipe_file_path">
+<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipeProvidesResult.recipe_file_path" title="Permalink to this definition"></a></dt>
+<dd><p>recipe file path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[str]</p>
+<dd class="field-odd"><p>recipe_file_path (str)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2460,45 +2590,45 @@ For more details, see xxxxx.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>getRecipeVersions result</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeVersionsResult.recipe_file_path">
-<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipeVersionsResult.recipe_file_path" title="Permalink to this definition"></a></dt>
-<dd><p>recipe file path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeVersionsResult.pe">
-<span class="sig-name descname"><span class="pre">pe</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipeVersionsResult.pe" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipeVersionsResult.pe" title="Permalink to this definition"></a></dt>
 <dd><p>package epoch</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeVersionsResult.pv">
-<span class="sig-name descname"><span class="pre">pv</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipeVersionsResult.pv" title="Permalink to this definition"></a></dt>
-<dd><p>package version</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>pe (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeVersionsResult.pr">
-<span class="sig-name descname"><span class="pre">pr</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipeVersionsResult.pr" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipeVersionsResult.pr" title="Permalink to this definition"></a></dt>
 <dd><p>package revision</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>pr (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeVersionsResult.pv">
+<span class="sig-name descname"><span class="pre">pv</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipeVersionsResult.pv" title="Permalink to this definition"></a></dt>
+<dd><p>package version</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pv (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipeVersionsResult.recipe_file_path">
+<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipeVersionsResult.recipe_file_path" title="Permalink to this definition"></a></dt>
+<dd><p>recipe file path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>recipe_file_path (str)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2512,22 +2642,22 @@ For more details, see xxxxx.</p>
 <p>getRecipes result</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipesResult.package_name">
-<span class="sig-name descname"><span class="pre">package_name</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipesResult.package_name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">package_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipesResult.package_name" title="Permalink to this definition"></a></dt>
 <dd><p>package name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>package_name (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetRecipesResult.recipe_files">
-<span class="sig-name descname"><span class="pre">recipe_files</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRecipesResult.recipe_files" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">recipe_files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.GetRecipesResult.recipe_files" title="Permalink to this definition"></a></dt>
 <dd><p>recipe file paths</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[str]</p>
+<dd class="field-odd"><p>recipe_files (List[str])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2540,23 +2670,23 @@ For more details, see xxxxx.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>getRProviders result</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetRuntimeDependsResult.recipe_file_path">
-<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRuntimeDependsResult.recipe_file_path" title="Permalink to this definition"></a></dt>
-<dd><p>recipe file path</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetRuntimeDependsResult.package_depenedncy">
+<span class="sig-name descname"><span class="pre">package_depenedncy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.GetRuntimeDependsResult.package_depenedncy" title="Permalink to this definition"></a></dt>
+<dd><p>package names that the recipe file depends on</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>package_depenedncy (Mapping[str, List[str]])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetRuntimeDependsResult.package_depenedncy">
-<span class="sig-name descname"><span class="pre">package_depenedncy</span></span><a class="headerlink" href="#bbclient.bbcommon.GetRuntimeDependsResult.package_depenedncy" title="Permalink to this definition"></a></dt>
-<dd><p>package names that the recipe file depends on</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetRuntimeDependsResult.recipe_file_path">
+<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetRuntimeDependsResult.recipe_file_path" title="Permalink to this definition"></a></dt>
+<dd><p>recipe file path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>Mapping[str, List[str]]</p>
+<dd class="field-odd"><p>recipe_file_path (str)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2575,56 +2705,56 @@ For more details, see xxxxx.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>getSkippedRecipes result</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetSkippedRecipesResult.recipe_file_path">
-<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><a class="headerlink" href="#bbclient.bbcommon.GetSkippedRecipesResult.recipe_file_path" title="Permalink to this definition"></a></dt>
-<dd><p>recipe file path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetSkippedRecipesResult.pn">
-<span class="sig-name descname"><span class="pre">pn</span></span><a class="headerlink" href="#bbclient.bbcommon.GetSkippedRecipesResult.pn" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetSkippedRecipesResult.pn" title="Permalink to this definition"></a></dt>
 <dd><p>packages name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.GetSkippedRecipesResult.skipreason">
-<span class="sig-name descname"><span class="pre">skipreason</span></span><a class="headerlink" href="#bbclient.bbcommon.GetSkippedRecipesResult.skipreason" title="Permalink to this definition"></a></dt>
-<dd><p>skipreason for the recipe file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>pn (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetSkippedRecipesResult.provides">
-<span class="sig-name descname"><span class="pre">provides</span></span><a class="headerlink" href="#bbclient.bbcommon.GetSkippedRecipesResult.provides" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">provides</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.GetSkippedRecipesResult.provides" title="Permalink to this definition"></a></dt>
 <dd><p>package names provided by the recipe file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[str]</p>
+<dd class="field-odd"><p>provides (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetSkippedRecipesResult.recipe_file_path">
+<span class="sig-name descname"><span class="pre">recipe_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetSkippedRecipesResult.recipe_file_path" title="Permalink to this definition"></a></dt>
+<dd><p>recipe file path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>recipe_file_path (str)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.GetSkippedRecipesResult.rprovides">
-<span class="sig-name descname"><span class="pre">rprovides</span></span><a class="headerlink" href="#bbclient.bbcommon.GetSkippedRecipesResult.rprovides" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rprovides</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.GetSkippedRecipesResult.rprovides" title="Permalink to this definition"></a></dt>
 <dd><p>package alias names provided by the recipe file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[str]</p>
+<dd class="field-odd"><p>rprovides (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.GetSkippedRecipesResult.skipreason">
+<span class="sig-name descname"><span class="pre">skipreason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.GetSkippedRecipesResult.skipreason" title="Permalink to this definition"></a></dt>
+<dd><p>skipreason for the recipe file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>skipreason (str)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2717,45 +2847,413 @@ implement default like this:</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbcommon.</span></span><span class="sig-name descname"><span class="pre">getAllKeysWithFlagsResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbcommon.html#getAllKeysWithFlagsResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbcommon.getAllKeysWithFlagsResult" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.getAllKeysWithFlagsResult.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#bbclient.bbcommon.getAllKeysWithFlagsResult.name" title="Permalink to this definition"></a></dt>
-<dd><p>variable name</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.getAllKeysWithFlagsResult.flags">
+<span class="sig-name descname"><span class="pre">flags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.getAllKeysWithFlagsResult.flags" title="Permalink to this definition"></a></dt>
+<dd><p>flag and value map</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.getAllKeysWithFlagsResult.value">
-<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#bbclient.bbcommon.getAllKeysWithFlagsResult.value" title="Permalink to this definition"></a></dt>
-<dd><p>variable value</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>flags (Mapping[str, str])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbcommon.getAllKeysWithFlagsResult.histories">
-<span class="sig-name descname"><span class="pre">histories</span></span><a class="headerlink" href="#bbclient.bbcommon.getAllKeysWithFlagsResult.histories" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">histories</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#bbclient.bbcommon.VariableHistory" title="bbclient.bbcommon.VariableHistory"><span class="pre">bbclient.bbcommon.VariableHistory</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbcommon.getAllKeysWithFlagsResult.histories" title="Permalink to this definition"></a></dt>
 <dd><p>see VariableHistory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[<a class="reference internal" href="#bbclient.bbcommon.VariableHistory" title="bbclient.bbcommon.VariableHistory">VariableHistory</a>]</p>
+<dd class="field-odd"><p>histories (List[<a class="reference internal" href="#bbclient.bbcommon.VariableHistory" title="bbclient.bbcommon.VariableHistory">VariableHistory</a>])</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbcommon.getAllKeysWithFlagsResult.flags">
-<span class="sig-name descname"><span class="pre">flags</span></span><a class="headerlink" href="#bbclient.bbcommon.getAllKeysWithFlagsResult.flags" title="Permalink to this definition"></a></dt>
-<dd><p>flag and value map</p>
+<dt class="sig sig-object py" id="bbclient.bbcommon.getAllKeysWithFlagsResult.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.getAllKeysWithFlagsResult.name" title="Permalink to this definition"></a></dt>
+<dd><p>variable name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>Mapping[str, str]</p>
+<dd class="field-odd"><p>name (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbcommon.getAllKeysWithFlagsResult.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbcommon.getAllKeysWithFlagsResult.value" title="Permalink to this definition"></a></dt>
+<dd><p>variable value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>value (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-bbclient.bbhelper">
+<span id="bbclient-bbhelper-module"></span><h2>bbclient.bbhelper module<a class="headerlink" href="#module-bbclient.bbhelper" title="Permalink to this headline"></a></h2>
+<p>This file provides common definition for ease of using bitbake</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbhelper.</span></span><span class="sig-name descname"><span class="pre">BBPackage</span></span><a class="reference internal" href="_modules/bbclient/bbhelper.html#BBPackage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbhelper.BBPackage" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Helper class to manage packages in bitbake project</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.all_variable_names">
+<span class="sig-name descname"><span class="pre">all_variable_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.all_variable_names" title="Permalink to this definition"></a></dt>
+<dd><p>all variable names of the package</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>all_variable_names (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.bbclass_files">
+<span class="sig-name descname"><span class="pre">bbclass_files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.bbclass_files" title="Permalink to this definition"></a></dt>
+<dd><p>bbclass files related to the package</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bbclass_files (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.client">
+<span class="sig-name descname"><span class="pre">client</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.client" title="Permalink to this definition"></a></dt>
+<dd><p>bbclient instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>client (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.conf_files">
+<span class="sig-name descname"><span class="pre">conf_files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.conf_files" title="Permalink to this definition"></a></dt>
+<dd><p>config files related to the package</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>conf_files (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.description" title="Permalink to this definition"></a></dt>
+<dd><p>description of the package</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>description (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.from_name">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bbclient.bbhelper.BBPackage" title="bbclient.bbhelper.BBPackage"><span class="pre">bbclient.bbhelper.BBPackage</span></a></span></span><a class="reference internal" href="_modules/bbclient/bbhelper.html#BBPackage.from_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbhelper.BBPackage.from_name" title="Permalink to this definition"></a></dt>
+<dd><p>Create BBPackage instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><em>BBClient</em></a>) – BBClient instance</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – the package name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>BBPackage instance</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#bbclient.bbhelper.BBPackage" title="bbclient.bbhelper.BBPackage">BBPackage</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.get_var">
+<span class="sig-name descname"><span class="pre">get_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/bbclient/bbhelper.html#BBPackage.get_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbhelper.BBPackage.get_var" title="Permalink to this definition"></a></dt>
+<dd><p>Get the value of the variable</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbhelper.BBPackage" title="bbclient.bbhelper.BBPackage"><em>BBPackage</em></a>) – BBClient instance</p></li>
+<li><p><strong>var_name</strong> (<em>str</em>) – the target variable name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the target variable value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.get_var_flag">
+<span class="sig-name descname"><span class="pre">get_var_flag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/bbclient/bbhelper.html#BBPackage.get_var_flag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbhelper.BBPackage.get_var_flag" title="Permalink to this definition"></a></dt>
+<dd><p>Get the value of the variable flag</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbhelper.BBPackage" title="bbclient.bbhelper.BBPackage"><em>BBPackage</em></a>) – BBClient instance</p></li>
+<li><p><strong>var_name</strong> (<em>str</em>) – the target variable name</p></li>
+<li><p><strong>flag</strong> (<em>str</em>) – the target flag name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the target variable flag value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.install_files">
+<span class="sig-name descname"><span class="pre">install_files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.install_files" title="Permalink to this definition"></a></dt>
+<dd><p>package install files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>install_files (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.license">
+<span class="sig-name descname"><span class="pre">license</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.license" title="Permalink to this definition"></a></dt>
+<dd><p>license of the package</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>license (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.package_depends">
+<span class="sig-name descname"><span class="pre">package_depends</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.package_depends" title="Permalink to this definition"></a></dt>
+<dd><p>package depends</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>package_depends (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.package_depends_graph">
+<span class="sig-name descname"><span class="pre">package_depends_graph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">networkx.classes.digraph.DiGraph</span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.package_depends_graph" title="Permalink to this definition"></a></dt>
+<dd><p>package dependency graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>package_depends_graph (networkx.DiGraph)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.package_epoch">
+<span class="sig-name descname"><span class="pre">package_epoch</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.package_epoch" title="Permalink to this definition"></a></dt>
+<dd><p>package epoch</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>package_epoch (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.package_name">
+<span class="sig-name descname"><span class="pre">package_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.package_name" title="Permalink to this definition"></a></dt>
+<dd><p>package name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>package_name (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.package_revision">
+<span class="sig-name descname"><span class="pre">package_revision</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.package_revision" title="Permalink to this definition"></a></dt>
+<dd><p>package revision</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>package_revision (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.package_runtime_depends">
+<span class="sig-name descname"><span class="pre">package_runtime_depends</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.package_runtime_depends" title="Permalink to this definition"></a></dt>
+<dd><p>package runtime depends</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>package_runtime_depends (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.package_runtime_depends_graph">
+<span class="sig-name descname"><span class="pre">package_runtime_depends_graph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">networkx.classes.digraph.DiGraph</span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.package_runtime_depends_graph" title="Permalink to this definition"></a></dt>
+<dd><p>package runtime dependency graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>package_runtime_depends_graph (networkx.DiGraph)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.package_version">
+<span class="sig-name descname"><span class="pre">package_version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.package_version" title="Permalink to this definition"></a></dt>
+<dd><p>package version</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>package_version (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.recipe_files">
+<span class="sig-name descname"><span class="pre">recipe_files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.recipe_files" title="Permalink to this definition"></a></dt>
+<dd><p>recipe files for the package</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>recipe_files (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.run_task">
+<span class="sig-name descname"><span class="pre">run_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'build'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/bbhelper.html#BBPackage.run_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbhelper.BBPackage.run_task" title="Permalink to this definition"></a></dt>
+<dd><p>Run a task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#bbclient.bbhelper.BBPackage" title="bbclient.bbhelper.BBPackage"><em>BBPackage</em></a>) – BBClient instance</p></li>
+<li><p><strong>task_name</strong> (<em>str</em><em>, </em><em>optional</em>) – the target task name. The default value is ‘build’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.source_uris">
+<span class="sig-name descname"><span class="pre">source_uris</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.source_uris" title="Permalink to this definition"></a></dt>
+<dd><p>source uri of the package</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>source_uris (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.summary">
+<span class="sig-name descname"><span class="pre">summary</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.summary" title="Permalink to this definition"></a></dt>
+<dd><p>summary fot the package</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>summary (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.task_depends_graph">
+<span class="sig-name descname"><span class="pre">task_depends_graph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">networkx.classes.digraph.DiGraph</span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.task_depends_graph" title="Permalink to this definition"></a></dt>
+<dd><p>task dependency graph. the root node is do_build of the pacakge.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>task_depends_graph (networkx.DiGraph)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBPackage.tasks">
+<span class="sig-name descname"><span class="pre">tasks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBPackage.tasks" title="Permalink to this definition"></a></dt>
+<dd><p>all task names of the package</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tasks (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBProject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.bbhelper.</span></span><span class="sig-name descname"><span class="pre">BBProject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bbclient/bbhelper.html#BBProject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.bbhelper.BBProject" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Helper class to use bitbake project</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBProject.client">
+<span class="sig-name descname"><span class="pre">client</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></em><a class="headerlink" href="#bbclient.bbhelper.BBProject.client" title="Permalink to this definition"></a></dt>
+<dd><p>bbclient instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>client (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBProject.image_packages">
+<span class="sig-name descname"><span class="pre">image_packages</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBProject.image_packages" title="Permalink to this definition"></a></dt>
+<dd><p>all image package names in the project</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>image_packages (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBProject.layers">
+<span class="sig-name descname"><span class="pre">layers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBProject.layers" title="Permalink to this definition"></a></dt>
+<dd><p>all layer names in the project</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>layers (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBProject.packages">
+<span class="sig-name descname"><span class="pre">packages</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBProject.packages" title="Permalink to this definition"></a></dt>
+<dd><p>all package names in the project</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>packages (List[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbhelper.BBProject.toolchain_packages">
+<span class="sig-name descname"><span class="pre">toolchain_packages</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#bbclient.bbhelper.BBProject.toolchain_packages" title="Permalink to this definition"></a></dt>
+<dd><p>all toolchain package names in the project</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>toolchain_packages (List[str])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2772,20 +3270,20 @@ implement default like this:</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class for all the events</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="bbclient.bbevent.BBEventBase.event_name">
-<span class="sig-name descname"><span class="pre">event_name</span></span><a class="headerlink" href="#bbclient.bbevent.BBEventBase.event_name" title="Permalink to this definition"></a></dt>
-<dd><p>event name like “bb.build.TaskProgress”</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="bbclient.bbevent.BBEventBase.EVENT_NAME">
 <span class="sig-name descname"><span class="pre">EVENT_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bb.build.TaskFailed'</span></em><a class="headerlink" href="#bbclient.bbevent.BBEventBase.EVENT_NAME" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.bbevent.BBEventBase.event_name">
+<span class="sig-name descname"><span class="pre">event_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#bbclient.bbevent.BBEventBase.event_name" title="Permalink to this definition"></a></dt>
+<dd><p>event name like “bb.build.TaskProgress</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>event_name (str)</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bbclient.bbevent.BBEventBase.is_target">
@@ -3317,6 +3815,169 @@ implement default like this:</p>
 <dd></dd></dl>
 
 </dd></dl>
+
+</section>
+<section id="module-bbclient.console">
+<span id="bbclient-console-module"></span><h2>bbclient.console module<a class="headerlink" href="#module-bbclient.console" title="Permalink to this headline"></a></h2>
+<p>This file provides cli interface of bbclient</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="bbclient.console.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subcommand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bbclient.console.Config" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.console.Config.command_args">
+<span class="sig-name descname"><span class="pre">command_args</span></span><a class="headerlink" href="#bbclient.console.Config.command_args" title="Permalink to this definition"></a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.console.Config.project_path">
+<span class="sig-name descname"><span class="pre">project_path</span></span><a class="headerlink" href="#bbclient.console.Config.project_path" title="Permalink to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bbclient.console.Config.subcommand">
+<span class="sig-name descname"><span class="pre">subcommand</span></span><a class="headerlink" href="#bbclient.console.Config.subcommand" title="Permalink to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.all_providers">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">all_providers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#all_providers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.all_providers" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.data_store_connector_cmd">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">data_store_connector_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#data_store_connector_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.data_store_connector_cmd" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.data_store_connector_varhist_cmd">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">data_store_connector_varhist_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#data_store_connector_varhist_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.data_store_connector_varhist_cmd" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.find_best_provider">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">find_best_provider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#find_best_provider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.find_best_provider" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.find_providers">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">find_providers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#find_providers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.find_providers" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_all_appends">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_all_appends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_all_appends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_all_appends" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_all_keys_with_flags_command">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_all_keys_with_flags_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_all_keys_with_flags_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_all_keys_with_flags_command" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_bb_file_priority">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_bb_file_priority</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_bb_file_priority"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_bb_file_priority" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_config">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_config" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_default_preference">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_default_preference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_default_preference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_default_preference" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_file_appends">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_file_appends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_file_appends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_file_appends" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_layer_priorities">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_layer_priorities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_layer_priorities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_layer_priorities" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_r_providers">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_r_providers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_r_providers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_r_providers" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_recipe_depends">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_recipe_depends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_recipe_depends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_recipe_depends" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_recipe_inherits">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_recipe_inherits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_recipe_inherits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_recipe_inherits" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_recipe_packages">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_recipe_packages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_recipe_packages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_recipe_packages" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_recipe_packages_dynamic">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_recipe_packages_dynamic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_recipe_packages_dynamic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_recipe_packages_dynamic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_recipe_provides">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_recipe_provides</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_recipe_provides"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_recipe_provides" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_recipe_versions">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_recipe_versions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_recipe_versions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_recipe_versions" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_recipes">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_recipes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_recipes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_recipes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_runtime_depends">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_runtime_depends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_runtime_depends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_runtime_depends" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_runtime_providers">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_runtime_providers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_runtime_providers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_runtime_providers" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_runtime_recommends">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_runtime_recommends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_runtime_recommends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_runtime_recommends" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_skipped_recipes">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_skipped_recipes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_skipped_recipes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_skipped_recipes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.get_variable">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">get_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#get_variable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.get_variable" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.main">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.main" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bbclient.console.match_file">
+<span class="sig-prename descclassname"><span class="pre">bbclient.console.</span></span><span class="sig-name descname"><span class="pre">match_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bbclient.bbclient.BBClient" title="bbclient.bbclient.BBClient"><span class="pre">bbclient.bbclient.BBClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bbclient/console.html#match_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bbclient.console.match_file" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 <section id="module-bbclient">

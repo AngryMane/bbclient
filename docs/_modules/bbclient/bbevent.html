@@ -75,11 +75,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Iterable</span>
 
 <div class="viewcode-block" id="BBEventBase"><a class="viewcode-back" href="../../bbclient.html#bbclient.bbevent.BBEventBase">[docs]</a><span class="k">class</span> <span class="nc">BBEventBase</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Base class for all the events</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        event_name (str): event name like &quot;bb.build.TaskProgress&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all the events&quot;&quot;&quot;</span>
     <span class="n">EVENT_NAME</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bb.build.TaskFailed&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBEventBase&quot;</span><span class="p">,</span> <span class="n">event_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -90,6 +86,7 @@
 <span class="sd">            event_name (str): event name like &quot;bb.build.TaskProgress&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">event_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">event_name</span>
+        <span class="sd">&quot;&quot;&quot;event_name (str): event name like &quot;bb.build.TaskProgress&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;BBEventBase&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
