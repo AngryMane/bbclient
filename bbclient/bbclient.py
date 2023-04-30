@@ -120,6 +120,12 @@ class BBClient:
         self.__logger: Logger = self.__get_default_logger(logging_level)
         """__logger (Optional[Logger]): Logger instance for debugging. Default is None."""
 
+        # validate project path
+        bb_lib_path: str = f"{project_abs_path}/bitbake/lib"
+        script_path: str = f"{project_abs_path}/{init_script_path}"
+        if not os.path.isfile(script_path) or not not os.path.isdir(bb_lib_path):
+            raise BBProjectNotFoundError(project_abs_path)
+
         # initialize env as same as the bitbake server
         pipe: subprocess.Popen = subprocess.Popen(
             f"{init_script_path} > /dev/null; env",
@@ -171,7 +177,6 @@ class BBClient:
             )
         except BBProjectNotFoundError as e:
             self.__logger.error(e)
-            self.__logger.error("bbclient needs bitbake library in your project path.Please check your project path.")
             return False
         self.__server_connection = connection
         self.__is_server_running = True if connection else False
@@ -1885,7 +1890,7 @@ class BBClient:
         """
         bb_lib_path: str = f"{project_path}/bitbake/lib"
         if not os.path.isdir(bb_lib_path):
-            raise BBProjectNotFoundError(bb_lib_path)
+            raise BBProjectNotFoundError(project_path)
         sys.path.append(bb_lib_path)
         from bb.main import setup_bitbake, BitBakeConfigParameters  # type: ignore
         from bb.tinfoil import TinfoilConfigParameters  # type: ignore

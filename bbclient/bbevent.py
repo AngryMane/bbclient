@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """ 
 This file provides definition for events from bitbake server
 """

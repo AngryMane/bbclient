@@ -24,7 +24,7 @@ def main() -> None:
         return 
     client: BBClient = BBClient(config.project_path)
     if not client.start_server():
-        print("bbclient command uses current path as your project path. If the parent dir of current dir isn't your project path, please use --project_path option.")
+        print("bbclient command uses the parenet dir of the current dir as your project path. If the parent dir of current dir isn't your project path, please use --project_path option.")
         return
     config.subcommand(client, config.command_args)
     client.stop_server()

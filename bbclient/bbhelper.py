@@ -51,9 +51,9 @@ class BBProject:
         self.layers: List[str] = [layer.path for layer in self.client.get_layer_priorities()]
         """layers (List[str]): all layer names in the project"""
         self.client.parse_files() # get_layer_priorities clears caches. So this is work around.
-        self.image_packages: List[str] = BBProject.__get_inherit_package_names(_FileParams.BBCLASS_IMAGE_BASE)
+        self.image_packages: List[str] = BBProject.__get_inherit_package_names(self.client, _FileParams.BBCLASS_IMAGE_BASE)
         """image_packages (List[str]): all image package names in the project"""
-        self.toolchain_packages: List[str] = self.__get_inherit_package_names(_FileParams.BBCLASS_POPULATE_SDK)
+        self.toolchain_packages: List[str] = self.__get_inherit_package_names(self.client, _FileParams.BBCLASS_POPULATE_SDK)
         """toolchain_packages (List[str]): all toolchain package names in the project"""
 
     @staticmethod
@@ -129,6 +129,22 @@ class BBPackage:
         """__datastore_index (int): data index for the package. """
 
         raise NotImplementedError('To create BBPackage instance, please use from_name method.')
+
+    @staticmethod
+    def get_package_names_from_recipe_file(client: BBClient, recipe_file_path: str) -> List[str]:
+        """Get all package names provided by the recipe file
+
+        Args:
+            client (BBClient): BBClient instance
+            recipe_file_path (str): the target recipe file path
+
+        Returns:
+            List[str]: the package names provided by the recipe file
+        """
+        index: int = client.parse_recipe_file(recipe_file_path)
+        if not index:
+            return []
+        return client.data_store_connector_cmd(index, DataStoreFunctions.GET_VAR, "PROVIDES").split()
 
     @staticmethod
     def from_name(client: BBClient, name: str) -> "BBPackage":

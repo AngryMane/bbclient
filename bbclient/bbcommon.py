@@ -64,7 +64,7 @@ class BBProjectNotFoundError(Exception):
         """__project_path (str): project path provided by user"""
 
     def __str__(self):
-        return f"bbclient failed to find bitbake library in {self.__project_path}."
+        return f"bbclient failed to find bitbake library or init_script_path in project_abs_path(={self.__project_path}). init_script_path and project_abs_path were set at BBClient constructor."
 
 
 class getAllKeysWithFlagsResult:
