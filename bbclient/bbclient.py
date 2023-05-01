@@ -122,8 +122,7 @@ class BBClient:
 
         # validate project path
         bb_lib_path: str = f"{project_abs_path}/bitbake/lib"
-        script_path: str = f"{project_abs_path}/{init_script_path}"
-        if not os.path.isfile(script_path) or not not os.path.isdir(bb_lib_path):
+        if not os.path.isdir(bb_lib_path):
             raise BBProjectNotFoundError(project_abs_path)
 
         # initialize env as same as the bitbake server
