@@ -253,7 +253,12 @@ def get_skipped_recipes(
 def get_file_appends(
     client: "BBClient", args: Namespace
 ) -> None:
-    ret: List[str] = client.get_file_appends(args.file_path, args.mutli_conf_name)
+    best_provider: List[str] = client.find_best_provider(args.file_path)
+    target_recipe_file_path: str = \
+        args.file_path if os.path.isfile(args.file_path) else \
+        best_provider[3] if len(best_provider) >= 4 else \
+        args.file_path 
+    ret: List[str] = client.get_file_appends(target_recipe_file_path, args.mutli_conf_name)
     json_str = json.dumps(ret, cls=JsonEncoder)
     print(json_str)
 
