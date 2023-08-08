@@ -962,7 +962,7 @@ class BBClient:
             self.__server_connection,
             "dataStoreConnectorCmd",
             datastore_index,
-            command.value,
+            command,
             args,
             kwargs,
             logger=self.__logger
