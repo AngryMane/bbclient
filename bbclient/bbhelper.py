@@ -76,88 +76,71 @@ class BBProject:
         return ret
 
 class BBPackage:
-    """Helper class to manage packages in bitbake project"""
+    def __new__(self):
+        """__new__
 
-    def __init__(self):
-        """DO NOT USE. 
-
-        Raises:
-            NotImplementedError: To create BBPackage instance, please use from_name method.
+        Note:
+            DO NOT USE. Please use from_name method.
         """
+
         # This is for code snippet
         self.client: BBClient = None
-        """client (str): bbclient instance"""
+        """BBClient : bbclient instance."""
         self.package_name: str = ""
-        """package_name (str): package name"""
+        """str: the package name."""
+        self.datastore_index: int = 0
+        """int: The index for datastore in bitbake."""
         self.summary: str = ""
-        """summary (str): summary fot the package"""
+        """str: SUMMARY variable of the package."""
         self.description: str = ""
-        """description (str): description of the package"""
+        """str: DESCRIPTION variable of the package."""
         self.license: str = ""
-        """license (str): license of the package"""
+        """str: LICENSE variable of the package."""
         self.source_uris: List[str] = []
-        """source_uris (List[str]): source uri of the package"""
+        """List[str]: SRC_URI variable of the package."""
         self.package_epoch: str = ""
-        """package_epoch (str): package epoch"""
+        """str: PE variable of the package."""
         self.package_version: str = ""
-        """package_version (str): package version"""
+        """str: PV variable of the package."""
         self.package_revision: str = ""
-        """package_revision (str): package revision"""
+        """str: PR variable of the package."""
         self.package_depends: List[str] = []
-        """package_depends (List[str]): package depends"""
+        """List[str]: DEPENDS variable of the package."""
         self.package_runtime_depends: List[str] = []
-        """package_runtime_depends (List[str]): package runtime depends"""
+        """List[str]: RDEPENDS variable of the package."""
         self.install_files: List[str] = []
-        """install_files (List[str]): package install files"""
+        """List[str]: FILES variable of the package."""
         self.conf_files: List[str] = []
-        """conf_files (List[str]): config files related to the package"""
+        """List[str]: .conf files related to the package."""
         self.bbclass_files: List[str] = []
-        """bbclass_files (List[str]): bbclass files related to the package"""
+        """List[str]: .bbclass files related to the package."""
         self.recipe_files: List[str] = []
-        """recipe_files (List[str]): recipe files for the package"""
+        """List[str]: .bb and other recipe files related to the package."""
         self.all_variable_names: List[str] = []
-        """all_variable_names (List[str]): all variable names of the package"""
+        """List[str]: all variable names in the recipe for the package."""
         self.tasks: List[str] = []
-        """tasks (List[str]): all task names of the package"""
+        """List[str]: all tasks in the recipe for the package."""
         self.package_depends_graph: networkx.DiGraph = None
-        """package_depends_graph (networkx.DiGraph):  package dependency graph"""
+        """networkx.DiGraph: The package dependency graph. The root node is ${self.package_name}"""
         self.package_runtime_depends_graph: networkx.DiGraph = None
-        """package_runtime_depends_graph (networkx.DiGraph): package runtime dependency graph"""
+        """networkx.DiGraph: The package runtime dependency graph. The root node is ${self.package_name}"""
         self.task_depends_graph: networkx.DiGraph = None
-        """task_depends_graph (networkx.DiGraph): task dependency graph. the root node is do_build of the pacakge."""
-        self.__datastore_index: int = 0
-        """__datastore_index (int): data index for the package. """
+        """networkx.DiGraph: The task dependency graph. The root node is ${self.package_name}.do_build"""
 
         raise NotImplementedError('To create BBPackage instance, please use from_name method.')
 
-    @staticmethod
-    def get_package_names_from_recipe_file(client: BBClient, recipe_file_path: str) -> List[str]:
-        """Get all package names provided by the recipe file
+    @classmethod
+    def from_name(cls: Type, client: BBClient, name: str) -> "BBPackage":
+        """Create BBPackage from package name
 
-        Args:
-            client (BBClient): BBClient instance
-            recipe_file_path (str): the target recipe file path
-
-        Returns:
-            List[str]: the package names provided by the recipe file
+        Attributes:
+            cls (Type): trigger event type for callback function
+            client (BBClient): callback function
+            name (str): callback function
+        Note:
+            BBPackage.from_name(client, "python3")
         """
-        index: int = client.parse_recipe_file(recipe_file_path)
-        if not index:
-            return []
-        return client.data_store_connector_cmd(index, DataStoreFunctions.GET_VAR, "PROVIDES").split()
-
-    @staticmethod
-    def from_name(client: BBClient, name: str) -> "BBPackage":
-        """Create BBPackage instance
-
-        Args:
-            client (BBClient): BBClient instance
-            name (str): the package name
-
-        Returns:
-            BBPackage: BBPackage instance
-        """
-        instance: BBPackage = BBPackage.__internal_new__()
+        instance: BBPackage = cls.__internal_new__()
         instance.client: BBClient = client
         instance.package_name: str = name
         instance.__datastore_index: int = BBPackage.__get_datastore_index(instance.client, instance.package_name)
@@ -188,16 +171,19 @@ class BBPackage:
         return instance
 
     def get_var(self: "BBPackage", var_name: str) -> Any:
-        """Get the value of the variable
+        """Get variable value
 
-        Args:
-            self (BBPackage): BBClient instance
-            var_name (str): the target variable name
+        Attributes:
+            self (BBPackage): none
+            var_name (str): variable name in the recipe for the package
 
         Returns:
-            Any: the target variable value
+            Any: variable value
+
+        Note:
+            User can get variable name from all_variable_names.
         """
-        return self.client.data_store_connector_cmd(self.__datastore_index, DataStoreFunctions.GET_VAR, var_name)
+        return self.client.data_store_connector_cmd(self.datastore_index, "getVar", var_name)
 
     def get_var_flag(self: "BBPackage", var_name: str, flag: str) -> Any:
         """Get the value of the variable flag

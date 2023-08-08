@@ -22,9 +22,20 @@ def main() -> None:
     llvm_package: BBPackage = BBPackage.from_name(client, llvm_package_names[0])
     print_package_info(llvm_package)
 
-    # package from package name
-    python3_package: BBPackage = BBPackage.from_name(client, "python3")
-    print_package_info(python3_package)
+    # you can get any other variables like this
+    #Ret: Any = package.get_var("HOMEPAGE") 
+    #Print(ret)
+
+    # you can run task like This. 
+    # If you want to receive callback info, please use client.register_callback and client.unregister_callback
+    #package.run_task("patch")
+    #project: BBProject = BBProject(client)
+    #print(project.image_packages)
+    #print(project.toolchain_packages)
+
+    #networkx.nx_agraph.to_agraph(package.package_depends_graph).draw('package_depends.pdf',prog='circo')
+    #networkx.nx_agraph.to_agraph(package.package_runtime_depends_graph).draw('runtime_package_depends.pdf',prog='circo')
+    #networkx.nx_agraph.to_agraph(package.task_depends_graph).draw('task_depends.pdf',prog='circo')
     
     client.stop_server()
 
