@@ -3,6 +3,11 @@ Use case
 
 This page introduce typical use cases for bbclient. Please do setup like below before each use cases.
 
+.. code-block:: bash
+
+    $ source oe-init-build-env
+
+
 .. code-block:: python
 
     import bbclient

@@ -133,6 +133,7 @@ class GetLayerPrioritiesResult:
 
 class GetRecipesResult:
     """getRecipes result"""
+
     def __init__(self: "GetRecipesResult", data: List[Any]) -> None:
         self.package_name: str = data[0]
         """package_name (str): package name"""
@@ -142,6 +143,7 @@ class GetRecipesResult:
 
 class GetRecipeDependsResult:
     """getRecipeDepends result"""
+
     def __init__(self: "GetRecipeDependsResult", data: List[Any]) -> None:
         self.recipe_file_path: str = data[0]
         """recipe_file_path (str): recipe file path"""
@@ -151,6 +153,7 @@ class GetRecipeDependsResult:
 
 class GetRecipeVersionsResult:
     """getRecipeVersions result"""
+
     def __init__(
         self: "GetRecipeVersionsResult", version: List[str], recipe_file_path: str
     ):
@@ -166,6 +169,7 @@ class GetRecipeVersionsResult:
 
 class GetRecipeProvidesResult:
     """getRecipeProvides result"""
+
     def __init__(
         self: "GetRecipeProvidesResult", recipe_file_path: str, packages: List[str]
     ):
@@ -177,6 +181,7 @@ class GetRecipeProvidesResult:
 
 class GetRecipePackagesResult:
     """getRecipePackages result"""
+
     def __init__(
         self: "GetRecipePackagesResult", package_name: str, recipe_file_paths: List[str]
     ):
@@ -188,6 +193,7 @@ class GetRecipePackagesResult:
 
 class GetRecipePackagesDynamicResult:
     """getRecipePackagesDynamic result"""
+
     def __init__(
         self: "GetRecipePackagesDynamicResult",
         dynamic_package_name: str,
@@ -201,6 +207,7 @@ class GetRecipePackagesDynamicResult:
 
 class GetRProvidersResult:
     """getRProviders result"""
+
     def __init__(
         self: "GetRProvidersResult",
         package_alias_name: str,
@@ -214,6 +221,7 @@ class GetRProvidersResult:
 
 class GetRuntimeDependsResult:
     """getRProviders result"""
+
     def __init__(
         self: "GetRuntimeDependsResult",
         recipe_file_path: str,
@@ -227,6 +235,7 @@ class GetRuntimeDependsResult:
 
 class GetRecipeInheritsResult:
     """getRecipeInherits result"""
+
     def __init__(
         self: "GetRecipeInheritsResult",
         recipe_file_path: str,
@@ -240,6 +249,7 @@ class GetRecipeInheritsResult:
 
 class GetBbFilePriorityResult:
     """getBbFilePriority result"""
+
     def __init__(
         self: "GetBbFilePriorityResult", recipe_file_path: str, priority: int
     ) -> None:
@@ -251,6 +261,7 @@ class GetBbFilePriorityResult:
 
 class GetDefaultPreferenceResult:
     """getDefaultPreference result"""
+
     def __init__(
         self: "GetDefaultPreferenceResult",
         recipe_file_path: str,
@@ -264,8 +275,11 @@ class GetDefaultPreferenceResult:
 
 class GetSkippedRecipesResult:
     """getSkippedRecipes result"""
+
     def __init__(
-        self: "GetSkippedRecipesResult", recipe_file_path: str, data: Union[Mapping[str, Any], "SkippedPackage"]
+        self: "GetSkippedRecipesResult",
+        recipe_file_path: str,
+        data: Union[Mapping[str, Any], "SkippedPackage"],
     ) -> None:
         self.recipe_file_path: str = recipe_file_path
         """recipe_file_path (str): recipe file path"""
@@ -282,12 +296,16 @@ class GetSkippedRecipesResult:
             return
 
         self.pn: str = data.pn if getattr(data, "pn") else None
-        self.skipreason: str =  data.skipreason if getattr(data, "skipreason") else None
-        self.provides: List[str] =  data.provides if getattr(data, "provides") else None
-        self.rprovides: List[str] =  data.rprovides if getattr(data, "rprovides") else None
+        self.skipreason: str = data.skipreason if getattr(data, "skipreason") else None
+        self.provides: List[str] = data.provides if getattr(data, "provides") else None
+        self.rprovides: List[str] = (
+            data.rprovides if getattr(data, "rprovides") else None
+        )
+
 
 class GetAllAppendsResult:
     """getAllAppends result"""
+
     def __init__(
         self: "GetAllAppendsResult", target_recipe_name: str, append_file_path: str
     ) -> None:
@@ -299,6 +317,7 @@ class GetAllAppendsResult:
 
 class FindProvidersResult:
     """findProviders result"""
+
     def __init__(
         self: "FindProvidersResult",
         package_name: str,
@@ -330,6 +349,7 @@ class FindProvidersResult:
 
 class AllProvidersResult:
     """allProviders result"""
+
     def __init__(
         self: "AllProvidersResult", package_name: str, recipe_file: List[Any]
     ) -> None:
@@ -342,6 +362,7 @@ class AllProvidersResult:
 
 
 GetRuntimeRecommendsResult = GetRuntimeDependsResult
+
 
 class JsonEncoder(json.JSONEncoder):
     def default(self, obj):
