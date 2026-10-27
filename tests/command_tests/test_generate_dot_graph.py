@@ -7,16 +7,12 @@ params = [
 ]
 
 @pytest.mark.parametrize("targets, task", params)
-def test_generate_dot_graph_main(main_client: BBClient, targets: List[str], task: str) -> None:
-    __test_impl(main_client, targets, task)
+def test_generate_dot_graph_wrynose(wrynose_client: BBClient, targets: List[str], task: str) -> None:
+    __test_impl(wrynose_client, targets, task)
 
 @pytest.mark.parametrize("targets, task", params)
-def test_generate_dot_graph_kirkstone(kirkstone_client: BBClient, targets: List[str], task: str) -> None:
-    __test_impl(kirkstone_client, targets, task)
-
-@pytest.mark.parametrize("targets, task", params)
-def test_generate_dot_graph_dunfell(dunfell_client: BBClient, targets: List[str], task: str) -> None:
-    __test_impl(dunfell_client, targets, task)
+def test_generate_dot_graph_scarthgap(scarthgap_client: BBClient, targets: List[str], task: str) -> None:
+    __test_impl(scarthgap_client, targets, task)
 
 def __test_impl(client: BBClient, targets: List[str], task: str) -> None:
     callback_monitors: List[CallbackMonitor] = []

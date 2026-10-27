@@ -1,11 +1,16 @@
-[submodule "tests/main"]
-	path = tests/main
-	url = git://git.yoctoproject.org/poky
-[submodule "tests/kirkstone"]
-	path = tests/kirkstone
-	url = git://git.yoctoproject.org/poky
-	branch = kirkstone
-[submodule "tests/dunfell"]
-	path = tests/dunfell
-	url = git://git.yoctoproject.org/poky
-	branch = dunfell
+[submodule "tests/scarthgap"]
+	path = tests/scarthgap
+	url = https://git.yoctoproject.org/poky
+	branch = scarthgap
+[submodule "tests/wrynose/openembedded-core"]
+	path = tests/wrynose/openembedded-core
+	url = https://git.openembedded.org/openembedded-core
+	branch = wrynose
+[submodule "tests/wrynose/bitbake"]
+	path = tests/wrynose/bitbake
+	url = https://git.openembedded.org/bitbake
+	branch = 2.18
+[submodule "tests/wrynose/meta-yocto"]
+	path = tests/wrynose/meta-yocto
+	url = https://git.yoctoproject.org/meta-yocto
+	branch = wrynose

@@ -7,16 +7,12 @@ params = [
 ]
 
 @pytest.mark.parametrize("klass_file_path, targets", params)
-def test_generate_targets_tree_main(main_client: BBClient, klass_file_path: str, targets: List[str]) -> None:
-    __test_impl(main_client, klass_file_path, targets)
+def test_generate_targets_tree_wrynose(wrynose_client: BBClient, klass_file_path: str, targets: List[str]) -> None:
+    __test_impl(wrynose_client, klass_file_path, targets)
 
 @pytest.mark.parametrize("klass_file_path, targets", params)
-def test_generate_targets_tree_kirkstone(kirkstone_client: BBClient, klass_file_path: str, targets: List[str]) -> None:
-    __test_impl(kirkstone_client, klass_file_path, targets)
-
-@pytest.mark.parametrize("klass_file_path, targets", params)
-def test_generate_targets_tree_dunfell(dunfell_client: BBClient, klass_file_path: str, targets: List[str]) -> None:
-    __test_impl(dunfell_client, klass_file_path, targets)
+def test_generate_targets_tree_scarthgap(scarthgap_client: BBClient, klass_file_path: str, targets: List[str]) -> None:
+    __test_impl(scarthgap_client, klass_file_path, targets)
 
 def __test_impl(client: BBClient, klass_file_path: str, targets: List[str]) -> None:
     callback_monitors: List[CallbackMonitor] = []

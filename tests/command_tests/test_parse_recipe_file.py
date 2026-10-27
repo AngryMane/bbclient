@@ -6,16 +6,12 @@ params = [
 ]
 
 @pytest.mark.parametrize("package", params)
-def test_generate_targets_tree_main(main_client: BBClient, package: str) -> None:
-    __test_impl(main_client, package)
+def test_generate_targets_tree_wrynose(wrynose_client: BBClient, package: str) -> None:
+    __test_impl(wrynose_client, package)
 
 @pytest.mark.parametrize("package", params)
-def test_generate_targets_tree_kirkstone(kirkstone_client: BBClient, package: str) -> None:
-    __test_impl(kirkstone_client, package)
-
-@pytest.mark.parametrize("package", params)
-def test_generate_targets_tree_dunfell(dunfell_client: BBClient, package: str) -> None:
-    __test_impl(dunfell_client, package)
+def test_generate_targets_tree_scarthgap(scarthgap_client: BBClient, package: str) -> None:
+    __test_impl(scarthgap_client, package)
 
 def __test_impl(client: BBClient, package: str) -> None:
     ret: List[str] = client.find_best_provider(package)

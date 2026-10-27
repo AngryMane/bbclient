@@ -10,6 +10,8 @@ import logging
 
 CUR_FILE_PATH: str = os.path.dirname(__file__)
 INIT_COMMAND: str = ". oe-init-build-env"
+# wrynose has no poky repository, so add the layers poky used to include.
+WRYNOSE_INIT_COMMAND: str = INIT_COMMAND + " && bitbake-layers add-layer ../../meta-yocto/meta-poky ../../meta-yocto/meta-yocto-bsp"
 
 class CallbackMonitor:
     def __init__(self: "CallbackMonitor"):
@@ -21,27 +23,18 @@ class CallbackMonitor:
         self.event = event
 
 @pytest.fixture(scope="module")
-def main_client():
-    PATH_TO_MAIN = CUR_FILE_PATH + "/../main"
-    client: BBClient = BBClient(PATH_TO_MAIN, INIT_COMMAND)
+def scarthgap_client():
+    PATH_TO_SCARTHGAP = CUR_FILE_PATH + "/../scarthgap"
+    client: BBClient = BBClient(PATH_TO_SCARTHGAP, INIT_COMMAND)
     client.start_server()
     client.parse_files()
     yield client
     client.stop_server()
 
 @pytest.fixture(scope="module")
-def kirkstone_client():
-    PATH_TO_KIRKSTONE = CUR_FILE_PATH + "/../kirkstone"
-    client: BBClient = BBClient(PATH_TO_KIRKSTONE, INIT_COMMAND)
-    client.start_server()
-    client.parse_files()
-    yield client
-    client.stop_server()
-
-@pytest.fixture(scope="module")
-def dunfell_client():
-    PATH_TO_DUNFELL = CUR_FILE_PATH + "/../dunfell"
-    client: BBClient = BBClient(PATH_TO_DUNFELL, INIT_COMMAND)
+def wrynose_client():
+    PATH_TO_WRYNOSE = CUR_FILE_PATH + "/../wrynose/openembedded-core"
+    client: BBClient = BBClient(PATH_TO_WRYNOSE, WRYNOSE_INIT_COMMAND)
     client.start_server()
     client.parse_files()
     yield client

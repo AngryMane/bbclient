@@ -7,16 +7,12 @@ params = [
 ]
 
 @pytest.mark.parametrize("package, task, expect", params)
-def test_build_file_main(main_client: BBClient, package: str, task: str, expect: Type[BBEventBase]) -> None:
-    __test_imple(main_client, package, task, expect)
+def test_build_file_wrynose(wrynose_client: BBClient, package: str, task: str, expect: Type[BBEventBase]) -> None:
+    __test_imple(wrynose_client, package, task, expect)
 
 @pytest.mark.parametrize("package, task, expect", params)
-def test_build_file_kirkstone(kirkstone_client: BBClient, package: str, task: str, expect: Type[BBEventBase]) -> None:
-    __test_imple(kirkstone_client, package, task, expect)
-
-@pytest.mark.parametrize("package, task, expect", params)
-def test_build_file_dunfell(dunfell_client: BBClient, package: str, task: str, expect: Type[BBEventBase]) -> None:
-    __test_imple(dunfell_client, package, task, expect)
+def test_build_file_scarthgap(scarthgap_client: BBClient, package: str, task: str, expect: Type[BBEventBase]) -> None:
+    __test_imple(scarthgap_client, package, task, expect)
 
 def __test_imple(client: BBClient, package: str, task: str, expect: Type[BBEventBase]) -> None:
     best_provider: List[str] = client.find_best_provider(package)

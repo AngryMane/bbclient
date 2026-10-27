@@ -6,16 +6,12 @@ params = [
 ]
 
 @pytest.mark.parametrize("package_name", params)
-def test_find_best_provider_main(main_client: BBClient, package_name) -> None:
-    __test_imple(main_client, package_name)
+def test_find_best_provider_wrynose(wrynose_client: BBClient, package_name) -> None:
+    __test_imple(wrynose_client, package_name)
 
 @pytest.mark.parametrize("package_name", params)
-def test_find_best_provider_kirkstone(kirkstone_client: BBClient, package_name) -> None:
-    __test_imple(kirkstone_client, package_name)
-
-@pytest.mark.parametrize("package_name", params)
-def test_find_best_provider_dunfell(dunfell_client: BBClient, package_name) -> None:
-    __test_imple(dunfell_client, package_name)
+def test_find_best_provider_scarthgap(scarthgap_client: BBClient, package_name) -> None:
+    __test_imple(scarthgap_client, package_name)
 
 def __test_imple(client: BBClient, package_name) -> None:
     result: List[str] = client.find_best_provider(package_name)
