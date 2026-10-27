@@ -18,6 +18,7 @@ __version__ = "1.0.0"
 
 import os
 import sys
+import shutil
 import uuid
 import time
 import threading
@@ -126,7 +127,7 @@ class BBClient:
         self.__is_server_running: bool = False
         self.__logger: Logger = self.__get_default_logger(logging_level)
         pipe: subprocess.Popen = subprocess.Popen(
-            f"{init_script_path} > /dev/null; env",
+            f"{{ {init_script_path}\n}} > /dev/null; env",
             stdout=subprocess.PIPE,
             shell=True,
             cwd=self.project_path,
@@ -1417,7 +1418,7 @@ class BBClient:
             |   "gcc",                              # only package name
             |   "mc:xxx_config:alsa",               # multiconfig and package name
             |   "multiconfig:yyy_config:vim",       # multiconfig and package name
-            |   "mc:\*:clang"                       # all multiconfig and package name
+            |   "mc:\\*:clang"                       # all multiconfig and package name
             |   "mc:yyy_config:python:do_patch",    # multiconfig, package name and task name
             | ]
         """
@@ -1451,7 +1452,7 @@ class BBClient:
             |   "gcc",                              # only package name
             |   "mc:xxx_config:alsa",               # multiconfig and package name
             |   "multiconfig:yyy_config:vim",       # multiconfig and package name
-            |   "mc:\*:clang"                        # all multiconfig and package name
+            |   "mc:\\*:clang"                        # all multiconfig and package name
             |   "mc:yyy_config:python:do_patch",    # multiconfig, package name and task name
             | ]
         """
@@ -1489,7 +1490,7 @@ class BBClient:
             |   "gcc",                              # only package name
             |   "mc:xxx_config:alsa",               # multiconfig and package name
             |   "multiconfig:yyy_config:vim",       # multiconfig and package name
-            |   "mc:\*:clang"                        # all multiconfig and package name
+            |   "mc:\\*:clang"                        # all multiconfig and package name
             |   "mc:yyy_config:python:do_patch",    # multiconfig, package name and task name
             | ]
         """
@@ -1882,6 +1883,12 @@ class BBClient:
             Optional["bb.server.xmlrpcclient.BitBakeXMLRPCServerConnection"]: Connection instance
         """
         bb_lib_path: str = f"{project_path}/bitbake/lib"
+        if not os.path.isdir(bb_lib_path):
+            # wrynose or more newer has no poky repository, so bitbake isn't in project path.
+            # fall back to the bitbake found in PATH set by the initialize command.
+            bitbake_path: Optional[str] = shutil.which("bitbake")
+            if bitbake_path:
+                bb_lib_path = os.path.join(os.path.dirname(os.path.realpath(bitbake_path)), "..", "lib")
         if not os.path.isdir(bb_lib_path):
             raise BBProjectNotFoundError(bb_lib_path)
         sys.path.append(bb_lib_path)

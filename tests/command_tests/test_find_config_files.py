@@ -7,16 +7,12 @@ params = [
 ]
 
 @pytest.mark.parametrize("variable_name, except_event_types, expect_command_result", params)
-def test_find_config_files_main(main_client: BBClient, variable_name: str, except_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
-    __test_impl(main_client, variable_name, except_event_types, expect_command_result)
+def test_find_config_files_wrynose(wrynose_client: BBClient, variable_name: str, except_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
+    __test_impl(wrynose_client, variable_name, except_event_types, expect_command_result)
 
 @pytest.mark.parametrize("variable_name, except_event_types, expect_command_result", params)
-def test_find_config_files_kirkstone(kirkstone_client: BBClient, variable_name: str, except_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
-    __test_impl(kirkstone_client, variable_name, except_event_types, expect_command_result)
-
-@pytest.mark.parametrize("variable_name, except_event_types, expect_command_result", params)
-def test_find_config_files_dunfell(dunfell_client: BBClient, variable_name: str, except_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
-    __test_impl(dunfell_client, variable_name, except_event_types, expect_command_result)
+def test_find_config_files_scarthgap(scarthgap_client: BBClient, variable_name: str, except_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
+    __test_impl(scarthgap_client, variable_name, except_event_types, expect_command_result)
 
 def __test_impl(client: BBClient, variable_name: str, except_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
     callback_monitors: List[CallbackMonitor] = []

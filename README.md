@@ -40,11 +40,11 @@ ret: Any = client.data_store_connector_cmd(data_store_index, "getVar", "PN")
 ```
 
 ## System Requirements
-* python: 3.7 or later
-* yocto: dunfell or kirkstone or main
+* python: 3.10 or later
+* yocto: scarthgap or wrynose
 
-Please note that this command(and also bitbake) doesn't support dunfell with python3.10.  
-This is because `collections.Iterable` has not been removed, so dunfell with python3.10 will cause exception.
+bbclient is tested on Ubuntu 22.04 and 24.04 with python 3.10, 3.12 and 3.14.  
+Since wrynose has no poky repository, bbclient uses the bitbake found in `PATH` (set by `oe-init-build-env`) when bitbake isn't in the project path.
 
 ## Installation
 

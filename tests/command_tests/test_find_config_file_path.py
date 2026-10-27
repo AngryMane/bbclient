@@ -6,16 +6,12 @@ params = [
 ]
 
 @pytest.mark.parametrize("config_file_name", params)
-def test_find_config_file_path_main(main_client: BBClient, config_file_name: str) -> None:
-    __test_impl(main_client, config_file_name)
+def test_find_config_file_path_wrynose(wrynose_client: BBClient, config_file_name: str) -> None:
+    __test_impl(wrynose_client, config_file_name)
 
 @pytest.mark.parametrize("config_file_name", params)
-def test_find_config_file_path_kirkstone(kirkstone_client: BBClient, config_file_name: str) -> None:
-    __test_impl(kirkstone_client, config_file_name)
-
-@pytest.mark.parametrize("config_file_name", params)
-def test_find_config_file_path_dunfell(dunfell_client: BBClient, config_file_name: str) -> None:
-    __test_impl(dunfell_client, config_file_name)
+def test_find_config_file_path_scarthgap(scarthgap_client: BBClient, config_file_name: str) -> None:
+    __test_impl(scarthgap_client, config_file_name)
 
 def __test_impl(client: BBClient, config_file_name: str) -> None:
     complete_monitor: CallbackMonitor = CallbackMonitor()

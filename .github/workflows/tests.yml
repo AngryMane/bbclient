@@ -1,28 +1,63 @@
 name: Tests
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ${{ matrix.platform }}
+    name: ${{ matrix.yocto-release }} / ${{ matrix.host.platform }} / python ${{ matrix.host.python-version }}
+    runs-on: ${{ matrix.host.platform }}
     strategy:
-      max-parallel: 15
+      fail-fast: false
       matrix:
-        platform: [ubuntu-latest]
-        python-version: [3.7, 3.8, 3.9]
+        yocto-release: [scarthgap, wrynose]
+        # oldest, ubuntu 24.04 system and newest python
+        host:
+          - platform: ubuntu-22.04
+            python-version: "3.10"
+          - platform: ubuntu-24.04
+            python-version: "3.12"
+          - platform: ubuntu-24.04
+            python-version: "3.14"
+    env:
+      BUILD_DIR: ${{ matrix.yocto-release == 'scarthgap' && 'tests/scarthgap/build' || 'tests/wrynose/openembedded-core/build' }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+    - name: Set up Python ${{ matrix.host.python-version }}
+      uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ matrix.host.python-version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip setuptools wheel
         python -m pip install tox tox-gh-actions
-        sudo apt-get install gawk wget git diffstat unzip texinfo gcc build-essential chrpath socat cpio python3 python3-pip python3-pexpect xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev xterm python3-subunit mesa-common-dev zstd liblz4-tool
+        sudo apt-get update
+        sudo apt-get install -y build-essential chrpath cpio debianutils diffstat file gawk gcc git iputils-ping libacl1 liblz4-tool locales python3 python3-git python3-jinja2 python3-pexpect python3-pip python3-subunit socat texinfo unzip wget xz-utils zstd
+        sudo locale-gen en_US.UTF-8
+    - name: Allow unprivileged user namespaces
+      # bitbake uses user namespaces to disable network access in tasks,
+      # but ubuntu 24.04 restricts them with AppArmor by default.
+      if: matrix.host.platform == 'ubuntu-24.04'
+      run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+    - name: Cache bitbake downloads and caches
+      # parse cache(tmp/cache) isn't cached because it is invalidated by mtime of checked out files.
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ env.BUILD_DIR }}/downloads
+          ${{ env.BUILD_DIR }}/sstate-cache
+          ${{ env.BUILD_DIR }}/cache
+        key: bitbake-${{ matrix.yocto-release }}-${{ matrix.host.platform }}-${{ matrix.host.python-version }}-${{ github.sha }}
+        restore-keys: |
+          bitbake-${{ matrix.yocto-release }}-${{ matrix.host.platform }}-${{ matrix.host.python-version }}-
     - name: Test with tox
+      env:
+        YOCTO_RELEASE: ${{ matrix.yocto-release }}
+        LANG: en_US.UTF-8
       run: tox

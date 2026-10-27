@@ -8,16 +8,12 @@ params = [
 ]
 
 @pytest.mark.parametrize("file_regex, directory, expect_event_types, expect_command_result", params)
-def test_find_files_matching_in_dir_main(main_client: BBClient, file_regex: str, directory: str, expect_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
-    __test_impl(main_client, file_regex, directory, expect_event_types, expect_command_result)
+def test_find_files_matching_in_dir_wrynose(wrynose_client: BBClient, file_regex: str, directory: str, expect_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
+    __test_impl(wrynose_client, file_regex, directory, expect_event_types, expect_command_result)
     
 @pytest.mark.parametrize("file_regex, directory, expect_event_types, expect_command_result", params)
-def test_find_config_files_kirkstone(kirkstone_client: BBClient, file_regex: str, directory: str, expect_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
-    __test_impl(kirkstone_client, file_regex, directory, expect_event_types, expect_command_result)
-
-@pytest.mark.parametrize("file_regex, directory, expect_event_types, expect_command_result", params)
-def test_find_config_files_dunfell(dunfell_client: BBClient, file_regex: str, directory: str, expect_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
-    __test_impl(dunfell_client, file_regex, directory, expect_event_types, expect_command_result)
+def test_find_config_files_scarthgap(scarthgap_client: BBClient, file_regex: str, directory: str, expect_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
+    __test_impl(scarthgap_client, file_regex, directory, expect_event_types, expect_command_result)
 
 def __test_impl(client: BBClient, file_regex: str, directory: str, expect_event_types: List[BBEventBase], expect_command_result: BBEventBase) -> None:
     callback_monitors: List[CallbackMonitor] = []
