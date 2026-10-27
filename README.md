@@ -40,10 +40,10 @@ ret: Any = client.data_store_connector_cmd(data_store_index, "getVar", "PN")
 ```
 
 ## System Requirements
-* python: 3.9 or later
+* python: 3.10 or later
 * yocto: scarthgap or wrynose
 
-bbclient is tested on Ubuntu 22.04 and 24.04 with python 3.9 to 3.14.  
+bbclient is tested on Ubuntu 22.04 and 24.04 with python 3.10, 3.12 and 3.14.  
 Since wrynose has no poky repository, bbclient uses the bitbake found in `PATH` (set by `oe-init-build-env`) when bitbake isn't in the project path.
 
 ## Installation

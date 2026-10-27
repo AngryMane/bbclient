@@ -17,7 +17,7 @@ setup(
     author="AngryMane",
     author_email="regulationdango@gmail.com",
     license="MIT",
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     install_requires=["bbclient"],
     classifiers=[
         "Development Status :: 3 - Alpha",
